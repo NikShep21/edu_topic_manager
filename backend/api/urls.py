@@ -1,6 +1,5 @@
-from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
-urlpatterns = [
-    path('users/', include('users.urls')),
-    path('topics/', include('topics.urls')),
-]
+router = DefaultRouter()
+
+urlpatterns = router.urls
