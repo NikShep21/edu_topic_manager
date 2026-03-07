@@ -55,23 +55,17 @@ jobs:
     needs: build-and-push
 
     steps:
-      - name: Test SSH connection
-        env:
-          SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
-          SERVER_PORT: ${{ secrets.SERVER_PORT }}
-          SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
-        run: |
-          set -eux
-
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-
-          printf "%s" "$SSH_KEY" | tr -d '\r' > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-
-          ssh -o StrictHostKeyChecking=no \
-              -i ~/.ssh/id_ed25519 \
-              -p "$SERVER_PORT" \
-              "$SERVER_USER@$SERVER_HOST" \
-              "echo SSH_OK && whoami && pwd"
+      - name: Deploy on server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          debug: true
+          script: |
+            set -e
+            cd ${{ secrets.SERVER_PATH }}
+            git pull origin main
+            docker compose -f docker-compose.deploy.yml pull
+            docker compose -f docker-compose.deploy.yml up -d
