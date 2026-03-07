@@ -34,6 +34,7 @@ services:
 
   frontend:
     build: ./frontend
+    restart: always
 
   nginx:
     build: ./nginx
@@ -41,6 +42,10 @@ services:
       - static_data:/static
     ports:
       - "80:80"
+    depends_on:
+      - backend
+      - frontend
+    restart: always
 
 volumes:
   postgres_data:
