@@ -34,8 +34,8 @@ services:
         condition: service_healthy
     restart: always
 
-  # frontend:
-  #   build: ./frontend
+  frontend:
+    build: ./frontend
 
   nginx:
     build: ./nginx
