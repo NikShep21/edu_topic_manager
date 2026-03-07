@@ -55,12 +55,11 @@ jobs:
     needs: build-and-push
 
     steps:
-      - name: Deploy over SSH
+      - name: Test SSH connection
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
           SERVER_PORT: ${{ secrets.SERVER_PORT }}
-          SERVER_PATH: ${{ secrets.SERVER_PATH }}
           SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
         run: |
           set -eux
@@ -68,14 +67,11 @@ jobs:
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
-          printf "%s" "$SSH_KEY" > ~/.ssh/id_ed25519
+          printf "%s" "$SSH_KEY" | tr -d '\r' > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
-          ssh-keyscan -p "$SERVER_PORT" "$SERVER_HOST" >> ~/.ssh/known_hosts
-
-          ssh -vvv -i ~/.ssh/id_ed25519 -p "$SERVER_PORT" "$SERVER_USER@$SERVER_HOST" "
-            set -e
-            cd '$SERVER_PATH'
-            docker compose -f docker-compose.deploy.yml pull
-            docker compose -f docker-compose.deploy.yml up -d
-          "
+          ssh -o StrictHostKeyChecking=no \
+              -i ~/.ssh/id_ed25519 \
+              -p "$SERVER_PORT" \
+              "$SERVER_USER@$SERVER_HOST" \
+              "echo SSH_OK && whoami && pwd"
