@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - ci/setup-registry-deploy
   workflow_dispatch:
 
 permissions:
