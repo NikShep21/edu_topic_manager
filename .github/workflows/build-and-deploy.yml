@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - ci/setup-registry-deploy
   workflow_dispatch:
 
 permissions:
@@ -62,17 +63,19 @@ jobs:
           SERVER_PATH: ${{ secrets.SERVER_PATH }}
           SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
         run: |
+          set -eux
+
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
-          echo "$SSH_KEY" > ~/.ssh/id_ed25519
+          printf "%s" "$SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
           ssh-keyscan -p "$SERVER_PORT" "$SERVER_HOST" >> ~/.ssh/known_hosts
 
-          ssh -i ~/.ssh/id_ed25519 -p "$SERVER_PORT" "$SERVER_USER@$SERVER_HOST" << 'EOF'
+          ssh -vvv -i ~/.ssh/id_ed25519 -p "$SERVER_PORT" "$SERVER_USER@$SERVER_HOST" "
             set -e
-            cd "$SERVER_PATH"
+            cd '$SERVER_PATH'
             docker compose -f docker-compose.deploy.yml pull
             docker compose -f docker-compose.deploy.yml up -d
-          EOF
+          "
