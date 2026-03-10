@@ -17,6 +17,8 @@
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
     "format": "prettier . --write",
     "format:check": "prettier . --check"
   },
