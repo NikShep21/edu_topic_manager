@@ -11,34 +11,42 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
-  steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+jobs:
+  frontend:
+    name: Frontend checks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
 
-    - name: setup node
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22' 
-        cache: 'npm'
-        cache-dependency-path: frontend/package-lock.json
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22' 
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+          
+      - name: install dependencies
+        run: npm ci
         
-    - name: install dependencies
-      run: npm ci
-      
-    - name: lint
-      run: npm run lint
+      - name: lint
+        run: npm run lint
 
 
-    - name: format check
-      run: npm run format:check
+      - name: format check
+        run: npm run format:check
 
-    - name: type check
-      run: npm run typecheck
+      - name: type check
+        run: npm run typecheck
 
-    - name: test
-      run: npm test
+      - name: test
+        run: npm test
 
-    - name: build 
-      run: npm run build
+      - name: build 
+        run: npm run build
 
 
