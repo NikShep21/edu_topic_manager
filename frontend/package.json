@@ -7,7 +7,7 @@
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{json,md,css,scss}": [
+    "*.{json,md,css,scss,html,yml,yaml}": [
       "prettier --write"
     ]
   },
@@ -17,8 +17,13 @@
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
     "format": "prettier . --write",
     "format:check": "prettier . --check"
+  },
+  "engines": {
+    "node": ">=24 <26"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.21",
@@ -30,13 +35,18 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^4.7.0",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "eslint-config-prettier": "^10.1.8",
+    "jsdom": "^29.0.0",
     "lint-staged": "^16.3.2",
     "prettier": "^3.8.1",
     "sass": "^1.97.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite": "^6.4.1",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.0"
   }
 }

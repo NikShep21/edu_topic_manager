@@ -1,7 +1,14 @@
 {
   "private": true,
   "devDependencies": {
-    "husky": "^9.1.7"
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@vitejs/plugin-react": "^4.7.0",
+    "husky": "^9.1.7",
+    "jsdom": "^27.0.1",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.0.18"
   },
   "scripts": {
     "prepare": "husky"
