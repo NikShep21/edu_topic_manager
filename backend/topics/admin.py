@@ -6,4 +6,4 @@ from .models import Topic
 
 @admin.register(Topic)
 class TopicAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'created_at')
+    list_display = ("id", "title", "created_at")
