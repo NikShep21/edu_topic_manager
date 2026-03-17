@@ -29,6 +29,7 @@ services:
       - .env
     volumes:
       - static_data:/app/staticfiles
+      - .:/app
     depends_on:
       db:
         condition: service_healthy
