@@ -1,5 +1,5 @@
 import React from "react";
 
-export const page = () => {
+export const layout = () => {
   return <div></div>;
 };
