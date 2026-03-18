@@ -1,5 +1,6 @@
 import React from "react";
 
-export const layout = () => {
+const Layout = () => {
   return <div></div>;
 };
+export default Layout;
