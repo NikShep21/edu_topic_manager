@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.scss";
+import "@/styles/reset.scss";
 import AppProviders from "@/app/_providers/AppProviders";
 
 export const metadata: Metadata = {
@@ -13,10 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AppProviders>
-      <html lang="en">
-        <body>{children}</body>
-      </html>
-    </AppProviders>
+    <html lang="en">
+      <body>
+        <AppProviders>{children}</AppProviders>
+      </body>
+    </html>
   );
 }
