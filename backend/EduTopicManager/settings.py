@@ -29,6 +29,7 @@ DEBUG = os.getenv("DEBUG") == "1"
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
+AUTH_USER_MODEL = "users.User"
 
 # Application definition
 
