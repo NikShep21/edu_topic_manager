@@ -1,0 +1,8 @@
+.mainContent {
+  padding-left: $sidebarWidth;
+}
+@media (max-width: $tablet) {
+  .mainContent {
+    padding-left: 0;
+  }
+}

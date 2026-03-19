@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import styles from "./MyLink.module.scss";
+import styles from "./NavLink.module.scss";
 import Link, { LinkProps } from "next/link";
 import { PropsWithChildren } from "react";
 
