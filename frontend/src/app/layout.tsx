@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.scss";
+import "@/styles/globals.scss";
 import "@/styles/reset.scss";
 import { AppProviders } from "@/app/_providers/AppProviders";
 import { Inter } from "next/font/google";
@@ -20,7 +20,7 @@ const RootLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.variable}>
         <AppProviders>{children}</AppProviders>
       </body>
