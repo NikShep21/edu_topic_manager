@@ -80,3 +80,20 @@ textarea {
 :where(address) {
   font-style: normal;
 }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font: inherit;
+}
+input {
+  border: none;
+  outline: none;
+  background: transparent;
+  box-shadow: none;
+  font: inherit;
+  color: inherit;
+}
