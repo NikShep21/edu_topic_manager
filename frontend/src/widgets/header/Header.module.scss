@@ -1,0 +1,39 @@
+.header {
+  height: 74px;
+  background-color: var(--color-objects);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @include sidePadding(20px);
+  border-bottom: 1px solid rgba(173, 173, 173, 0.3);
+
+  .burger {
+    display: none;
+    @media (max-width: $tablet) {
+      display: block;
+    }
+  }
+
+  .textHeader {
+    font-size: 1.4rem;
+
+    @media (max-width: $tablet) {
+      display: none;
+    }
+  }
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    .settingsIcon {
+      cursor: pointer;
+      transition: all 0.15s;
+      width: 24px;
+      height: 24px;
+      color: var(--text-secondary);
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+.link {
+  display: flex;
+  align-items: center;
+  padding: 14px 7%;
+  width: 100%;
+
+  margin: 0 auto;
+  border-radius: 7px;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: var(--bg-color);
+  }
+}
+.activeLink {
+  background-color: #e0e6f3 !important;
+  color: #1161be;
+  font-weight: 500;
+}

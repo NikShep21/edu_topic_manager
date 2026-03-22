@@ -1,0 +1,10 @@
+.notifyIcon {
+  cursor: pointer;
+  transition: all 0.15s;
+  width: 24px;
+  height: 24px;
+  color: var(--text-secondary);
+  &:hover {
+    opacity: 0.6;
+  }
+}

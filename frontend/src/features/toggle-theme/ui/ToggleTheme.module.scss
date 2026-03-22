@@ -1,0 +1,45 @@
+.toggleTheme {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 999px;
+  background-color: var(--bg-color);
+}
+
+.button {
+  position: relative;
+  z-index: 2;
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.icon {
+  transition: color 0.15s ease-out;
+  color: #8b8e9c;
+}
+
+.thumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: var(--color-objects);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: transform 0.15s ease;
+  z-index: 1;
+}
+
+.light {
+  transform: translateX(34px);
+}
+.activeColor {
+  color: #b0b5c5 !important;
+}
