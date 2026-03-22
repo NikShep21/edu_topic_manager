@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import "./globals.scss";
 import "@/styles/reset.scss";
 import { AppProviders } from "@/app/_providers/AppProviders";
+import { Inter } from "next/font/google";
+
+export const inter = Inter({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-inter",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,7 +21,7 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="en">
-      <body>
+      <body className={inter.variable}>
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

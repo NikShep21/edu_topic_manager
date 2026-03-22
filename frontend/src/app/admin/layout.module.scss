@@ -1,8 +1,10 @@
-.mainContent {
+.page {
   padding-left: $sidebarWidth;
+  transition: all 0.2s ease-in-out;
 }
+
 @media (max-width: $tablet) {
-  .mainContent {
+  .page {
     padding-left: 0;
   }
 }
