@@ -9,7 +9,7 @@
   transition: all 0.2s;
 
   &:hover {
-    background-color: $bgColor;
+    background-color: var(--bg-color);
   }
 }
 .activeLink {
