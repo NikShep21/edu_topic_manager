@@ -1,0 +1,1 @@
+export { requireAccess } from "./requireAccess";
