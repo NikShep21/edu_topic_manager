@@ -11,7 +11,6 @@ router.register("topics", TopicViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("auth/", include("djoser.urls.authtoken")),
     path("auth/login/", LoginView.as_view()),
     path("auth/refresh/", RefreshView.as_view()),
     path("auth/logout/", LogoutView.as_view()),
