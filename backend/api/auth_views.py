@@ -55,3 +55,29 @@ class LoginView(APIView):
         )
 
         return response
+    
+
+class RefreshView(APIView):
+
+    def post(self, request):
+
+        refresh_token = request.COOKIES.get("refresh_token")
+
+        if not refresh_token:
+            return Response({"error": "No refresh token"}, status=401)
+
+        token = RefreshToken(refresh_token)
+
+        access = token.access_token
+
+        response = Response({"success": True})
+
+        response.set_cookie(
+            key="access_token",
+            value=str(access),
+            httponly=True,
+            samesite="Lax",
+            max_age=60 * 30,
+        )
+
+        return response
