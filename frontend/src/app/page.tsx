@@ -1,6 +1,6 @@
-import styles from "./page.module.scss";
+import { redirect } from "next/navigation";
+import { ROUTES } from "@/shared/routes/routes";
 
-const Home = () => {
-  return <div className={styles.page}></div>;
-};
-export default Home;
+export default function HomePage() {
+  redirect(ROUTES.login);
+}
