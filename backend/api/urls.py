@@ -2,6 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from users.views import UserViewSet
 from topics.views import TopicViewSet
+from .auth_views import LoginView, RefreshView, LogoutView
 
 router = DefaultRouter()
 
@@ -11,4 +12,7 @@ router.register("topics", TopicViewSet)
 urlpatterns = [
     path("", include(router.urls)),
     path("auth/", include("djoser.urls.authtoken")),
+    path("auth/login/", LoginView.as_view()),
+    path("auth/refresh/", RefreshView.as_view()),
+    path("auth/logout/", LogoutView.as_view()),
 ]
