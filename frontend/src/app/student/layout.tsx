@@ -1,7 +1,7 @@
-import LayoutShell from "@/app/admin/_providers/LayoutShell";
+import LayoutShell from "@/app/student/_providers/LayoutShell";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
-  // await requireAccess("admin")
+  // await requireAccess("student")
 
   return <LayoutShell>{children}</LayoutShell>;
 };
