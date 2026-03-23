@@ -25,7 +25,7 @@ export const PasswordInput = ({ error, startContent, ...props }: PasswordInputPr
           onClick={() => setIsVisible((prev) => !prev)}
           aria-label={isVisible ? "Скрыть пароль" : "Показать пароль"}
         >
-          {isVisible ? <IoEyeOffOutline size={20} /> : <IoEyeOutline size={20} />}
+          {isVisible ? <IoEyeOutline size={20} /> : <IoEyeOffOutline size={20} />}
         </button>
       }
     />
