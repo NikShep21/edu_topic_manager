@@ -81,3 +81,15 @@ class RefreshView(APIView):
         )
 
         return response
+    
+
+class LogoutView(APIView):
+
+    def post(self, request):
+
+        response = Response({"success": True})
+
+        response.delete_cookie("access_token")
+        response.delete_cookie("refresh_token")
+
+        return response
