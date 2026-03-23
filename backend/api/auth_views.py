@@ -66,7 +66,10 @@ class RefreshView(APIView):
         if not refresh_token:
             return Response({"error": "No refresh token"}, status=401)
 
-        token = RefreshToken(refresh_token)
+        try:
+            token = RefreshToken(refresh_token)
+        except Exception:
+            return Response({"error": "Invalid refresh token"}, status=401)
 
         access = token.access_token
 
