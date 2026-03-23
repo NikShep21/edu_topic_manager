@@ -1,6 +1,6 @@
 import { HttpClient } from "../http-client";
 
-export const apiClient = new HttpClient("/api", {
+export const fetchClient = new HttpClient("/api", {
   credentials: "include",
   headers: {
     Accept: "application/json",

@@ -1,3 +1,3 @@
 export { QUERY_KEYS } from "./react-query/query-keys";
-export { apiClient } from "./core/lib/create-client";
-export { apiServer } from "./core/lib/create-server";
+export { fetchClient } from "./core/lib/create-client";
+export { fetchServer } from "./core/lib/create-server";
