@@ -1,6 +1,7 @@
 asgiref==3.11.1
 Django==6.0.2
 djangorestframework==3.16.1
+djangorestframework-simplejwt
 djoser==2.2.2
 flake8==7.3.0
 mccabe==0.7.0
