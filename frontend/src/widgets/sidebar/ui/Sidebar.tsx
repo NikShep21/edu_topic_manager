@@ -79,7 +79,7 @@ export const Sidebar = ({ nav, isOpen, onClose }: SidebarProps) => {
         </div>
         <div className={styles.bottomPart}>
           <div className={styles.sidebarFooter}>
-            <UserBadge firstName={"Лев"} lastName={"Клименко"} role="Admin" />
+            <UserBadge firstName={"Лев"} lastName={"Клименко"} role="admin" />
           </div>
         </div>
       </aside>
