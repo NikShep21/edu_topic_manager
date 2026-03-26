@@ -19,13 +19,21 @@ class LoginView(APIView):
         user = authenticate(username=username, password=password)
 
         if user is None:
-            return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(
+                {
+                    "success": False,
+                    "message": "Invalid username or password",
+                    "errors": None,
+                },
+                status=status.HTTP_401_UNAUTHORIZED
+            )
 
         refresh = RefreshToken.for_user(user)
         access = refresh.access_token
 
         response = Response({
             "success": True,
+            "message": "Login successful",
             "user": {
                 "id": user.id,
                 "username": user.username,
@@ -65,20 +73,38 @@ class RefreshView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-
         refresh_token = request.COOKIES.get("refresh_token")
 
         if not refresh_token:
-            return Response({"error": "No refresh token"}, status=401)
+            return Response(
+                {
+                    "success": False,
+                    "message": "No refresh token",
+                    "errors": None,
+                },
+                status=status.HTTP_401_UNAUTHORIZED
+            )
 
         try:
             token = RefreshToken(refresh_token)
         except Exception:
-            return Response({"error": "Invalid refresh token"}, status=401)
+            return Response(
+                {
+                    "success": False,
+                    "message": "Invalid refresh token",
+                    "errors": None,
+                },
+                status=status.HTTP_401_UNAUTHORIZED
+            )
 
         access = token.access_token
 
-        response = Response({"success": True})
+        response = Response(
+            {
+                "success": True,
+                "message": "Token refreshed",
+            }
+        )
 
         response.set_cookie(
             key="access_token",
@@ -97,7 +123,12 @@ class LogoutView(APIView):
 
     def post(self, request):
 
-        response = Response({"success": True})
+        response = Response(
+            {
+                "success": True,
+                "message": "Logout successful",
+            }
+        )
 
         response.delete_cookie("access_token")
         response.delete_cookie("refresh_token")
