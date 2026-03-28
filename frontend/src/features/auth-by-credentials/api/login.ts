@@ -6,7 +6,5 @@ import type {
 import { fetchClient } from "@/shared/api";
 
 export const login = async (dataLogin: LoginRequest): Promise<LoginResponse> => {
-  const response: Response = await fetchClient.post(LOGIN_PATH, dataLogin);
-  const data: LoginResponse = await response.json();
-  return data;
+  return fetchClient.post<LoginResponse>(LOGIN_PATH, dataLogin);
 };

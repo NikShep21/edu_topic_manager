@@ -18,15 +18,17 @@ export const LoginForm = () => {
   const {
     register,
     handleSubmit,
+
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { remember_me: false },
   });
-  const { isPending } = useLoginMutation();
+  const { isPending, mutate } = useLoginMutation();
   const onSubmit = (formData: LoginFormValues) => {
-    console.log(formData);
+    mutate(formData);
   };
+
   return (
     <div className={styles.formContainer}>
       <h1 className={styles.title}>Вход в систему</h1>

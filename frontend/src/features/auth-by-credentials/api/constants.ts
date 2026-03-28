@@ -1,1 +1,1 @@
-export const LOGIN_PATH = "auth/token/login";
+export const LOGIN_PATH = "/auth/login";
