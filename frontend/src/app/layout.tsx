@@ -21,7 +21,7 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.variable}>
+      <body className={inter.variable} suppressHydrationWarning>
         <AppProviders>{children}</AppProviders>
       </body>
     </html>
