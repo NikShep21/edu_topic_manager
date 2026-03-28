@@ -3,22 +3,45 @@ import type { QueryParams, RequestOptions } from "./types";
 
 export class HttpClient {
   constructor(
-    private readonly baseUrl: string,
+    private readonly basePath: string = "",
     private readonly defaultOptions: RequestInit = {},
   ) {}
 
   private buildUrl(path: string, query?: QueryParams) {
-    const url = new URL(path, this.baseUrl);
+    const normalizedBasePath = this.normalizeBasePath(this.basePath);
+    const normalizedPath = this.normalizePath(path);
 
-    if (query) {
-      for (const [key, value] of Object.entries(query)) {
-        if (value !== null && value !== undefined) {
-          url.searchParams.set(key, String(value));
-        }
+    const url = normalizedBasePath
+      ? `${normalizedBasePath}/${normalizedPath}`
+      : `/${normalizedPath}`;
+
+    if (!query) {
+      return url;
+    }
+
+    const searchParams = new URLSearchParams();
+
+    for (const [key, value] of Object.entries(query)) {
+      if (value !== null && value !== undefined) {
+        searchParams.set(key, String(value));
       }
     }
 
-    return url.toString();
+    const queryString = searchParams.toString();
+
+    return queryString ? `${url}?${queryString}` : url;
+  }
+
+  private normalizeBasePath(basePath: string) {
+    if (!basePath) {
+      return "";
+    }
+
+    return `/${basePath.replace(/^\/+|\/+$/g, "")}`;
+  }
+
+  private normalizePath(path: string) {
+    return path.replace(/^\/+/, "");
   }
 
   private async request<T>(path: string, options: RequestOptions = {}): Promise<T> {
@@ -28,7 +51,7 @@ export class HttpClient {
       ...this.defaultOptions,
       ...rest,
       headers: {
-        ...(body ? { "Content-Type": "application/json" } : {}),
+        ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
         ...(this.defaultOptions.headers ?? {}),
         ...(headers ?? {}),
       },
