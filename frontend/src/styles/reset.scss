@@ -48,6 +48,10 @@ select {
 }
 
 button {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-block;
+  cursor: pointer;
   background-color: transparent;
   border: none;
   cursor: pointer;
