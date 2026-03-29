@@ -25,21 +25,23 @@ class LoginView(APIView):
                     "message": "Invalid username or password",
                     "errors": None,
                 },
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
         refresh = RefreshToken.for_user(user)
         access = refresh.access_token
 
-        response = Response({
-            "success": True,
-            "message": "Login successful",
-            "user": {
-                "id": user.id,
-                "username": user.username,
-                "role": user.role,
+        response = Response(
+            {
+                "success": True,
+                "message": "Login successful",
+                "user": {
+                    "id": user.id,
+                    "username": user.username,
+                    "role": user.role,
+                },
             }
-        })
+        )
 
         access_age = 60 * 30
 
@@ -53,7 +55,7 @@ class LoginView(APIView):
             value=str(access),
             httponly=True,
             samesite="Lax",
-            secure=True, #поменять на тру при пуше
+            secure=True,  # поменять на тру при пуше
             max_age=access_age,
         )
 
@@ -61,13 +63,13 @@ class LoginView(APIView):
             key="refresh_token",
             value=str(refresh),
             httponly=True,
-            secure=True, #поменять на тру при пуше
+            secure=True,  # поменять на тру при пуше
             samesite="Lax",
             max_age=refresh_age,
         )
 
         return response
-    
+
 
 class RefreshView(APIView):
     permission_classes = [AllowAny]
@@ -82,7 +84,7 @@ class RefreshView(APIView):
                     "message": "No refresh token",
                     "errors": None,
                 },
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
         try:
@@ -94,7 +96,7 @@ class RefreshView(APIView):
                     "message": "Invalid refresh token",
                     "errors": None,
                 },
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
         access = token.access_token
@@ -110,13 +112,13 @@ class RefreshView(APIView):
             key="access_token",
             value=str(access),
             httponly=True,
-            secure=True, #поменять на тру при пуше
+            secure=True,  # поменять на тру при пуше
             samesite="Lax",
             max_age=60 * 30,
         )
 
         return response
-    
+
 
 class LogoutView(APIView):
     permission_classes = [AllowAny]

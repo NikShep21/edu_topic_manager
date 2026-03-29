@@ -19,10 +19,6 @@ class UserReadSerializer(serializers.ModelSerializer):
         ]
 
 
-
-
-
-
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 

@@ -22,8 +22,8 @@ class UserViewSet(ModelViewSet):
         if self.action == "me":
             return [IsAuthenticated()]
         return [IsAdminRole()]
-    
+
     @action(detail=False, methods=["get"])
     def me(self, request):
-        serializer = UserReadSerializer (request.user)
+        serializer = UserReadSerializer(request.user)
         return Response(serializer.data)

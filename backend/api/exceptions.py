@@ -6,7 +6,7 @@ def custom_exception_handler(exc, context):
 
     if responce is None:
         return responce
-    
+
     data = {
         "succsess": False,
         "message": "request failed",
