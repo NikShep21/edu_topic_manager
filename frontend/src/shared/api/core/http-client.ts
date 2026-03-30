@@ -34,7 +34,7 @@ export class HttpClient {
   private async request<T>(path: string, options: RequestOptions = {}): Promise<T> {
     const { query, body, headers, ...rest } = options;
     const url = this.buildUrl(path, query);
-
+    console.log("HTTP URL:", url);
     let response: Response;
 
     try {
