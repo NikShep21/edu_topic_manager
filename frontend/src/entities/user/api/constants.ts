@@ -1,1 +1,1 @@
-export const USER_PATH = "users/me";
+export const USER_PATH = "users/me/";
