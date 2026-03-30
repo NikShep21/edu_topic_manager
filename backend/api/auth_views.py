@@ -54,8 +54,8 @@ class LoginView(APIView):
             key="access_token",
             value=str(access),
             httponly=True,
-            samesite="Lax",
-            secure=False,  # поменять на тру при деплое
+            samesite="None",
+            secure=True,
             max_age=access_age,
         )
 
@@ -63,8 +63,8 @@ class LoginView(APIView):
             key="refresh_token",
             value=str(refresh),
             httponly=True,
-            secure=False,  # поменять на тру при деплое
-            samesite="Lax",
+            samesite="None",
+            secure=True,
             max_age=refresh_age,
         )
 
