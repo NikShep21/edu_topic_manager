@@ -31,7 +31,7 @@ export const handlers = [
         detail: "Неверный логин или пароль",
       },
       {
-        status: 401,
+        status: 500,
       },
     );
   }),
