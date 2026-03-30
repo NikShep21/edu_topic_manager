@@ -1,42 +1,133 @@
 .button {
-  border-radius: 8px;
-  background-color: var(--main-color);
-  box-shadow: 0 4px 10px rgba(74, 144, 226, 0.2);
-  color: #fff;
-  cursor: pointer;
-  transition: all 0.15s;
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-}
 
-.button:hover {
-  background-color: #4386d4;
-  box-shadow: 0 6px 14px rgba(74, 144, 226, 0.26);
-}
+  border: 1px solid transparent;
+  border-radius: 10px;
 
-.button:active {
-  transform: translateY(1px);
-  box-shadow: 0 3px 8px rgba(74, 144, 226, 0.18);
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+
+  cursor: pointer;
+  user-select: none;
+
+  transition:
+    background-color 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease,
+    box-shadow 0.16s ease,
+    transform 0.1s ease,
+    opacity 0.16s ease;
 }
 
 .button:focus-visible {
-  outline: 2px solid rgba(74, 144, 226, 0.35);
+  outline: 2px solid color-mix(in srgb, var(--main-color) 35%, transparent);
   outline-offset: 2px;
 }
 
+.button:not(:disabled):active {
+  transform: translateY(1px);
+}
+
 .button:disabled {
-  opacity: 0.7;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
+.fullWidth {
+  width: 100%;
+}
+
 .content {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+}
+
+.loading .content {
+  opacity: 0;
+}
+
+.spinnerWrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
 }
 
 .spinner {
-  margin-top: 1px;
+  pointer-events: none;
+}
+
+/* sizes */
+
+.sm {
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: 14px;
+}
+
+.md {
+  min-height: 44px;
+  padding: 0 18px;
+  font-size: 17px;
+}
+
+.lg {
+  min-height: 48px;
+  padding: 0 22px;
+  font-size: 16px;
+}
+
+/* variants */
+
+.primary {
+  background-color: var(--main-color);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgb(101 142 205 / 0.22);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--main-color) 92%, #000000 8%);
+  box-shadow: 0 10px 24px rgb(101 142 205 / 0.28);
+}
+
+.secondary {
+  background-color: var(--dropdown-color);
+  border-color: var(--border-color);
+  color: var(--text-color);
+  box-shadow: 0 2px 10px rgb(15 23 42 / 0.04);
+}
+
+.secondary:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--dropdown-color) 70%, #ffffff 30%);
+  border-color: var(--border-color-active);
+}
+
+.ghost {
+  background-color: transparent;
+  color: var(--text-color);
+}
+
+.ghost:hover:not(:disabled) {
+  background-color: rgb(15 23 42 / 0.05);
+}
+
+.danger {
+  background-color: #c94b4b;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgb(201 75 75 / 0.2);
+}
+
+.danger:hover:not(:disabled) {
+  background-color: #b84242;
+  box-shadow: 0 10px 24px rgb(201 75 75 / 0.26);
 }
