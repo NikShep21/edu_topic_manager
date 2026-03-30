@@ -3,60 +3,54 @@ import type { QueryParams, RequestOptions } from "./types";
 
 export class HttpClient {
   constructor(
-    private readonly basePath: string = "",
+    private readonly basePath = "",
     private readonly defaultOptions: RequestInit = {},
   ) {}
 
   private buildUrl(path: string, query?: QueryParams) {
-    const normalizedBasePath = this.normalizeBasePath(this.basePath);
-    const normalizedPath = this.normalizePath(path);
+    const trimmedBasePath = this.basePath.replace(/\/+$/, "");
+    const trimmedPath = path.replace(/^\/+/, "");
 
-    const url = normalizedBasePath
-      ? `${normalizedBasePath}/${normalizedPath}`
-      : `/${normalizedPath}`;
+    const rawUrl = trimmedBasePath
+      ? `${trimmedBasePath}/${trimmedPath}`
+      : trimmedPath.startsWith("http://") || trimmedPath.startsWith("https://")
+        ? trimmedPath
+        : `/${trimmedPath}`;
 
-    if (!query) {
-      return url;
-    }
+    const isAbsolute = /^https?:\/\//i.test(rawUrl);
+    const url = isAbsolute ? new URL(rawUrl) : new URL(rawUrl, "http://localhost");
 
-    const searchParams = new URLSearchParams();
-
-    for (const [key, value] of Object.entries(query)) {
-      if (value !== null && value !== undefined) {
-        searchParams.set(key, String(value));
+    if (query) {
+      for (const [key, value] of Object.entries(query)) {
+        if (value !== null && value !== undefined) {
+          url.searchParams.set(key, String(value));
+        }
       }
     }
 
-    const queryString = searchParams.toString();
-
-    return queryString ? `${url}?${queryString}` : url;
-  }
-
-  private normalizeBasePath(basePath: string) {
-    if (!basePath) {
-      return "";
-    }
-
-    return `/${basePath.replace(/^\/+|\/+$/g, "")}`;
-  }
-
-  private normalizePath(path: string) {
-    return path.replace(/^\/+/, "");
+    return isAbsolute ? url.toString() : `${url.pathname}${url.search}`;
   }
 
   private async request<T>(path: string, options: RequestOptions = {}): Promise<T> {
     const { query, body, headers, ...rest } = options;
+    const url = this.buildUrl(path, query);
 
-    const response = await fetch(this.buildUrl(path, query), {
-      ...this.defaultOptions,
-      ...rest,
-      headers: {
-        ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
-        ...(this.defaultOptions.headers ?? {}),
-        ...(headers ?? {}),
-      },
-      body: body !== undefined ? JSON.stringify(body) : undefined,
-    });
+    let response: Response;
+
+    try {
+      response = await fetch(url, {
+        ...this.defaultOptions,
+        ...rest,
+        headers: {
+          ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
+          ...(this.defaultOptions.headers ?? {}),
+          ...(headers ?? {}),
+        },
+        body: body !== undefined ? JSON.stringify(body) : undefined,
+      });
+    } catch {
+      throw new ApiError("Network error", 0, null);
+    }
 
     const contentType = response.headers.get("content-type") ?? "";
     const isJson = contentType.includes("application/json");
