@@ -1,9 +1,16 @@
-import LayoutShell from "@/app/student/_providers/LayoutShell";
+"use client";
+import { ProtectedRoute } from "@/app/_components/ProtectedRoute";
+import { nav } from "@/app/student/_config/navigation";
+import { DashboardShell } from "@/widgets/dashboard-shell";
 
-const Layout = async ({ children }: { children: React.ReactNode }) => {
-  // await requireAccess("student")
-
-  return <LayoutShell>{children}</LayoutShell>;
+const Layout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <ProtectedRoute allowedRole="student">
+      <DashboardShell title="Выбор темы" nav={nav}>
+        {children}
+      </DashboardShell>
+    </ProtectedRoute>
+  );
 };
 
 export default Layout;
