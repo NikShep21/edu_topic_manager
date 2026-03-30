@@ -1,7 +1,7 @@
 import type { UserData } from "@/entities/user";
 
 export interface LoginRequest {
-  login: string;
+  username: string;
   password: string;
   remember_me: boolean;
 }

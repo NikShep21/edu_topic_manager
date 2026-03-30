@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const loginSchema = z.object({
-  login: z
+  username: z
     .string()
     .min(1, "Введите логин")
     .min(3, "Логин должен быть не короче 3 символов"),
