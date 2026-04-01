@@ -34,6 +34,11 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "email",
             "role",
         ]
+        extra_kwargs = {
+            "first_name": {"required": True, "allow_blank": False},
+            "last_name": {"required": True, "allow_blank": False},
+            "middle_name": {"required": True, "allow_blank": False},
+        }
 
     def create(self, validated_data):
         password = validated_data.pop("password")
