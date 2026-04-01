@@ -20,6 +20,14 @@
   transform: translateX(0);
 }
 
+.userButton {
+  @include hoverButton;
+}
+
+.user .userButton {
+  width: 100%;
+  height: 0px;
+}
 .sidebarHeader {
   min-height: 74px;
   display: flex;
