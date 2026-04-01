@@ -43,6 +43,7 @@ class User(AbstractUser):
         STUDENT = "student", _("Студент")
         TEACHER = "teacher", _("Преподаватель")
         ADMIN = "admin", _("Администратор")
+
     first_name = models.CharField(
         max_length=150,
         blank=False,
