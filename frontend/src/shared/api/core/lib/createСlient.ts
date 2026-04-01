@@ -1,4 +1,4 @@
-import { HttpClient } from "../http-client";
+import { HttpClient } from "../httpClient";
 
 export const fetchClient = new HttpClient("/api/", {
   credentials: "include",

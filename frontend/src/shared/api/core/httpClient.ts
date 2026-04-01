@@ -1,4 +1,4 @@
-import { ApiError } from "./api-error";
+import { ApiError } from "./apiError";
 import type { QueryParams, RequestOptions } from "./types";
 
 export class HttpClient {
