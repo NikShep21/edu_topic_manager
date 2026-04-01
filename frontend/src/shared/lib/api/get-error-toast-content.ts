@@ -1,4 +1,4 @@
-import { ApiError } from "@/shared/api/core/api-error";
+import type { ApiError } from "@/shared/api";
 
 export const getErrorToastContent = (error: ApiError) => {
   if (error.status === 0) {
