@@ -7,7 +7,7 @@ import { FaLock } from "react-icons/fa";
 import { Button } from "@/shared/ui/button";
 import { PasswordInput } from "@/shared/ui/password-input";
 import { useForm } from "react-hook-form";
-import { useLoginMutation } from "@/features/auth-by-credentials/model/use-login-mutation";
+import { useLoginMutation } from "@/features/auth-by-credentials/model/useLoginMutation";
 
 import {
   loginSchema,
