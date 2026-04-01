@@ -1,17 +1,20 @@
 import clsx from "clsx";
 import styles from "./UserBadge.module.scss";
-import type { UserRole } from "../../model/types";
+import type { UserData } from "../../model/types";
 
 interface UserBadgeProps {
-  firstName: string;
-  lastName: string;
-  role: UserRole;
+  userData?: UserData;
   className?: string;
 }
 
-export const UserBadge = ({ firstName, lastName, role, className }: UserBadgeProps) => {
-  const fullName = `${firstName} ${lastName}`;
-  const fallbackLetter = firstName.charAt(0).toUpperCase();
+export const UserBadge = ({ userData, className }: UserBadgeProps) => {
+  if (!userData) {
+    return null;
+  }
+
+  console.log("UserBadge", { userData });
+  const fullName = `${userData.firstName} ${userData.lastName}`;
+  const fallbackLetter = userData.firstName.charAt(0).toUpperCase();
 
   return (
     <div className={clsx(styles.user, className)}>
@@ -21,7 +24,7 @@ export const UserBadge = ({ firstName, lastName, role, className }: UserBadgePro
 
       <div className={styles.info}>
         <p className={styles.fullName}>{fullName}</p>
-        <span className={styles.role}>{role}</span>
+        <span className={styles.role}>{userData.role}</span>
       </div>
     </div>
   );
