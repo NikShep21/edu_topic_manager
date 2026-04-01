@@ -4,7 +4,7 @@ import React from "react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "./ThemeProvider";
-import { queryClient } from "../../shared/api/react-query/query-client";
+import { queryClient } from "../../shared/api/react-query/queryClient";
 // import { MswProvider } from "@/app/_providers/MswProvider";
 import { ToastProvider } from "@/shared/model/toast/toast-provider";
 

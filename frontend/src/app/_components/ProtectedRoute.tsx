@@ -2,8 +2,8 @@
 
 import { redirect } from "next/navigation";
 
-import { UseUserQuery, type UserRole } from "@/entities/user";
-import { ApiError } from "@/shared/api/core/api-error";
+import { useUserQuery, type UserRole } from "@/entities/user";
+import { ApiError } from "@/shared/api/core/apiError";
 import { ROUTES } from "@/shared/routes/routes";
 
 interface ProtectedRouteProps {
@@ -12,7 +12,7 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children, allowedRole }: ProtectedRouteProps) => {
-  const { data, error, isPending } = UseUserQuery();
+  const { data, error, isPending } = useUserQuery();
   console.log("ProtectedRoute", { data, error, isPending });
   const role = data?.role as UserRole | undefined;
 
