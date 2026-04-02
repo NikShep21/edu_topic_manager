@@ -49,13 +49,13 @@ class User(AbstractUser):
         blank=False,
         verbose_name=_("Имя"),
     )
-    
+
     last_name = models.CharField(
         max_length=150,
         blank=False,
         verbose_name=_("Фамилия"),
     )
-    
+
     middle_name = models.CharField(
         max_length=150,
         blank=False,
