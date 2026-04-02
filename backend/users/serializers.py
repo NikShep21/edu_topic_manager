@@ -1,11 +1,13 @@
-from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.db import transaction
+from rest_framework import serializers
+
+from .models import StudentProfile, TeacherProfile
 
 User = get_user_model()
 
 
 class UserReadSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = [
@@ -22,6 +24,25 @@ class UserReadSerializer(serializers.ModelSerializer):
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
+    course = serializers.IntegerField(required=False)
+    group = serializers.CharField(required=False)
+
+    academic_degree = serializers.CharField(
+        required=False,
+        allow_null=True,
+        allow_blank=True,
+    )
+    academic_title = serializers.CharField(
+        required=False,
+        allow_null=True,
+        allow_blank=True,
+    )
+    job_title = serializers.CharField(
+        required=False,
+        allow_null=True,
+        allow_blank=True,
+    )
+
     class Meta:
         model = User
         fields = [
@@ -33,6 +54,11 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "middle_name",
             "email",
             "role",
+            "course",
+            "group",
+            "academic_degree",
+            "academic_title",
+            "job_title",
         ]
         extra_kwargs = {
             "first_name": {"required": True, "allow_blank": False},
@@ -40,19 +66,57 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "middle_name": {"required": True, "allow_blank": False},
         }
 
+    def validate(self, attrs):
+        role = attrs.get("role")
+
+        if role == User.Role.STUDENT:
+            if attrs.get("course") is None:
+                raise serializers.ValidationError(
+                    {"course": "Это поле обязательно для студента."}
+                )
+            if not attrs.get("group"):
+                raise serializers.ValidationError(
+                    {"group": "Это поле обязательно для студента."}
+                )
+
+        return attrs
+
+    @transaction.atomic
     def create(self, validated_data):
         password = validated_data.pop("password")
+
+        course = validated_data.pop("course", None)
+        group = validated_data.pop("group", None)
+
+        academic_degree = validated_data.pop("academic_degree", None)
+        academic_title = validated_data.pop("academic_title", None)
+        job_title = validated_data.pop("job_title", None)
 
         user = User(**validated_data)
         user.set_password(password)
         user.save()
 
+        if user.role == User.Role.STUDENT:
+            StudentProfile.objects.create(
+                user=user,
+                course=course,
+                group=group,
+            )
+
+        elif user.role == User.Role.TEACHER:
+            TeacherProfile.objects.create(
+                user=user,
+                academic_degree=academic_degree,
+                academic_title=academic_title,
+                job_title=job_title,
+            )
+
         return user
 
 
 class StudentListSerializer(serializers.ModelSerializer):
-    course = serializers.IntegerField(source="studentprofile.course")
-    group = serializers.CharField(source="studentprofile.group")
+    course = serializers.IntegerField(source="student_profile.course")
+    group = serializers.CharField(source="student_profile.group")
 
     class Meta:
         model = User
@@ -71,13 +135,16 @@ class StudentListSerializer(serializers.ModelSerializer):
 
 class TeacherListSerializer(serializers.ModelSerializer):
     academic_degree = serializers.CharField(
-        source="teacherprofile.academic_degree", allow_null=True
+        source="teacher_profile.academic_degree",
+        allow_null=True,
     )
     academic_title = serializers.CharField(
-        source="teacherprofile.academic_title", allow_null=True
+        source="teacher_profile.academic_title",
+        allow_null=True,
     )
     job_title = serializers.CharField(
-        source="teacherprofile.job_title", allow_null=True
+        source="teacher_profile.job_title",
+        allow_null=True,
     )
 
     class Meta:
