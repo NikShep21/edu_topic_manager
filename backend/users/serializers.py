@@ -48,3 +48,21 @@ class UserCreateSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+class StudentListSerializer(serializers.ModelSerializer):
+    course = serializers.IntegerField(source="studentprofile.course")
+    group = serializers.CharField(source="studentprofile.group")
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "middle_name",
+            "email",
+            "role",
+            "course",
+            "group",
+        ]
