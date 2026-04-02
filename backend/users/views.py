@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
 
 from .serializers import (
-    UserReadSerializer, 
+    UserReadSerializer,
     UserCreateSerializer,
     TeacherListSerializer,
     StudentListSerializer,
@@ -37,12 +37,11 @@ class UserViewSet(ModelViewSet):
     def me(self, request):
         serializer = UserReadSerializer(request.user)
         return Response(serializer.data)
-    
+
     @action(detail=False, methods=["get"])
     def students(self, request):
         queryset = User.objects.filter(
-            role="student", 
-            student_profile__isnull=False
+            role="student", student_profile__isnull=False
         ).select_related("student_profile")
 
         course = request.query_params.get("course")
@@ -56,10 +55,10 @@ class UserViewSet(ModelViewSet):
             queryset = queryset.filter(student_profile__group__icontains=group)
         if search:
             queryset = queryset.filter(
-                Q(username__icontains=search) |
-                Q(first_name__icontains=search) |
-                Q(last_name__icontains=search) |
-                Q(middle_name__icontains=search)
+                Q(username__icontains=search)
+                | Q(first_name__icontains=search)
+                | Q(last_name__icontains=search)
+                | Q(middle_name__icontains=search)
             )
 
         if ordering == "-fio":
@@ -69,12 +68,11 @@ class UserViewSet(ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-    
+
     @action(detail=False, methods=["get"])
     def teachers(self, request):
         queryset = User.objects.filter(
-            role="teacher", 
-            teacher_profile__isnull=False
+            role="teacher", teacher_profile__isnull=False
         ).select_related("teacher_profile")
 
         academic_degree = request.query_params.get("academic_degree")
@@ -87,25 +85,23 @@ class UserViewSet(ModelViewSet):
             queryset = queryset.filter(
                 teacher_profile__academic_degree__icontains=academic_degree
             )
-        
+
         if academic_title:
             queryset = queryset.filter(
                 teacher_profile__academic_title__icontains=academic_title
             )
-        
+
         if job_title:
-            queryset = queryset.filter(
-                teacher_profile__job_title__icontains=job_title
-            )
+            queryset = queryset.filter(teacher_profile__job_title__icontains=job_title)
 
         if search:
             queryset = queryset.filter(
-                Q(username__icontains=search) |
-                Q(first_name__icontains=search) |
-                Q(last_name__icontains=search) |
-                Q(middle_name__icontains=search)
+                Q(username__icontains=search)
+                | Q(first_name__icontains=search)
+                | Q(last_name__icontains=search)
+                | Q(middle_name__icontains=search)
             )
-        
+
         if ordering == "-fio":
             queryset = queryset.order_by("-last_name", "-first_name", "-middle_name")
         else:
