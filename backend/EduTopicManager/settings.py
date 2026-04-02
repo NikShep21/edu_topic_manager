@@ -168,6 +168,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
     "EXCEPTION_HANDLER": "api.exceptions.custom_exception_handler",
+    "DEFAULT_PAGINATION_CLASS": "api.pagination.StandardResultsSetPagination",
 }
 
 SIMPLE_JWT = {

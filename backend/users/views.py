@@ -3,8 +3,14 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import Q
 
-from .serializers import UserReadSerializer, UserCreateSerializer
+from .serializers import (
+    UserReadSerializer,
+    UserCreateSerializer,
+    TeacherListSerializer,
+    StudentListSerializer,
+)
 from .permissions import IsAdminRole
 
 User = get_user_model()
@@ -16,6 +22,10 @@ class UserViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.action == "create":
             return UserCreateSerializer
+        if self.action == "students":
+            return StudentListSerializer
+        if self.action == "teachers":
+            return TeacherListSerializer
         return UserReadSerializer
 
     def get_permissions(self):
@@ -26,4 +36,81 @@ class UserViewSet(ModelViewSet):
     @action(detail=False, methods=["get"])
     def me(self, request):
         serializer = UserReadSerializer(request.user)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["get"])
+    def students(self, request):
+        queryset = User.objects.filter(
+            role="student", student_profile__isnull=False
+        ).select_related("student_profile")
+
+        course = request.query_params.get("course")
+        group = request.query_params.get("group")
+        search = request.query_params.get("search")
+        ordering = request.query_params.get("ordering", "fio")
+
+        if course:
+            queryset = queryset.filter(student_profile__course=course)
+        if group:
+            queryset = queryset.filter(student_profile__group__icontains=group)
+        if search:
+            queryset = queryset.filter(
+                Q(username__icontains=search)
+                | Q(first_name__icontains=search)
+                | Q(last_name__icontains=search)
+                | Q(middle_name__icontains=search)
+            )
+
+        if ordering == "-fio":
+            queryset = queryset.order_by("-last_name", "-first_name", "-middle_name")
+        else:
+            queryset = queryset.order_by("last_name", "first_name", "middle_name")
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["get"])
+    def teachers(self, request):
+        queryset = User.objects.filter(
+            role="teacher", teacher_profile__isnull=False
+        ).select_related("teacher_profile")
+
+        academic_degree = request.query_params.get("academic_degree")
+        academic_title = request.query_params.get("academic_title")
+        job_title = request.query_params.get("job_title")
+        search = request.query_params.get("search")
+        ordering = request.query_params.get("ordering", "fio")
+
+        if academic_degree:
+            queryset = queryset.filter(
+                teacher_profile__academic_degree__icontains=academic_degree
+            )
+
+        if academic_title:
+            queryset = queryset.filter(
+                teacher_profile__academic_title__icontains=academic_title
+            )
+
+        if job_title:
+            queryset = queryset.filter(teacher_profile__job_title__icontains=job_title)
+
+        if search:
+            queryset = queryset.filter(
+                Q(username__icontains=search)
+                | Q(first_name__icontains=search)
+                | Q(last_name__icontains=search)
+                | Q(middle_name__icontains=search)
+            )
+
+        if ordering == "-fio":
+            queryset = queryset.order_by("-last_name", "-first_name", "-middle_name")
+        else:
+            queryset = queryset.order_by("last_name", "first_name", "middle_name")
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
