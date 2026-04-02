@@ -1,14 +1,24 @@
-import { ApiError } from "./api-error";
+import { ApiError } from "./apiError";
 import type { QueryParams, RequestOptions } from "./types";
 
 export class HttpClient {
   constructor(
-    private readonly baseUrl: string,
+    private readonly basePath = "",
     private readonly defaultOptions: RequestInit = {},
   ) {}
 
   private buildUrl(path: string, query?: QueryParams) {
-    const url = new URL(path, this.baseUrl);
+    const trimmedBasePath = this.basePath.replace(/\/+$/, "");
+    const trimmedPath = path.replace(/^\/+/, "");
+
+    const rawUrl = trimmedBasePath
+      ? `${trimmedBasePath}/${trimmedPath}`
+      : trimmedPath.startsWith("http://") || trimmedPath.startsWith("https://")
+        ? trimmedPath
+        : `/${trimmedPath}`;
+
+    const isAbsolute = /^https?:\/\//i.test(rawUrl);
+    const url = isAbsolute ? new URL(rawUrl) : new URL(rawUrl, "http://localhost");
 
     if (query) {
       for (const [key, value] of Object.entries(query)) {
@@ -18,22 +28,29 @@ export class HttpClient {
       }
     }
 
-    return url.toString();
+    return isAbsolute ? url.toString() : `${url.pathname}${url.search}`;
   }
 
   private async request<T>(path: string, options: RequestOptions = {}): Promise<T> {
     const { query, body, headers, ...rest } = options;
+    const url = this.buildUrl(path, query);
+    console.log("HTTP URL:", url);
+    let response: Response;
 
-    const response = await fetch(this.buildUrl(path, query), {
-      ...this.defaultOptions,
-      ...rest,
-      headers: {
-        ...(body ? { "Content-Type": "application/json" } : {}),
-        ...(this.defaultOptions.headers ?? {}),
-        ...(headers ?? {}),
-      },
-      body: body !== undefined ? JSON.stringify(body) : undefined,
-    });
+    try {
+      response = await fetch(url, {
+        ...this.defaultOptions,
+        ...rest,
+        headers: {
+          ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
+          ...(this.defaultOptions.headers ?? {}),
+          ...(headers ?? {}),
+        },
+        body: body !== undefined ? JSON.stringify(body) : undefined,
+      });
+    } catch {
+      throw new ApiError("Network error", 0, null);
+    }
 
     const contentType = response.headers.get("content-type") ?? "";
     const isJson = contentType.includes("application/json");

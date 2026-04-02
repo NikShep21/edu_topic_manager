@@ -1,13 +1,16 @@
 :root {
   --bg-color: #efeff4;
-  --main-color: #4a90e2;
+  --main-color: #658ecd;
   --sidebar-color: #f2f3f8;
   --color-objects: #ffffff;
+  --dropdown-on-sidebar: #f7f7f7;
   --dropdown-color: #f3f5fa;
-  --text-color: #1c1e21;
+  --accent-surface-text: #1161be;
+  --accent-surface: #e0e6f3;
+  --text-color: #2d3035;
   --text-secondary: #6b7280;
   --border-color: #d9dde7;
-
+  --border-color-active: #8e9194;
   --avatar-bg: #e1e6ee;
 }
 
@@ -16,6 +19,9 @@
   --main-color: #5b9cff;
   --sidebar-color: #171a21;
   --color-objects: #1d212b;
+  --accent-surface: #253246;
+  --accent-surface-text: #cfe2ff;
+  --dropdown-on-sidebar: #242a36;
   --dropdown-color: #242a36;
   --text-color: #f3f4f6;
   --text-secondary: #9aa3b2;

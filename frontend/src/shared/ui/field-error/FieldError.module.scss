@@ -1,0 +1,13 @@
+.fieldError {
+  min-height: 18px;
+  margin: 3px 0 0;
+  font-size: 12px;
+  line-height: 1.2;
+  color: #d84f68;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.visible {
+  opacity: 1;
+}

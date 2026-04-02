@@ -1,3 +1,14 @@
 @mixin sidePadding($pad) {
   padding: 0px $pad 0px $pad;
 }
+@mixin centerFlex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@mixin hoverButton {
+  transition: opacity 0.15s ease-in-out;
+  &:hover {
+    opacity: 0.7;
+  }
+}

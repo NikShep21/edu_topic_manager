@@ -13,7 +13,7 @@
   }
 }
 .activeLink {
-  background-color: #e0e6f3 !important;
-  color: #1161be;
+  background-color: var(--accent-surface) !important;
+  color: var(--accent-surface-text);
   font-weight: 500;
 }

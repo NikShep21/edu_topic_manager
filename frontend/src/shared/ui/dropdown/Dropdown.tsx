@@ -21,6 +21,7 @@ interface PropsDropdown {
   children: React.ReactNode;
   trigger: React.ReactElement<DropdownTriggerProps>;
   placement?: DropdownPlacement;
+  className?: string;
 }
 
 const placementClasses = {
@@ -36,6 +37,7 @@ export const Dropdown = ({
   children,
   trigger,
   placement = "bottom-center",
+  className,
 }: PropsDropdown) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleHandler = () => setIsOpen((prev) => !prev);
@@ -76,7 +78,7 @@ export const Dropdown = ({
     <div ref={wrapperRef} className={styles.wrapper}>
       {triggerElement}
       {isOpen && (
-        <div className={clsx(styles.dropdown, placementClasses[placement])}>
+        <div className={clsx(styles.dropdown, placementClasses[placement], className)}>
           {children}
         </div>
       )}
