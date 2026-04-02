@@ -49,22 +49,26 @@ class User(AbstractUser):
         blank=False,
         verbose_name=_("Имя"),
     )
+    
     last_name = models.CharField(
         max_length=150,
         blank=False,
         verbose_name=_("Фамилия"),
     )
+    
     middle_name = models.CharField(
         max_length=150,
         blank=False,
         verbose_name=_("Отчество"),
     )
+
     role = models.CharField(
         max_length=10,
         choices=Role.choices,
         default=Role.STUDENT,
         verbose_name=_("Роль"),
     )
+
     email = models.EmailField(
         _("email address"),
         blank=True,

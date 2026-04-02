@@ -112,7 +112,7 @@ class RefreshView(APIView):
             key="access_token",
             value=str(access),
             httponly=True,
-            secure=True,  # поменять на тру при деплое
+            secure=False,  # поменять на тру при деплое
             samesite="Lax",
             max_age=60 * 30,
         )
