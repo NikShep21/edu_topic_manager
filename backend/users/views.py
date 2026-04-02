@@ -58,8 +58,7 @@ class UserViewSet(ModelViewSet):
                 Q(username__icontains=search) |
                 Q(first_name__icontains=search) |
                 Q(last_name__icontains=search) |
-                Q(middle_name__icontains=search) |
-                Q(email__icontains=search)
+                Q(middle_name__icontains=search)
             )
 
         serializer = self.get_serializer(queryset, many=True)
@@ -97,8 +96,7 @@ class UserViewSet(ModelViewSet):
                 Q(username__icontains=search) |
                 Q(first_name__icontains=search) |
                 Q(last_name__icontains=search) |
-                Q(middle_name__icontains=search) |
-                Q(email__icontains=search)
+                Q(middle_name__icontains=search)
             )
 
         serializer = self.get_serializer(queryset, many=True)
