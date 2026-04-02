@@ -13,8 +13,8 @@ export const UserBadge = ({ userData, className }: UserBadgeProps) => {
   }
 
   console.log("UserBadge", { userData });
-  const fullName = `${userData.firstName} ${userData.lastName}`;
-  const fallbackLetter = userData.firstName.charAt(0).toUpperCase();
+  const fullName = `${userData.first_name} ${userData.last_name}`;
+  const fallbackLetter = userData.first_name.charAt(0).toUpperCase();
 
   return (
     <div className={clsx(styles.user, className)}>
