@@ -64,3 +64,42 @@ class UserViewSet(ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=["get"])
+    def teachers(self, request):
+        queryset = User.objects.filter(
+            role="teacher", 
+            teacher_profile__isnull=False
+        ).select_related("teacher_profile")
+
+        academic_degree = request.query_params.get("academic_degree")
+        academic_title = request.query_params.get("academic_title")
+        job_title = request.query_params.get("job_title")
+        search = request.query_params.get("search")
+
+        if academic_degree:
+            queryset = queryset.filter(
+                teacher_profile__academic_degree__icontains=academic_degree
+            )
+        
+        if academic_title:
+            queryset = queryset.filter(
+                teacher_profile__academic_title__icontains=academic_title
+            )
+        
+        if job_title:
+            queryset = queryset.filter(
+                teacher_profile__job_title__icontains=job_title
+            )
+
+        if search:
+            queryset = queryset.filter(
+                Q(username__icontains=search) |
+                Q(first_name__icontains=search) |
+                Q(last_name__icontains=search) |
+                Q(middle_name__icontains=search) |
+                Q(email__icontains=search)
+            )
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
