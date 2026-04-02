@@ -66,3 +66,23 @@ class StudentListSerializer(serializers.ModelSerializer):
             "course",
             "group",
         ]
+
+class TeacherListSerializer(serializers.ModelSerializer):
+    academic_degree = serializers.CharField(source="teacherprofile.academic_degree", allow_null=True)
+    academic_title = serializers.CharField(source="teacherprofile.academic_title", allow_null=True)
+    job_title = serializers.CharField(source="teacherprofile.job_title", allow_null=True)
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "middle_name",
+            "email",
+            "role",
+            "academic_degree",
+            "academic_title",
+            "job_title",
+        ]
