@@ -48,6 +48,7 @@ class UserViewSet(ModelViewSet):
         course = request.query_params.get("course")
         group = request.query_params.get("group")
         search = request.query_params.get("search")
+        ordering = request.query_params.get("ordering", "fio")
 
         if course:
             queryset = queryset.filter(student_profile__course=course)
@@ -60,6 +61,11 @@ class UserViewSet(ModelViewSet):
                 Q(last_name__icontains=search) |
                 Q(middle_name__icontains=search)
             )
+
+        if ordering == "-fio":
+            queryset = queryset.order_by("-last_name", "-first_name", "-middle_name")
+        else:
+            queryset = queryset.order_by("last_name", "first_name", "middle_name")
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
@@ -75,6 +81,7 @@ class UserViewSet(ModelViewSet):
         academic_title = request.query_params.get("academic_title")
         job_title = request.query_params.get("job_title")
         search = request.query_params.get("search")
+        ordering = request.query_params.get("ordering", "fio")
 
         if academic_degree:
             queryset = queryset.filter(
@@ -98,6 +105,16 @@ class UserViewSet(ModelViewSet):
                 Q(last_name__icontains=search) |
                 Q(middle_name__icontains=search)
             )
+        
+        if ordering == "-fio":
+            queryset = queryset.order_by("-last_name", "-first_name", "-middle_name")
+        else:
+            queryset = queryset.order_by("last_name", "first_name", "middle_name")
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
