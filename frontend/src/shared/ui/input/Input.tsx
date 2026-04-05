@@ -1,16 +1,28 @@
+import type React from "react";
+import clsx from "clsx";
 import { FieldError } from "@/shared/ui/field-error";
 import styles from "./Input.module.scss";
-import clsx from "clsx";
 
-interface PropsInput extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   startContent?: React.ReactNode;
   endContent?: React.ReactNode;
   error?: string;
+  isError?: boolean;
+  className?: string;
+  inputClassName?: string;
 }
 
-export const Input = ({ startContent, endContent, error, ...props }: PropsInput) => {
+export const Input = ({
+  startContent,
+  endContent,
+  error,
+  isError = true,
+  className,
+  inputClassName,
+  ...props
+}: InputProps) => {
   return (
-    <div className={styles.field}>
+    <div className={clsx(styles.field, className)}>
       <div className={styles.inputContainer}>
         {startContent && (
           <div className={styles.startContent} aria-hidden="true">
@@ -19,17 +31,25 @@ export const Input = ({ startContent, endContent, error, ...props }: PropsInput)
         )}
 
         <input
-          className={clsx(styles.input, {
-            [styles.withStartContent]: Boolean(startContent),
-            [styles.withEndContent]: Boolean(endContent),
-          })}
           {...props}
+          className={clsx(
+            styles.input,
+            {
+              [styles.withStartContent]: Boolean(startContent),
+              [styles.withEndContent]: Boolean(endContent),
+            },
+            inputClassName,
+          )}
         />
 
-        {endContent && <div className={styles.endContent}>{endContent}</div>}
+        {endContent && (
+          <div className={styles.endContent} aria-hidden="true">
+            {endContent}
+          </div>
+        )}
       </div>
 
-      <FieldError message={error} className={styles.error} />
+      {isError ? <FieldError message={error} className={styles.error} /> : null}
     </div>
   );
 };

@@ -1,0 +1,12 @@
+.searchInput {
+  background-color: var(--search-input-bg);
+  border: 1px var(--search-input-border);
+
+  &:hover {
+    background-color: var(--search-input-bg-hover);
+  }
+
+  &:focus {
+    background-color: var(--search-input-bg-hover);
+  }
+}
