@@ -1,0 +1,28 @@
+.sortLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sortIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.35;
+  transform: rotate(0deg);
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.sortIconActive {
+  opacity: 1;
+}
+
+.sortIconDesc {
+  transform: rotate(180deg);
+}
+
+.actionsCell {
+  width: 96px;
+}
