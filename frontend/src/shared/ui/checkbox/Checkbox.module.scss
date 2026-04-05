@@ -1,0 +1,82 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.box {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1.5px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--color-objects);
+  color: transparent;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.input:hover + .box {
+  border-color: var(--border-color-active);
+  background: var(--search-input-bg);
+}
+
+.input:focus-visible + .box {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(101, 142, 205, 0.18);
+}
+
+.input:checked + .box {
+  background: var(--main-color);
+  border-color: var(--main-color);
+  color: #fff;
+}
+
+.input:checked:hover + .box {
+  filter: brightness(0.98);
+}
+
+.input:active + .box {
+  transform: scale(0.97);
+}
+
+.label {
+  color: var(--text-color);
+  font-size: 14px;
+  line-height: 1.2;
+}
