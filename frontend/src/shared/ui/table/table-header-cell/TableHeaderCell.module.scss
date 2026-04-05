@@ -1,0 +1,29 @@
+.cell {
+  height: 52px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  background: var(--search-input-bg);
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.interactive {
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.interactive:hover {
+  color: var(--text-color);
+}

@@ -1,0 +1,11 @@
+.row {
+  transition: background-color 0.15s ease;
+}
+
+.row:hover {
+  background: rgba(101, 142, 205, 0.04);
+}
+
+.selected {
+  background: rgba(101, 142, 205, 0.08);
+}

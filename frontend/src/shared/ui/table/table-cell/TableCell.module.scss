@@ -1,0 +1,16 @@
+.cell {
+  height: 64px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+  vertical-align: middle;
+  font-size: 15px;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
