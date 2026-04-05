@@ -5,7 +5,7 @@ import { Sidebar } from "@/widgets/sidebar/ui/Sidebar";
 import { Header } from "@/widgets/header";
 import styles from "./DashboardShell.module.scss";
 import type { SidebarNavItem } from "@/widgets/sidebar";
-import { useUserQuery } from "@/entities/user";
+import { useGetUser } from "@/entities/user/current";
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -19,7 +19,7 @@ export const DashboardShell = ({ children, nav, title }: DashboardShellProps) =>
   const openSidebar = () => setIsSidebarOpen(true);
   const closeSidebar = () => setIsSidebarOpen(false);
 
-  const { data: userData } = useUserQuery();
+  const { data: userData } = useGetUser();
 
   return (
     <div className={styles.layout}>
