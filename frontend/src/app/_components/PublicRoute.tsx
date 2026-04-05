@@ -2,16 +2,17 @@
 
 import { redirect } from "next/navigation";
 
-import { useUserQuery, type UserRole } from "@/entities/user";
 import { ApiError } from "@/shared/api/core/apiError";
 import { ROUTES } from "@/shared/routes/routes";
+import type { UserRole } from "@/entities/user";
+import { useGetUser } from "@/entities/user/current";
 
 interface PublicRouteProps {
   children: React.ReactNode;
 }
 
 export const PublicRoute = ({ children }: PublicRouteProps) => {
-  const { data, error, isPending } = useUserQuery();
+  const { data, error, isPending } = useGetUser();
 
   const role = data?.role as UserRole | undefined;
 

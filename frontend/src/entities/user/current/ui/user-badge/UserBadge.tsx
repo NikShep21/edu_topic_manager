@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import styles from "./UserBadge.module.scss";
-import type { UserData } from "../../model/types";
+import type { UserData } from "../../../base/model/types";
 
 interface UserBadgeProps {
   userData?: UserData;
@@ -12,7 +12,6 @@ export const UserBadge = ({ userData, className }: UserBadgeProps) => {
     return null;
   }
 
-  console.log("UserBadge", { userData });
   const fullName = `${userData.first_name} ${userData.last_name}`;
   const fallbackLetter = userData.first_name.charAt(0).toUpperCase();
 
