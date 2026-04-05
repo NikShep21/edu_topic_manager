@@ -18,10 +18,11 @@ type DropdownPlacement =
   | "bottom-right";
 
 interface PropsDropdown {
-  children: React.ReactNode;
+  children: React.ReactNode | ((args: { closeDropdown: () => void }) => React.ReactNode);
   trigger: React.ReactElement<DropdownTriggerProps>;
   placement?: DropdownPlacement;
   className?: string;
+  onOpenChange?: (isOpen: boolean) => void;
 }
 
 const placementClasses = {
@@ -38,10 +39,22 @@ export const Dropdown = ({
   trigger,
   placement = "bottom-center",
   className,
+  onOpenChange,
 }: PropsDropdown) => {
   const [isOpen, setIsOpen] = useState(false);
-  const toggleHandler = () => setIsOpen((prev) => !prev);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+
+  const closeDropdown = () => {
+    setIsOpen(false);
+  };
+
+  const toggleHandler = () => {
+    setIsOpen((prev) => !prev);
+  };
+
+  useEffect(() => {
+    onOpenChange?.(isOpen);
+  }, [isOpen, onOpenChange]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -50,13 +63,13 @@ export const Dropdown = ({
       const target = event.target as Node;
 
       if (wrapperRef.current && !wrapperRef.current.contains(target)) {
-        setIsOpen(false);
+        closeDropdown();
       }
     };
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsOpen(false);
+        closeDropdown();
       }
     };
 
@@ -70,7 +83,10 @@ export const Dropdown = ({
   }, [isOpen]);
 
   const triggerElement = cloneElement(trigger, {
-    onClick: toggleHandler,
+    onClick: (event: React.MouseEvent<HTMLElement>) => {
+      trigger.props.onClick?.(event);
+      toggleHandler();
+    },
     className: clsx(styles.opener, trigger.props.className),
   });
 
@@ -79,7 +95,7 @@ export const Dropdown = ({
       {triggerElement}
       {isOpen && (
         <div className={clsx(styles.dropdown, placementClasses[placement], className)}>
-          {children}
+          {typeof children === "function" ? children({ closeDropdown }) : children}
         </div>
       )}
     </div>
