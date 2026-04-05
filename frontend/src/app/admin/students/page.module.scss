@@ -1,9 +1,15 @@
 .content {
-  padding: $paddingMobile;
+  padding: 20px 30px;
+  @media (max-width: $tablet) {
+    padding: 10px;
+  }
+}
+.table {
+  margin-top: 40px;
 }
 .tableContainer {
   background-color: var(--color-objects);
-  padding: 20px;
+  overflow: hidden;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
