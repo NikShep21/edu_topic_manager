@@ -24,15 +24,23 @@ export const ButtonCreateStudent = () => {
     handleSubmit,
     formState: { errors },
     register,
+    reset,
   } = useForm<CreateStudentValues>({
     resolver: zodResolver(createStudentSchema),
   });
 
   const { error, isPending, mutate } = useCreateStudent();
   const submit = (formData: CreateStudentValues) => {
-    const data = { ...formData, role: "student" } as const;
-    mutate(data);
+    const payload = { ...formData, role: "student" } as const;
+
+    mutate(payload, {
+      onSuccess: () => {
+        reset();
+        setIsOpen(false);
+      },
+    });
   };
+
   const createError =
     error instanceof ApiError && (error.status === 401 || error.status === 400)
       ? error

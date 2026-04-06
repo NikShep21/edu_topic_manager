@@ -3,6 +3,7 @@
   .dropdown {
     position: absolute;
     min-width: 100%;
+    width: max-content;
     overflow: hidden;
     border-radius: 7px;
     background: var(--dropdown-color);

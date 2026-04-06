@@ -1,8 +1,13 @@
-import type { StudentsQueryParams } from "@/entities/user/student";
-import type { StudentSortField, SortDirection, StudentsManagementState } from "./types";
+import type {
+  StudentsQueryParams,
+  OrderingStudentBaseField,
+  OrderingStudentField,
+} from "@/entities/user/student";
+import type { StudentSortField, StudentsManagementState } from "./types";
+import type { SortDirection } from "@/shared/model/sort/types";
 
-const SORT_FIELD_TO_ORDERING_MAP: Record<StudentSortField, string> = {
-  full_name: "full_name",
+const SORT_FIELD_TO_ORDERING_MAP: Record<StudentSortField, OrderingStudentBaseField> = {
+  full_name: "fio",
   group: "group",
   course: "course",
 };
@@ -10,7 +15,7 @@ const SORT_FIELD_TO_ORDERING_MAP: Record<StudentSortField, string> = {
 const buildOrdering = (
   sortField: StudentSortField,
   sortDirection: SortDirection,
-): string => {
+): OrderingStudentField => {
   const orderingField = SORT_FIELD_TO_ORDERING_MAP[sortField];
 
   return sortDirection === "desc" ? `-${orderingField}` : orderingField;

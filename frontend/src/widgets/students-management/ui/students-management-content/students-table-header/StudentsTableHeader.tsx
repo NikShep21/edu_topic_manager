@@ -7,10 +7,8 @@ import { Checkbox } from "@/shared/ui/checkbox";
 import { TableHeaderCell, TableRow } from "@/shared/ui/table";
 
 import styles from "./StudentsTableHeader.module.scss";
-import type {
-  SortDirection,
-  StudentSortField,
-} from "@/widgets/students-management/model/types";
+import type { StudentSortField } from "@/widgets/students-management/model/types";
+import type { SortDirection } from "@/shared/model/sort/types";
 
 interface StudentsTableHeaderProps {
   sortField: StudentSortField;

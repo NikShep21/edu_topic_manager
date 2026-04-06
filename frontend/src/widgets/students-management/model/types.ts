@@ -1,5 +1,6 @@
+import type { SortDirection } from "@/shared/model/sort/types";
+
 export type StudentSortField = "full_name" | "group" | "course";
-export type SortDirection = "asc" | "desc";
 
 export interface StudentsManagementState {
   search: string;
