@@ -10,12 +10,9 @@ export const createStudentSchema = z.object({
   middle_name: z.string().min(1, "Введите отчество"),
   course: z
     .number({
-      error: (issue) =>
-        issue.input === undefined || Number.isNaN(issue.input)
-          ? "Введите курс"
-          : "Курс должен быть числом",
+      error: "Выберите курс",
     })
-    .min(1, { error: "Курс должен быть не меньше 1" }),
+    .min(1, { error: "Выберите курс" }),
   group: z
     .string()
     .min(1, "Введите группу")
