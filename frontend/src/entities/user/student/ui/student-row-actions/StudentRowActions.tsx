@@ -1,21 +1,22 @@
 "use client";
 
-import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import { FiEdit2, FiKey, FiTrash2 } from "react-icons/fi";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 
 import { Dropdown, DropdownMenu, DropdownMenuItem } from "@/shared/ui/dropdown";
-
 import { IconButton } from "@/shared/ui/icon-button";
 
 interface StudentRowActionsProps {
   studentId: number;
   onEdit?: (studentId: number) => void;
+  onChangePassword?: (studentId: number) => void;
   onDelete?: (studentId: number) => void;
 }
 
 export const StudentRowActions = ({
   studentId,
   onEdit,
+  onChangePassword,
   onDelete,
 }: StudentRowActionsProps) => {
   return (
@@ -35,6 +36,16 @@ export const StudentRowActions = ({
             }}
           >
             Редактировать
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            icon={<FiKey size={16} />}
+            onClick={() => {
+              onChangePassword?.(studentId);
+              closeDropdown();
+            }}
+          >
+            Сменить пароль
           </DropdownMenuItem>
 
           <DropdownMenuItem
