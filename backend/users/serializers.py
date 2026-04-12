@@ -234,7 +234,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
 class StudentListSerializer(serializers.ModelSerializer):
     course = serializers.IntegerField(source="student_profile.course")
-    group = serializers.CharField(source="student_profile.group")
+    group = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -249,6 +249,11 @@ class StudentListSerializer(serializers.ModelSerializer):
             "course",
             "group",
         ]
+
+    def get_group(self, obj):
+        return {
+            "name": obj.student_profile.group
+        }
 
 
 class TeacherListSerializer(serializers.ModelSerializer):
