@@ -5,3 +5,4 @@ export type {
   OrderingStudentField,
 } from "./api/types";
 export { StudentTableRow } from "./ui/student-table-row/StudentTableRow";
+export { courseOptions } from "./model/constants";
