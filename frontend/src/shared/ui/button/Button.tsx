@@ -41,7 +41,7 @@ export const Button = ({
       disabled={disabled || isLoading}
       {...props}
     >
-      {!isLoading && children}
+      <div className={styles.content}>{children}</div>
 
       {isLoading ? (
         <span className={styles.spinnerWrapper} aria-hidden="true">
