@@ -1,8 +1,11 @@
 "use client";
 
-import { cloneElement, useEffect, useRef, useState } from "react";
-import styles from "./Dropdown.module.scss";
 import clsx from "clsx";
+import { cloneElement, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+
+import { useDropdownPosition } from "./useDropdownPosition";
+import styles from "./Dropdown.module.scss";
 
 interface DropdownTriggerProps {
   onClick?: React.MouseEventHandler<HTMLElement>;
@@ -23,16 +26,8 @@ interface PropsDropdown {
   placement?: DropdownPlacement;
   className?: string;
   onOpenChange?: (isOpen: boolean) => void;
+  matchTriggerWidth?: boolean;
 }
-
-const placementClasses = {
-  "top-left": styles.topLeft,
-  "top-center": styles.topCenter,
-  "top-right": styles.topRight,
-  "bottom-left": styles.bottomLeft,
-  "bottom-center": styles.bottomCenter,
-  "bottom-right": styles.bottomRight,
-};
 
 export const Dropdown = ({
   children,
@@ -40,15 +35,26 @@ export const Dropdown = ({
   placement = "bottom-center",
   className,
   onOpenChange,
+  matchTriggerWidth = false,
 }: PropsDropdown) => {
   const [isOpen, setIsOpen] = useState(false);
+
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const { dropdownStyle, updatePosition } = useDropdownPosition({
+    isOpen,
+    placement,
+    matchTriggerWidth,
+    wrapperRef,
+    dropdownRef,
+  });
 
   const closeDropdown = () => {
     setIsOpen(false);
   };
 
-  const toggleHandler = () => {
+  const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
 
@@ -62,7 +68,10 @@ export const Dropdown = ({
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
 
-      if (wrapperRef.current && !wrapperRef.current.contains(target)) {
+      const clickedInsideTrigger = wrapperRef.current?.contains(target);
+      const clickedInsideDropdown = dropdownRef.current?.contains(target);
+
+      if (!clickedInsideTrigger && !clickedInsideDropdown) {
         closeDropdown();
       }
     };
@@ -75,29 +84,51 @@ export const Dropdown = ({
 
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleEscape);
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscape);
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
     };
-  }, [isOpen]);
+  }, [isOpen, updatePosition]);
 
   const triggerElement = cloneElement(trigger, {
     onClick: (event: React.MouseEvent<HTMLElement>) => {
       trigger.props.onClick?.(event);
-      toggleHandler();
+      toggleDropdown();
     },
     className: clsx(styles.opener, trigger.props.className),
   });
 
+  if (typeof document === "undefined") {
+    return (
+      <div ref={wrapperRef} className={styles.wrapper}>
+        {triggerElement}
+      </div>
+    );
+  }
+
   return (
-    <div ref={wrapperRef} className={styles.wrapper}>
-      {triggerElement}
-      {isOpen && (
-        <div className={clsx(styles.dropdown, placementClasses[placement], className)}>
-          {typeof children === "function" ? children({ closeDropdown }) : children}
-        </div>
-      )}
-    </div>
+    <>
+      <div ref={wrapperRef} className={styles.wrapper}>
+        {triggerElement}
+      </div>
+
+      {isOpen
+        ? createPortal(
+            <div
+              ref={dropdownRef}
+              style={dropdownStyle}
+              className={clsx(styles.dropdown, className)}
+            >
+              {typeof children === "function" ? children({ closeDropdown }) : children}
+            </div>,
+            document.body,
+          )
+        : null}
+    </>
   );
 };
