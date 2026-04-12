@@ -1,27 +1,33 @@
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.decorators import action
-from rest_framework.response import Response
 from django.contrib.auth import get_user_model
-from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
-from .serializers import (
-    UserReadSerializer,
-    UserCreateSerializer,
-    TeacherListSerializer,
-    StudentListSerializer,
-)
+from api.pagination import StandardResultsSetPagination
 from .permissions import IsAdminRole
+from .serializers import (
+    StudentListSerializer,
+    TeacherListSerializer,
+    UserCreateSerializer,
+    UserReadSerializer,
+    UserUpdateSerializer,
+)
+
 
 User = get_user_model()
 
 
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
+    pagination_class = StandardResultsSetPagination
 
     def get_serializer_class(self):
         if self.action == "create":
             return UserCreateSerializer
+        if self.action in ["update", "partial_update"]:
+            return UserUpdateSerializer
         if self.action == "students":
             return StudentListSerializer
         if self.action == "teachers":
@@ -41,7 +47,8 @@ class UserViewSet(ModelViewSet):
     @action(detail=False, methods=["get"])
     def students(self, request):
         queryset = User.objects.filter(
-            role="student", student_profile__isnull=False
+            role=User.Role.STUDENT,
+            student_profile__isnull=False,
         ).select_related("student_profile")
 
         course = request.query_params.get("course")
@@ -51,8 +58,10 @@ class UserViewSet(ModelViewSet):
 
         if course:
             queryset = queryset.filter(student_profile__course=course)
+
         if group:
             queryset = queryset.filter(student_profile__group__icontains=group)
+
         if search:
             queryset = queryset.filter(
                 Q(username__icontains=search)
@@ -66,13 +75,52 @@ class UserViewSet(ModelViewSet):
         else:
             queryset = queryset.order_by("last_name", "first_name", "middle_name")
 
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, methods=["get"], url_path="students/filter-options")
+    def student_filter_options(self, request):
+        groups_qs = (
+            User.objects.filter(
+                role=User.Role.STUDENT,
+                student_profile__isnull=False,
+            )
+            .exclude(student_profile__group="")
+            .values_list("student_profile__group", flat=True)
+            .distinct()
+            .order_by("student_profile__group")
+        )
+
+        courses_qs = (
+            User.objects.filter(
+                role=User.Role.STUDENT,
+                student_profile__isnull=False,
+            )
+            .values_list("student_profile__course", flat=True)
+            .distinct()
+            .order_by("student_profile__course")
+        )
+
+        groups = [{"name": group_name} for group_name in groups_qs]
+        courses = [{"id": course, "name": f"{course} курс"} for course in courses_qs]
+
+        return Response(
+            {
+                "groups": groups,
+                "courses": courses,
+            }
+        )
 
     @action(detail=False, methods=["get"])
     def teachers(self, request):
         queryset = User.objects.filter(
-            role="teacher", teacher_profile__isnull=False
+            role=User.Role.TEACHER,
+            teacher_profile__isnull=False,
         ).select_related("teacher_profile")
 
         academic_degree = request.query_params.get("academic_degree")
@@ -92,7 +140,9 @@ class UserViewSet(ModelViewSet):
             )
 
         if job_title:
-            queryset = queryset.filter(teacher_profile__job_title__icontains=job_title)
+            queryset = queryset.filter(
+                teacher_profile__job_title__icontains=job_title
+            )
 
         if search:
             queryset = queryset.filter(
