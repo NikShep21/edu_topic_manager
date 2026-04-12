@@ -1,50 +1,9 @@
-.modal {
-  width: min(760px, 100%);
-}
-
-.form {
-  width: 100%;
-  max-width: 560px;
-  display: flex;
-  flex-direction: column;
-}
 .icon {
   width: max-content;
 }
+
 .text {
   @media (max-width: $tablet) {
     display: none;
   }
-}
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-width: 0;
-}
-
-.label {
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.2;
-  color: var(--text-primary);
-}
-
-.row {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 16px;
-  @media (max-width: $mobile) {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-}
-
-.actions {
-  width: 100%;
-  max-width: 560px;
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border-color);
 }
