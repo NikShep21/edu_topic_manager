@@ -3,6 +3,13 @@ from rest_framework.permissions import BasePermission
 
 class IsAdminRole(BasePermission):
     def has_permission(self, request, view):
-        return request.user.is_authenticated and (
-            request.user.role == "admin" or request.user.is_superuser
+        user = request.user
+        return bool(
+            user
+            and user.is_authenticated
+            and (
+                user.role == "admin"
+                or user.is_superuser
+                or user.is_staff
+            )
         )
