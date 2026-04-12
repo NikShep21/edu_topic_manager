@@ -85,6 +85,7 @@ export const Sidebar = ({ nav, isOpen, onClose, userData }: SidebarProps) => {
         <div className={styles.bottomPart}>
           <div className={styles.sidebarFooter}>
             <Dropdown
+              matchTriggerWidth
               placement="top-center"
               className={styles.userDropdown}
               trigger={

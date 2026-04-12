@@ -17,6 +17,9 @@
   background-color: var(--color-objects);
   box-shadow: 0 20px 60px rgb(0 0 0 / 12%);
   overflow: hidden;
+  max-height: calc(100dvh - 32px);
+
+  margin: auto;
 }
 
 .modalHeader {
@@ -71,6 +74,7 @@
 
 .modalBody {
   padding: 18px 26px;
+  overflow-y: auto;
   background-color: var(--color-objects);
 }
 

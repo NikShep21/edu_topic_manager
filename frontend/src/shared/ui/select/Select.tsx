@@ -78,6 +78,7 @@ export const Select = ({
 
   return (
     <Dropdown
+      matchTriggerWidth
       trigger={
         <button
           type="button"
