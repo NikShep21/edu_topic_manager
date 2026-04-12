@@ -5,11 +5,12 @@ import type {
   StudentsQueryParams,
 } from "@/entities/user/student/api/types";
 import { studentQueryKeys } from "@/entities/user/student/model/queryKeys";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 export const useStudentsQuery = (query: StudentsQueryParams) => {
   return useQuery<StudentData[]>({
     queryKey: studentQueryKeys.list(query),
     queryFn: () => getStudents(query),
+    placeholderData: keepPreviousData,
   });
 };
