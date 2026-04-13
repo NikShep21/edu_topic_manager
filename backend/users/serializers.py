@@ -114,9 +114,129 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return user
 
 
+class UserUpdateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=False)
+
+    course = serializers.IntegerField(required=False)
+    group = serializers.CharField(required=False, allow_blank=True)
+
+    academic_degree = serializers.CharField(
+        required=False,
+        allow_null=True,
+        allow_blank=True,
+    )
+    academic_title = serializers.CharField(
+        required=False,
+        allow_null=True,
+        allow_blank=True,
+    )
+    job_title = serializers.CharField(
+        required=False,
+        allow_null=True,
+        allow_blank=True,
+    )
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "password",
+            "first_name",
+            "last_name",
+            "middle_name",
+            "email",
+            "course",
+            "group",
+            "academic_degree",
+            "academic_title",
+            "job_title",
+            "is_active",
+            "is_staff",
+        ]
+        extra_kwargs = {
+            "username": {"required": False},
+            "first_name": {"required": False},
+            "last_name": {"required": False},
+            "middle_name": {"required": False},
+            "email": {"required": False},
+            "is_active": {"required": False},
+            "is_staff": {"required": False},
+        }
+
+    def validate(self, attrs):
+        role = self.instance.role
+
+        if role == User.Role.STUDENT:
+            course = attrs.get(
+                "course",
+                getattr(
+                    getattr(self.instance, "student_profile", None), "course", None
+                ),
+            )
+            group = attrs.get(
+                "group",
+                getattr(getattr(self.instance, "student_profile", None), "group", None),
+            )
+
+            if course is None:
+                raise serializers.ValidationError(
+                    {"course": "Это поле обязательно для студента."}
+                )
+            if not group:
+                raise serializers.ValidationError(
+                    {"group": "Это поле обязательно для студента."}
+                )
+
+        return attrs
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        password = validated_data.pop("password", None)
+
+        course = validated_data.pop("course", None)
+        group = validated_data.pop("group", None)
+
+        academic_degree = validated_data.pop("academic_degree", None)
+        academic_title = validated_data.pop("academic_title", None)
+        job_title = validated_data.pop("job_title", None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        if password:
+            instance.set_password(password)
+
+        instance.save()
+
+        if instance.role == User.Role.STUDENT:
+            student_profile = instance.student_profile
+
+            if course is not None:
+                student_profile.course = course
+            if group is not None:
+                student_profile.group = group
+
+            student_profile.save()
+
+        elif instance.role == User.Role.TEACHER:
+            teacher_profile = instance.teacher_profile
+
+            if academic_degree is not None:
+                teacher_profile.academic_degree = academic_degree
+            if academic_title is not None:
+                teacher_profile.academic_title = academic_title
+            if job_title is not None:
+                teacher_profile.job_title = job_title
+
+            teacher_profile.save()
+
+        return instance
+
+
 class StudentListSerializer(serializers.ModelSerializer):
     course = serializers.IntegerField(source="student_profile.course")
-    group = serializers.CharField(source="student_profile.group")
+    group = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -131,6 +251,9 @@ class StudentListSerializer(serializers.ModelSerializer):
             "course",
             "group",
         ]
+
+    def get_group(self, obj):
+        return {"name": obj.student_profile.group}
 
 
 class TeacherListSerializer(serializers.ModelSerializer):

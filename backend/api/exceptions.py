@@ -2,25 +2,25 @@ from rest_framework.views import exception_handler
 
 
 def custom_exception_handler(exc, context):
-    responce = exception_handler(exc, context)
+    response = exception_handler(exc, context)
 
-    if responce is None:
-        return responce
+    if response is None:
+        return response
 
     data = {
-        "succsess": False,
-        "message": "request failed",
+        "success": False,
+        "message": "Request failed",
         "errors": None,
     }
 
-    if isinstance(responce.data, dict):
-        if "deteil" in responce.data:
-            data["message"] = responce.data["deteil"]
+    if isinstance(response.data, dict):
+        if "detail" in response.data:
+            data["message"] = response.data["detail"]
         else:
-            data["message"] = "validation error"
-            data["errors"] = responce.data
+            data["message"] = "Validation error"
+            data["errors"] = response.data
     else:
-        data["message"] = responce.data
+        data["message"] = response.data
 
-    responce.data = data
-    return responce
+    response.data = data
+    return response
