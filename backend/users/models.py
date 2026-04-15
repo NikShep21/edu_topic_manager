@@ -3,6 +3,13 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
+COURSE_CHOICES = [
+    (1, "1 курс"),
+    (2, "2 курс"),
+    (3, "3 курс"),
+    (4, "4 курс"),
+]
+
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -92,6 +99,21 @@ class User(AbstractUser):
         parts = [self.last_name, self.first_name, self.middle_name]
         return " ".join(part for part in parts if part).strip()
 
+class StudentGroup(models.Model):
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+        verbose_name=_("группа"),
+    )
+
+    class Meta:
+        verbose_name = _("Группа студентов")
+        verbose_name_plural = _("Группы студентов")
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
 
 class StudentProfile(models.Model):
     user = models.OneToOneField(
@@ -100,11 +122,16 @@ class StudentProfile(models.Model):
         related_name="student_profile",
         verbose_name=_("Пользователь"),
     )
-    course = models.PositiveSmallIntegerField(verbose_name=_("Курс"))
-    group = models.CharField(
-        max_length=100,
+    course = models.PositiveSmallIntegerField(
+        choices=COURSE_CHOICES,
+        verbose_name=_("Курс"),
+    )
+    group = models.ForeignKey(
+        StudentGroup,
+        on_delete=models.PROTECT,
+        null=True,
         blank=True,
-        default="",
+        related_name="students",
         verbose_name=_("Группа"),
     )
 
@@ -113,7 +140,7 @@ class StudentProfile(models.Model):
         verbose_name_plural = _("Профили студентов")
 
     def __str__(self):
-        return f"{self.user.get_full_name()} (Курс {self.course}, Группа {self.group})"
+        return f"{self.user.get_full_name()} (Курс {self.course}, Группа {self.group.name})"
 
 
 class TeacherProfile(models.Model):
