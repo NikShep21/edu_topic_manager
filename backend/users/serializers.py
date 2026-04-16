@@ -130,6 +130,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
         course = validated_data.pop("course", None)
         group = validated_data.pop("group", None)
+        validated_data.pop("group_name", None)
         group_name = validated_data.pop("_group_name", None)
 
         academic_degree = validated_data.pop("academic_degree", None)
@@ -279,6 +280,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
         course = validated_data.pop("course", None)
         group = validated_data.pop("group", None)
+        validated_data.pop("group_name", None)
         group_name = validated_data.pop("_group_name", None)
 
         academic_degree = validated_data.pop("academic_degree", None)
