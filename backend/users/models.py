@@ -10,6 +10,7 @@ COURSE_CHOICES = [
     (4, "4 курс"),
 ]
 
+
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -98,6 +99,7 @@ class User(AbstractUser):
     def get_full_name(self):
         parts = [self.last_name, self.first_name, self.middle_name]
         return " ".join(part for part in parts if part).strip()
+
 
 class StudentGroup(models.Model):
     name = models.CharField(

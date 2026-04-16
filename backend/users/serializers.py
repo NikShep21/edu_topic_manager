@@ -193,7 +193,9 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         if role == User.Role.STUDENT:
             course = attrs.get(
                 "course",
-                getattr(getattr(self.instance, "student_profile", None), "course", None),
+                getattr(
+                    getattr(self.instance, "student_profile", None), "course", None
+                ),
             )
             group = attrs.get(
                 "group",
@@ -309,4 +311,3 @@ class TeacherListSerializer(serializers.ModelSerializer):
             "academic_title",
             "job_title",
         ]
-        

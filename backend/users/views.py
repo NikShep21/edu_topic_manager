@@ -121,9 +121,7 @@ class UserViewSet(ModelViewSet):
             )
 
         if job_title:
-            queryset = queryset.filter(
-                teacher_profile__job_title__icontains=job_title
-            )
+            queryset = queryset.filter(teacher_profile__job_title__icontains=job_title)
 
         if search:
             queryset = queryset.filter(
