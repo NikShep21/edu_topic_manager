@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from api.pagination import StandardResultsSetPagination
+from .models import COURSE_CHOICES, StudentGroup
 from .permissions import IsAdminRole
 from .serializers import (
     StudentListSerializer,
@@ -14,7 +15,6 @@ from .serializers import (
     UserReadSerializer,
     UserUpdateSerializer,
 )
-
 
 User = get_user_model()
 
@@ -49,7 +49,7 @@ class UserViewSet(ModelViewSet):
         queryset = User.objects.filter(
             role=User.Role.STUDENT,
             student_profile__isnull=False,
-        ).select_related("student_profile")
+        ).select_related("student_profile", "student_profile__group")
 
         course = request.query_params.get("course")
         group = request.query_params.get("group")
@@ -60,7 +60,7 @@ class UserViewSet(ModelViewSet):
             queryset = queryset.filter(student_profile__course=course)
 
         if group:
-            queryset = queryset.filter(student_profile__group__icontains=group)
+            queryset = queryset.filter(student_profile__group_id=group)
 
         if search:
             queryset = queryset.filter(
@@ -85,34 +85,15 @@ class UserViewSet(ModelViewSet):
 
     @action(detail=False, methods=["get"], url_path="students/filter-options")
     def student_filter_options(self, request):
-        groups_qs = (
-            User.objects.filter(
-                role=User.Role.STUDENT,
-                student_profile__isnull=False,
-            )
-            .exclude(student_profile__group="")
-            .values_list("student_profile__group", flat=True)
-            .distinct()
-            .order_by("student_profile__group")
-        )
-
-        courses_qs = (
-            User.objects.filter(
-                role=User.Role.STUDENT,
-                student_profile__isnull=False,
-            )
-            .values_list("student_profile__course", flat=True)
-            .distinct()
-            .order_by("student_profile__course")
-        )
-
-        groups = [{"name": group_name} for group_name in groups_qs]
-        courses = [{"id": course, "name": f"{course} курс"} for course in courses_qs]
+        groups = list(StudentGroup.objects.values("id", "name").order_by("name"))
 
         return Response(
             {
                 "groups": groups,
-                "courses": courses,
+                "courses": [
+                    {"id": course_id, "name": course_name}
+                    for course_id, course_name in COURSE_CHOICES
+                ],
             }
         )
 

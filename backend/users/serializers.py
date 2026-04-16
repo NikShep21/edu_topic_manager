@@ -2,9 +2,15 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from rest_framework import serializers
 
-from .models import StudentProfile, TeacherProfile
+from .models import COURSE_CHOICES, StudentGroup, StudentProfile, TeacherProfile
 
 User = get_user_model()
+
+
+class StudentGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentGroup
+        fields = ["id", "name"]
 
 
 class UserReadSerializer(serializers.ModelSerializer):
@@ -25,7 +31,12 @@ class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     course = serializers.IntegerField(required=False)
-    group = serializers.CharField(required=False)
+    group_id = serializers.PrimaryKeyRelatedField(
+        queryset=StudentGroup.objects.all(),
+        source="group",
+        write_only=True,
+        required=False,
+    )
 
     academic_degree = serializers.CharField(
         required=False,
@@ -55,7 +66,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "email",
             "role",
             "course",
-            "group",
+            "group_id",
             "academic_degree",
             "academic_title",
             "job_title",
@@ -74,10 +85,17 @@ class UserCreateSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     {"course": "Это поле обязательно для студента."}
                 )
-            if not attrs.get("group"):
+            if attrs.get("group") is None:
                 raise serializers.ValidationError(
-                    {"group": "Это поле обязательно для студента."}
+                    {"group_id": "Это поле обязательно для студента."}
                 )
+
+        valid_course_ids = {course_id for course_id, _ in COURSE_CHOICES}
+        course = attrs.get("course")
+        if course is not None and course not in valid_course_ids:
+            raise serializers.ValidationError(
+                {"course": "Недопустимое значение курса."}
+            )
 
         return attrs
 
@@ -118,7 +136,12 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)
 
     course = serializers.IntegerField(required=False)
-    group = serializers.CharField(required=False, allow_blank=True)
+    group_id = serializers.PrimaryKeyRelatedField(
+        queryset=StudentGroup.objects.all(),
+        source="group",
+        write_only=True,
+        required=False,
+    )
 
     academic_degree = serializers.CharField(
         required=False,
@@ -147,7 +170,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "middle_name",
             "email",
             "course",
-            "group",
+            "group_id",
             "academic_degree",
             "academic_title",
             "job_title",
@@ -183,10 +206,17 @@ class UserUpdateSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     {"course": "Это поле обязательно для студента."}
                 )
-            if not group:
+            if group is None:
                 raise serializers.ValidationError(
-                    {"group": "Это поле обязательно для студента."}
+                    {"group_id": "Это поле обязательно для студента."}
                 )
+
+        valid_course_ids = {course_id for course_id, _ in COURSE_CHOICES}
+        course = attrs.get("course")
+        if course is not None and course not in valid_course_ids:
+            raise serializers.ValidationError(
+                {"course": "Недопустимое значение курса."}
+            )
 
         return attrs
 
@@ -236,7 +266,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
 class StudentListSerializer(serializers.ModelSerializer):
     course = serializers.IntegerField(source="student_profile.course")
-    group = serializers.SerializerMethodField()
+    group = StudentGroupSerializer(source="student_profile.group", read_only=True)
 
     class Meta:
         model = User
@@ -251,9 +281,6 @@ class StudentListSerializer(serializers.ModelSerializer):
             "course",
             "group",
         ]
-
-    def get_group(self, obj):
-        return {"name": obj.student_profile.group}
 
 
 class TeacherListSerializer(serializers.ModelSerializer):
