@@ -37,11 +37,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
         write_only=True,
         required=False,
     )
-    group_name = serializers.CharField(
-        write_only=True,
-        required=False,
-        allow_blank=False,
-    )
 
     academic_degree = serializers.CharField(
         required=False,
@@ -72,7 +67,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "role",
             "course",
             "group_id",
-            "group_name",
             "academic_degree",
             "academic_title",
             "job_title",
@@ -85,13 +79,16 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         role = attrs.get("role")
-        group = attrs.get("group")
-        group_name = self.initial_data.get("group_name")
 
-        if isinstance(group_name, str):
-            group_name = group_name.strip()
-            if not group_name:
-                group_name = None
+        if role == User.Role.STUDENT:
+            if attrs.get("course") is None:
+                raise serializers.ValidationError(
+                    {"course": "Это поле обязательно для студента."}
+                )
+            if attrs.get("group") is None:
+                raise serializers.ValidationError(
+                    {"group_id": "Это поле обязательно для студента."}
+                )
 
         valid_course_ids = {course_id for course_id, _ in COURSE_CHOICES}
         course = attrs.get("course")
@@ -100,28 +97,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
                 {"course": "Недопустимое значение курса."}
             )
 
-        if role == User.Role.STUDENT:
-            if attrs.get("course") is None:
-                raise serializers.ValidationError(
-                    {"course": "Это поле обязательно для студента."}
-                )
-
-            if group is None and not group_name:
-                raise serializers.ValidationError(
-                    {"group_id": "Передайте group_id или group_name для студента."}
-                )
-
-            if group is not None and group_name and group.name != group_name:
-                raise serializers.ValidationError(
-                    {
-                        "group_name": (
-                            "group_name не совпадает с группой, "
-                            "переданной в group_id."
-                        )
-                    }
-                )
-
-        attrs["_group_name"] = group_name
         return attrs
 
     @transaction.atomic
@@ -130,14 +105,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
         course = validated_data.pop("course", None)
         group = validated_data.pop("group", None)
-        group_name = validated_data.pop("_group_name", None)
 
         academic_degree = validated_data.pop("academic_degree", None)
         academic_title = validated_data.pop("academic_title", None)
         job_title = validated_data.pop("job_title", None)
-
-        if group is None and group_name:
-            group, _ = StudentGroup.objects.get_or_create(name=group_name)
 
         user = User(**validated_data)
         user.set_password(password)
@@ -171,11 +142,6 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         write_only=True,
         required=False,
     )
-    group_name = serializers.CharField(
-        write_only=True,
-        required=False,
-        allow_blank=False,
-    )
 
     academic_degree = serializers.CharField(
         required=False,
@@ -205,7 +171,6 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "email",
             "course",
             "group_id",
-            "group_name",
             "academic_degree",
             "academic_title",
             "job_title",
@@ -224,13 +189,27 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         role = self.instance.role
-        group = attrs.get("group")
-        group_name = self.initial_data.get("group_name")
 
-        if isinstance(group_name, str):
-            group_name = group_name.strip()
-            if not group_name:
-                group_name = None
+        if role == User.Role.STUDENT:
+            course = attrs.get(
+                "course",
+                getattr(
+                    getattr(self.instance, "student_profile", None), "course", None
+                ),
+            )
+            group = attrs.get(
+                "group",
+                getattr(getattr(self.instance, "student_profile", None), "group", None),
+            )
+
+            if course is None:
+                raise serializers.ValidationError(
+                    {"course": "Это поле обязательно для студента."}
+                )
+            if group is None:
+                raise serializers.ValidationError(
+                    {"group_id": "Это поле обязательно для студента."}
+                )
 
         valid_course_ids = {course_id for course_id, _ in COURSE_CHOICES}
         course = attrs.get("course")
@@ -239,38 +218,6 @@ class UserUpdateSerializer(serializers.ModelSerializer):
                 {"course": "Недопустимое значение курса."}
             )
 
-        if role == User.Role.STUDENT:
-            final_course = attrs.get(
-                "course",
-                getattr(
-                    getattr(self.instance, "student_profile", None), "course", None
-                ),
-            )
-            final_group = group or getattr(
-                getattr(self.instance, "student_profile", None), "group", None
-            )
-
-            if final_course is None:
-                raise serializers.ValidationError(
-                    {"course": "Это поле обязательно для студента."}
-                )
-
-            if final_group is None and not group_name:
-                raise serializers.ValidationError(
-                    {"group_id": "Передайте group_id или group_name для студента."}
-                )
-
-            if group is not None and group_name and group.name != group_name:
-                raise serializers.ValidationError(
-                    {
-                        "group_name": (
-                            "group_name не совпадает с группой, "
-                            "переданной в group_id."
-                        )
-                    }
-                )
-
-        attrs["_group_name"] = group_name
         return attrs
 
     @transaction.atomic
@@ -279,14 +226,10 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
         course = validated_data.pop("course", None)
         group = validated_data.pop("group", None)
-        group_name = validated_data.pop("_group_name", None)
 
         academic_degree = validated_data.pop("academic_degree", None)
         academic_title = validated_data.pop("academic_title", None)
         job_title = validated_data.pop("job_title", None)
-
-        if group is None and group_name:
-            group, _ = StudentGroup.objects.get_or_create(name=group_name)
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
