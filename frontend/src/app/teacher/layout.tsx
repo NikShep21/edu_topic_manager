@@ -6,9 +6,7 @@ import { DashboardShell } from "@/widgets/dashboard-shell";
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <ProtectedRoute allowedRole="teacher">
-      <DashboardShell title="Управление темами" nav={nav}>
-        {children}
-      </DashboardShell>
+      <DashboardShell nav={nav}>{children}</DashboardShell>
     </ProtectedRoute>
   );
 };
