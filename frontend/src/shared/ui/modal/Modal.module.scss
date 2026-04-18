@@ -77,10 +77,13 @@
   overflow-y: auto;
   background-color: var(--color-objects);
 }
-
+.br {
+  width: 100%;
+  border-bottom: 1px solid var(--border-color);
+}
 .modalFooter {
-  padding: 18px 26px 26px;
-  border-top: 1px solid var(--border-color);
+  padding: 0px 26px 26px;
+
   background-color: var(--color-objects);
 }
 @media (max-width: $mobile) {
