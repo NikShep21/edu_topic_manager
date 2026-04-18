@@ -1,6 +1,6 @@
 "use client";
 
-import { type Control, type FieldErrors, type UseFormRegister } from "react-hook-form";
+import { useFormState, type Control, type UseFormRegister } from "react-hook-form";
 
 import { Input } from "@/shared/ui/input";
 
@@ -8,25 +8,27 @@ import type { CreateStudentValues } from "../../model/schema";
 
 import styles from "./CreateStudentForm.module.scss";
 
-import { courseOptions, StudentFormFields } from "@/entities/user/student";
+import { StudentFormFields } from "@/entities/user/student";
+import type { SelectOption } from "@/shared/ui/select";
 
 interface CreateStudentFormProps {
   control: Control<CreateStudentValues>;
   register: UseFormRegister<CreateStudentValues>;
-  errors: FieldErrors<CreateStudentValues>;
+
+  courseOptions: SelectOption[];
 }
 
 export const CreateStudentForm = ({
   control,
   register,
-  errors,
+  courseOptions,
 }: CreateStudentFormProps) => {
+  const { errors } = useFormState({ control });
   return (
     <div className={styles.form}>
       <StudentFormFields
         control={control}
         register={register}
-        errors={errors}
         courseOptions={courseOptions}
       />
 

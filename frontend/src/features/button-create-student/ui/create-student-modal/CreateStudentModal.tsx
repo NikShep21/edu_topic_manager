@@ -3,9 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { ApiError } from "@/shared/api";
-import { FieldError } from "@/shared/ui/field-error";
 import { Modal, ModalDefaultActions } from "@/shared/ui/modal";
+import { buildSelectOptions } from "@/shared/lib/select/buildSelectOptions";
+import { applyServerErrors } from "@/shared/lib/form/applyServerErrors";
+
+import { useStudentsFilterQuery } from "@/entities/user/student";
 
 import { createStudentSchema, type CreateStudentValues } from "../../model/schema";
 import { useCreateStudent } from "../../model/useCreateStudent";
@@ -19,44 +21,51 @@ interface CreateStudentModalProps {
 }
 
 export const CreateStudentModal = ({ isOpen, onClose }: CreateStudentModalProps) => {
-  const {
-    handleSubmit,
-    control,
-    register,
-    reset,
-    formState: { errors },
-  } = useForm<CreateStudentValues>({
-    resolver: zodResolver(createStudentSchema),
-    defaultValues: {
-      username: "",
-      first_name: "",
-      last_name: "",
-      middle_name: "",
-      course: undefined,
-      group: "",
-      password: "",
-    },
-  });
-
-  const { error, isPending, mutate } = useCreateStudent();
-
-  const submit = (formData: CreateStudentValues) => {
-    mutate({ ...formData, role: "student" } as const, {
-      onSuccess: () => {
-        reset();
-        onClose();
+  const { handleSubmit, control, register, reset, setError, clearErrors } =
+    useForm<CreateStudentValues>({
+      resolver: zodResolver(createStudentSchema),
+      defaultValues: {
+        username: "",
+        first_name: "",
+        last_name: "",
+        middle_name: "",
+        course: undefined,
+        group: "",
+        password: "",
       },
     });
-  };
 
-  const createError =
-    error instanceof ApiError && (error.status === 400 || error.status === 401)
-      ? error
-      : null;
+  const { mutate, isPending } = useCreateStudent();
+  const { data: filterOptions } = useStudentsFilterQuery();
+
+  const courseOptions = buildSelectOptions(filterOptions?.courses ?? []);
 
   const handleClose = () => {
     reset();
+    clearErrors();
+
     onClose();
+  };
+
+  const submit = (formData: CreateStudentValues) => {
+    clearErrors();
+
+    mutate(
+      {
+        ...formData,
+        role: "student",
+        group: formData.group,
+      },
+      {
+        onSuccess: () => {
+          reset();
+          onClose();
+        },
+        onError: (error) => {
+          applyServerErrors<CreateStudentValues>(error, setError);
+        },
+      },
+    );
   };
 
   return (
@@ -65,24 +74,25 @@ export const CreateStudentModal = ({ isOpen, onClose }: CreateStudentModalProps)
       onClose={handleClose}
       title="Создание студента"
       className={styles.modal}
+      footer={
+        <ModalDefaultActions
+          formId="create-student-form"
+          onClose={handleClose}
+          isLoading={isPending}
+          text="Создать студента"
+        />
+      }
     >
       <form
         id="create-student-form"
         onSubmit={handleSubmit(submit)}
         className={styles.content}
       >
-        <CreateStudentForm control={control} register={register} errors={errors} />
-
-        <FieldError message={createError?.message} className={styles.error} />
-
-        <div className={styles.actions}>
-          <ModalDefaultActions
-            formId="create-student-form"
-            onClose={handleClose}
-            isLoading={isPending}
-            text="Создать студента"
-          />
-        </div>
+        <CreateStudentForm
+          courseOptions={courseOptions}
+          control={control}
+          register={register}
+        />
       </form>
     </Modal>
   );
