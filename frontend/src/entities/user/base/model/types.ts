@@ -24,8 +24,17 @@ export interface StudentData extends UserData {
 }
 
 export interface TeacherData extends UserData {
-  academic_degree: string;
-  academic_title: string;
-  job_title: string;
+  academic_degree: {
+    id: number;
+    name: string;
+  };
+  academic_title: {
+    id: number;
+    name: string;
+  };
+  job_title: {
+    id: number;
+    name: string;
+  };
   role: "teacher";
 }
