@@ -115,6 +115,54 @@ class StudentGroup(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class AcademicDegree(models.Model):
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+        verbose_name=_("ученая степень"),
+    )
+
+    class Meta:
+        verbose_name = _("Ученая степень")
+        verbose_name_plural = _("Ученые степени")
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+    
+
+class AcademicTitle(models.Model):
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+        verbose_name=_("ученое звание"),
+    )
+
+    class Meta:
+        verbose_name = _("Ученое звание")
+        verbose_name_plural = _("Ученые звания")
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+    
+
+class JobTitle(models.Model):
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+        verbose_name=_("должность"),
+    )
+
+    class Meta:
+        verbose_name = _("Должность")
+        verbose_name_plural = _("Должности")
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
 
 
 class StudentProfile(models.Model):
@@ -152,25 +200,28 @@ class TeacherProfile(models.Model):
         related_name="teacher_profile",
         verbose_name=_("Пользователь"),
     )
-    academic_degree = models.CharField(
-        max_length=100,
-        blank=True,
+    academic_degree = models.ForeignKey(
+        AcademicDegree,
+        on_delete=models.SET_NULL,
         null=True,
-        default=None,
+        blank=True,
+        related_name="teacher_profiles",
         verbose_name=_("Ученая степень"),
     )
-    academic_title = models.CharField(
-        max_length=100,
-        blank=True,
+    academic_title = models.ForeignKey(
+        AcademicTitle,
+        on_delete=models.SET_NULL,
         null=True,
-        default=None,
+        blank=True,
+        related_name="teacher_profiles",
         verbose_name=_("Ученое звание"),
     )
-    job_title = models.CharField(
-        max_length=100,
-        blank=True,
+    job_title = models.ForeignKey(
+        JobTitle,
+        on_delete=models.SET_NULL,
         null=True,
-        default=None,
+        blank=True,
+        related_name="teacher_profiles",
         verbose_name=_("Должность"),
     )
 
