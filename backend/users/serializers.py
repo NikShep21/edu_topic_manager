@@ -2,7 +2,15 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from rest_framework import serializers
 
-from .models import COURSE_CHOICES, StudentGroup, StudentProfile, TeacherProfile
+from .models import (
+    AcademicDegree,
+    AcademicTitle,
+    COURSE_CHOICES,
+    JobTitle,
+    StudentGroup,
+    StudentProfile,
+    TeacherProfile,
+)
 
 User = get_user_model()
 
@@ -10,6 +18,24 @@ User = get_user_model()
 class StudentGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentGroup
+        fields = ["id", "name"]
+
+
+class AcademicDegreeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AcademicDegree
+        fields = ["id", "name"]
+
+
+class AcademicTitleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AcademicTitle
+        fields = ["id", "name"]
+
+
+class JobTitleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobTitle
         fields = ["id", "name"]
 
 
@@ -45,16 +71,25 @@ class UserCreateSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True,
         allow_blank=True,
+        error_messages={
+            "invalid": 'Поле "academic_degree" должно быть строкой.',
+        },
     )
     academic_title = serializers.CharField(
         required=False,
         allow_null=True,
         allow_blank=True,
+        error_messages={
+            "invalid": 'Поле "academic_title" должно быть строкой.',
+        },
     )
     job_title = serializers.CharField(
         required=False,
         allow_null=True,
         allow_blank=True,
+        error_messages={
+            "invalid": 'Поле "job_title" должно быть строкой.',
+        },
     )
 
     class Meta:
@@ -112,11 +147,29 @@ class UserCreateSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         role = attrs.get("role")
         group_name = attrs.get("group")
+        academic_degree_name = attrs.get("academic_degree")
+        academic_title_name = attrs.get("academic_title")
+        job_title_name = attrs.get("job_title")
 
         if isinstance(group_name, str):
             group_name = group_name.strip()
             if not group_name:
                 group_name = None
+
+        if isinstance(academic_degree_name, str):
+            academic_degree_name = academic_degree_name.strip()
+            if not academic_degree_name:
+                academic_degree_name = None
+
+        if isinstance(academic_title_name, str):
+            academic_title_name = academic_title_name.strip()
+            if not academic_title_name:
+                academic_title_name = None
+
+        if isinstance(job_title_name, str):
+            job_title_name = job_title_name.strip()
+            if not job_title_name:
+                job_title_name = None
 
         valid_course_ids = {course_id for course_id, _ in COURSE_CHOICES}
         course = attrs.get("course")
@@ -137,7 +190,15 @@ class UserCreateSerializer(serializers.ModelSerializer):
                 )
 
         attrs["_group_name"] = group_name
+        attrs["_academic_degree_name"] = academic_degree_name
+        attrs["_academic_title_name"] = academic_title_name
+        attrs["_job_title_name"] = job_title_name
+
         attrs.pop("group", None)
+        attrs.pop("academic_degree", None)
+        attrs.pop("academic_title", None)
+        attrs.pop("job_title", None)
+
         return attrs
 
     @transaction.atomic
@@ -147,13 +208,29 @@ class UserCreateSerializer(serializers.ModelSerializer):
         course = validated_data.pop("course", None)
         group_name = validated_data.pop("_group_name", None)
 
-        academic_degree = validated_data.pop("academic_degree", None)
-        academic_title = validated_data.pop("academic_title", None)
-        job_title = validated_data.pop("job_title", None)
+        academic_degree_name = validated_data.pop("_academic_degree_name", None)
+        academic_title_name = validated_data.pop("_academic_title_name", None)
+        job_title_name = validated_data.pop("_job_title_name", None)
 
         group = None
         if group_name:
             group, _ = StudentGroup.objects.get_or_create(name=group_name)
+
+        academic_degree = None
+        if academic_degree_name:
+            academic_degree, _ = AcademicDegree.objects.get_or_create(
+                name=academic_degree_name
+            )
+
+        academic_title = None
+        if academic_title_name:
+            academic_title, _ = AcademicTitle.objects.get_or_create(
+                name=academic_title_name
+            )
+
+        job_title = None
+        if job_title_name:
+            job_title, _ = JobTitle.objects.get_or_create(name=job_title_name)
 
         user = User(**validated_data)
         user.set_password(password)
@@ -195,16 +272,25 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True,
         allow_blank=True,
+        error_messages={
+            "invalid": 'Поле "academic_degree" должно быть строкой.',
+        },
     )
     academic_title = serializers.CharField(
         required=False,
         allow_null=True,
         allow_blank=True,
+        error_messages={
+            "invalid": 'Поле "academic_title" должно быть строкой.',
+        },
     )
     job_title = serializers.CharField(
         required=False,
         allow_null=True,
         allow_blank=True,
+        error_messages={
+            "invalid": 'Поле "job_title" должно быть строкой.',
+        },
     )
 
     class Meta:
@@ -259,12 +345,38 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         role = self.instance.role
 
         group_provided = "group" in self.initial_data
+        academic_degree_provided = "academic_degree" in self.initial_data
+        academic_title_provided = "academic_title" in self.initial_data
+        job_title_provided = "job_title" in self.initial_data
+
         group_name = attrs.get("group") if group_provided else None
+        academic_degree_name = (
+            attrs.get("academic_degree") if academic_degree_provided else None
+        )
+        academic_title_name = (
+            attrs.get("academic_title") if academic_title_provided else None
+        )
+        job_title_name = attrs.get("job_title") if job_title_provided else None
 
         if isinstance(group_name, str):
             group_name = group_name.strip()
             if not group_name:
                 group_name = None
+
+        if isinstance(academic_degree_name, str):
+            academic_degree_name = academic_degree_name.strip()
+            if not academic_degree_name:
+                academic_degree_name = None
+
+        if isinstance(academic_title_name, str):
+            academic_title_name = academic_title_name.strip()
+            if not academic_title_name:
+                academic_title_name = None
+
+        if isinstance(job_title_name, str):
+            job_title_name = job_title_name.strip()
+            if not job_title_name:
+                job_title_name = None
 
         valid_course_ids = {course_id for course_id, _ in COURSE_CHOICES}
         course = attrs.get("course")
@@ -299,7 +411,23 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
         attrs["_group_name"] = group_name if group_provided else None
         attrs["_group_provided"] = group_provided
+        attrs["_academic_degree_name"] = (
+            academic_degree_name if academic_degree_provided else None
+        )
+        attrs["_academic_degree_provided"] = academic_degree_provided
+
+        attrs["_academic_title_name"] = (
+            academic_title_name if academic_title_provided else None
+        )
+        attrs["_academic_title_provided"] = academic_title_provided
+
+        attrs["_job_title_name"] = job_title_name if job_title_provided else None
+        attrs["_job_title_provided"] = job_title_provided
+
         attrs.pop("group", None)
+        attrs.pop("academic_degree", None)
+        attrs.pop("academic_title", None)
+        attrs.pop("job_title", None)
         return attrs
 
     @transaction.atomic
@@ -310,9 +438,14 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         group_name = validated_data.pop("_group_name", None)
         group_provided = validated_data.pop("_group_provided", False)
 
-        academic_degree = validated_data.pop("academic_degree", None)
-        academic_title = validated_data.pop("academic_title", None)
-        job_title = validated_data.pop("job_title", None)
+        academic_degree_name = validated_data.pop("_academic_degree_name", None)
+        academic_degree_provided = validated_data.pop("_academic_degree_provided", False)
+
+        academic_title_name = validated_data.pop("_academic_title_name", None)
+        academic_title_provided = validated_data.pop("_academic_title_provided", False)
+
+        job_title_name = validated_data.pop("_job_title_name", None)
+        job_title_provided = validated_data.pop("_job_title_provided", False)
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -345,14 +478,59 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         elif instance.role == User.Role.TEACHER:
             teacher_profile = instance.teacher_profile
 
-            if academic_degree is not None:
-                teacher_profile.academic_degree = academic_degree
-            if academic_title is not None:
-                teacher_profile.academic_title = academic_title
-            if job_title is not None:
-                teacher_profile.job_title = job_title
+            old_academic_degree = teacher_profile.academic_degree
+            old_academic_title = teacher_profile.academic_title
+            old_job_title = teacher_profile.job_title
+
+            if academic_degree_provided:
+                if academic_degree_name is None:
+                    teacher_profile.academic_degree = None
+                else:
+                    new_academic_degree, _ = AcademicDegree.objects.get_or_create(
+                        name=academic_degree_name
+                    )
+                    teacher_profile.academic_degree = new_academic_degree
+
+            if academic_title_provided:
+                if academic_title_name is None:
+                    teacher_profile.academic_title = None
+                else:
+                    new_academic_title, _ = AcademicTitle.objects.get_or_create(
+                        name=academic_title_name
+                    )
+                    teacher_profile.academic_title = new_academic_title
+
+            if job_title_provided:
+                if job_title_name is None:
+                    teacher_profile.job_title = None
+                else:
+                    new_job_title, _ = JobTitle.objects.get_or_create(
+                        name=job_title_name
+                    )
+                    teacher_profile.job_title = new_job_title
 
             teacher_profile.save()
+
+            if (
+                old_academic_degree
+                and old_academic_degree != teacher_profile.academic_degree
+                and not old_academic_degree.teacher_profiles.exists()
+            ):
+                old_academic_degree.delete()
+
+            if (
+                old_academic_title
+                and old_academic_title != teacher_profile.academic_title
+                and not old_academic_title.teacher_profiles.exists()
+            ):
+                old_academic_title.delete()
+
+            if (
+                old_job_title
+                and old_job_title != teacher_profile.job_title
+                and not old_job_title.teacher_profiles.exists()
+            ):
+                old_job_title.delete()
 
         return instance
 
@@ -377,17 +555,17 @@ class StudentListSerializer(serializers.ModelSerializer):
 
 
 class TeacherListSerializer(serializers.ModelSerializer):
-    academic_degree = serializers.CharField(
+    academic_degree = AcademicDegreeSerializer(
         source="teacher_profile.academic_degree",
-        allow_null=True,
+        read_only=True,
     )
-    academic_title = serializers.CharField(
+    academic_title = AcademicTitleSerializer(
         source="teacher_profile.academic_title",
-        allow_null=True,
+        read_only=True,
     )
-    job_title = serializers.CharField(
+    job_title = JobTitleSerializer(
         source="teacher_profile.job_title",
-        allow_null=True,
+        read_only=True,
     )
 
     class Meta:
