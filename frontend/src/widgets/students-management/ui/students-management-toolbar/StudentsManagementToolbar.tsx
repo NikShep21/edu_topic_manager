@@ -2,10 +2,11 @@
 
 import { ButtonCreateStudent } from "@/features/button-create-student";
 import { SearchInput } from "@/shared/ui/input";
-import { Select } from "@/shared/ui/select";
+import { Select, type SelectOption } from "@/shared/ui/select";
+import { FaUpload } from "react-icons/fa";
 
-import { courseOptions, groupOptions } from "../../model/filterOptions";
 import styles from "./StudentsManagementToolbar.module.scss";
+import { Button } from "@/shared/ui/button";
 
 interface StudentsManagementToolbarProps {
   search: string;
@@ -14,6 +15,8 @@ interface StudentsManagementToolbarProps {
   onSearchChange: (value: string) => void;
   onGroupChange: (value: string) => void;
   onCourseChange: (value: string) => void;
+  groupOptions: SelectOption[];
+  courseOptions: SelectOption[];
 }
 
 export const StudentsManagementToolbar = ({
@@ -23,6 +26,8 @@ export const StudentsManagementToolbar = ({
   onSearchChange,
   onGroupChange,
   onCourseChange,
+  groupOptions,
+  courseOptions,
 }: StudentsManagementToolbarProps) => {
   return (
     <div className={styles.header}>
@@ -35,23 +40,33 @@ export const StudentsManagementToolbar = ({
         />
         <ButtonCreateStudent />
       </div>
+      <div className={styles.additFunctions}>
+        <div className={styles.filters}>
+          <Select
+            label="Группа"
+            value={group}
+            onChange={onGroupChange}
+            options={groupOptions}
+            placeholder="Все группы"
+          />
 
-      <div className={styles.filters}>
-        <Select
-          label="Группа"
-          value={group}
-          onChange={onGroupChange}
-          options={groupOptions}
-          placeholder="Все группы"
-        />
+          <Select
+            label="Курс"
+            value={course}
+            onChange={onCourseChange}
+            options={courseOptions}
+            placeholder="Все курсы"
+          />
+        </div>
+        <Button size="sm" variant="secondary" className={styles.upload}>
+          <div className={styles.contentUpload}>
+            <div className={styles.icon}>
+              <FaUpload />
+            </div>
 
-        <Select
-          label="Курс"
-          value={course}
-          onChange={onCourseChange}
-          options={courseOptions}
-          placeholder="Все курсы"
-        />
+            <p>Загрузить csv</p>
+          </div>
+        </Button>
       </div>
     </div>
   );

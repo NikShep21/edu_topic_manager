@@ -1,26 +1,86 @@
 .header {
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   padding: 20px;
 }
 
 .inputContainer {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  flex-wrap: wrap;
 }
 
 .input {
-  flex: 1 1 320px;
-  min-width: 240px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.additFunctions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .filters {
-  margin-top: 20px;
   display: flex;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+.upload {
+  flex-shrink: 0;
+}
+
+.contentUpload {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon {
+  width: max-content;
+}
+
+@media (max-width: $tablet) {
+  .additFunctions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filters {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .upload {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: $mobile) {
+  .header {
+    padding: 16px;
+  }
+
+  .inputContainer {
+    align-items: stretch;
+  }
+
+  .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .upload {
+    width: 100%;
+  }
+
+  .contentUpload {
+    justify-content: center;
+  }
 }

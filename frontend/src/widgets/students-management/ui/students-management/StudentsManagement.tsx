@@ -4,13 +4,15 @@ import { useEffect } from "react";
 
 import styles from "./StudentsManagement.module.scss";
 
-import { useStudentsQuery } from "@/entities/user/student/model/useGetStudents";
 import { useSelection } from "@/shared/lib/hooks/use-selection/useSelection";
 import { useToast } from "@/shared/model/toast/use-toast";
 
 import { useStudentsManagement } from "../../model/useStudentsManagement";
 import { StudentsManagementToolbar } from "../students-management-toolbar/StudentsManagementToolbar";
 import { StudentsManagementContent } from "../students-management-content/StudentsManagementContent";
+import { useStudentsFilterQuery, useStudentsQuery } from "@/entities/user/student";
+import { buildSelectOptions } from "@/shared/lib/select/buildSelectOptions";
+import { PaginationBar } from "@/shared/ui/pagination";
 
 export const StudentsManagement = () => {
   const studentsManagement = useStudentsManagement();
@@ -19,8 +21,17 @@ export const StudentsManagement = () => {
   const { data, isLoading, isFetching, isError } = useStudentsQuery(
     studentsManagement.queryParams,
   );
+  const { data: filterOptions } = useStudentsFilterQuery();
 
-  const students = data ?? [];
+  const students = data?.results ?? [];
+  const groupOptions = [
+    { value: "all", label: "Все группы" },
+    ...buildSelectOptions(filterOptions?.groups ?? []),
+  ];
+  const courseOptions = [
+    { value: "all", label: "Все курсы" },
+    ...buildSelectOptions(filterOptions?.courses ?? []),
+  ];
 
   const { isAllSelected, handleSelectAll, isSelected, handleSelectOne, resetSelection } =
     useSelection(students);
@@ -57,6 +68,8 @@ export const StudentsManagement = () => {
         onSearchChange={studentsManagement.handleSearchChange}
         onGroupChange={studentsManagement.handleGroupChange}
         onCourseChange={studentsManagement.handleCourseChange}
+        groupOptions={groupOptions}
+        courseOptions={courseOptions}
       />
 
       <StudentsManagementContent
@@ -71,6 +84,12 @@ export const StudentsManagement = () => {
         isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
+      />
+      <PaginationBar
+        page={studentsManagement.state.page}
+        pageSize={studentsManagement.state.pageSize}
+        totalCount={data?.count ?? 0}
+        onPageChange={studentsManagement.handlePageChange}
       />
     </div>
   );

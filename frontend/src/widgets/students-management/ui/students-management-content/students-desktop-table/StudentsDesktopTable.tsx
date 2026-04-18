@@ -1,16 +1,15 @@
 "use client";
 
-import { StudentTableRow } from "@/entities/user/student/ui/student-table-row/StudentTableRow";
-import { StudentRowActions } from "@/entities/user/student/ui/student-row-actions/StudentRowActions";
-import { Table, TableBody, TableHead } from "@/shared/ui/table";
-import type { SortDirection } from "@/shared/model/sort/types";
-
 import type { StudentData } from "@/entities/user/base/model/types";
+
+import type { SortDirection } from "@/shared/model/sort/types";
+import { Table, TableBody, TableHead } from "@/shared/ui/table";
 import type { StudentSortField } from "@/widgets/students-management/model/types";
 
 import { StudentsTableHeader } from "../students-table-header/StudentsTableHeader";
 
 import styles from "./StudentsDesktopTable.module.scss";
+import { StudentRowActions, StudentTableRow } from "@/entities/user/student";
 
 interface StudentsDesktopTableProps {
   students: StudentData[];
@@ -21,6 +20,9 @@ interface StudentsDesktopTableProps {
   onSelectAll: (checked: boolean) => void;
   isSelected: (studentId: number) => boolean | undefined;
   onSelect: (studentId: number, checked: boolean) => void;
+  onEdit: (studentId: number) => void;
+  onDelete: (studentId: number) => void;
+  onChangePassword: (studentId: number) => void;
 }
 
 export const StudentsDesktopTable = ({
@@ -32,6 +34,9 @@ export const StudentsDesktopTable = ({
   onSelectAll,
   isSelected,
   onSelect,
+  onEdit,
+  onDelete,
+  onChangePassword,
 }: StudentsDesktopTableProps) => {
   return (
     <Table className={styles.table}>
@@ -52,7 +57,14 @@ export const StudentsDesktopTable = ({
             student={student}
             isSelected={Boolean(isSelected(student.id))}
             onSelect={onSelect}
-            actions={<StudentRowActions studentId={student.id} />}
+            actions={
+              <StudentRowActions
+                studentId={student.id}
+                onEdit={onEdit}
+                onDelete={onDelete}
+                onChangePassword={onChangePassword}
+              />
+            }
           />
         ))}
       </TableBody>
