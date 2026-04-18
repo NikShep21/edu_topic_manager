@@ -14,12 +14,18 @@ export interface AdminData extends UserData {
 }
 
 export interface StudentData extends UserData {
-  group: string;
+  group: {
+    name: string;
+    id: number;
+  };
   course: number;
 
   role: "student";
 }
 
 export interface TeacherData extends UserData {
+  academic_degree: string;
+  academic_title: string;
+  job_title: string;
   role: "teacher";
 }
