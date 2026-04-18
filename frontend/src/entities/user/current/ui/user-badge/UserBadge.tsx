@@ -2,12 +2,15 @@ import clsx from "clsx";
 import styles from "./UserBadge.module.scss";
 import type { UserData } from "../../../base/model/types";
 
+type UserBadgeSize = "sm" | "md" | "lg";
+
 interface UserBadgeProps {
   userData?: UserData;
   className?: string;
+  size?: UserBadgeSize;
 }
 
-export const UserBadge = ({ userData, className }: UserBadgeProps) => {
+export const UserBadge = ({ userData, className, size = "md" }: UserBadgeProps) => {
   if (!userData) {
     return null;
   }
@@ -16,7 +19,7 @@ export const UserBadge = ({ userData, className }: UserBadgeProps) => {
   const fallbackLetter = userData.first_name.charAt(0).toUpperCase();
 
   return (
-    <div className={clsx(styles.user, className)}>
+    <div className={clsx(styles.user, styles[size], className)}>
       <div className={styles.avatar}>
         <span className={styles.avatarLetter}>{fallbackLetter}</span>
       </div>
