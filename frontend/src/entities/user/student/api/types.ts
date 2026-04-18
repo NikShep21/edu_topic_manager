@@ -1,4 +1,5 @@
 import type { QueryParams } from "@/shared/api";
+import type { FilterOption } from "@/shared/lib/api/types";
 
 export type OrderingStudentBaseField = "fio" | "group" | "course";
 
@@ -15,7 +16,7 @@ export interface StudentsQueryParams extends QueryParams {
   page_size: number;
 }
 
-export interface PaginatedResponse<T> {
-  count: number;
-  results: T[];
+export interface StudentsFilterFields {
+  groups: FilterOption[];
+  courses: FilterOption[];
 }

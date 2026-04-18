@@ -9,5 +9,7 @@ export type {
 export { StudentTableRow } from "./ui/student-table-row/StudentTableRow";
 export { StudentRowActions } from "./ui/student-row-actions/StudentRowActions";
 export { StudentFormFields } from "./ui/student-form/StudentFormFields";
+export { StudentMobileCard } from "./ui/student-mobile-card/StudentMobileCard";
 
-export { courseOptions } from "./model/constants";
+export { useStudentsQuery } from "./model/useStudentsQuery";
+export { useStudentsFilterQuery } from "./model/useStudentsFilterQuery";

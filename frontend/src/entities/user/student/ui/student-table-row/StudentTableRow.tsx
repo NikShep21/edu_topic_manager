@@ -37,7 +37,7 @@ export const StudentTableRow = ({
         <span className={styles.fullName}>{fullName}</span>
       </TableCell>
 
-      <TableCell>{student.group}</TableCell>
+      <TableCell>{student.group.name}</TableCell>
 
       <TableCell align="center">{student.course}</TableCell>
 
