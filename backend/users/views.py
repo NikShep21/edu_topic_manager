@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -85,7 +86,12 @@ class UserViewSet(ModelViewSet):
 
     @action(detail=False, methods=["get"], url_path="students/filter-options")
     def student_filter_options(self, request):
-        groups = list(StudentGroup.objects.values("id", "name").order_by("name"))
+        groups = list(
+            StudentGroup.objects.filter(students__isnull=False)
+            .distinct()
+            .values("id", "name")
+            .order_by("name")
+        )
 
         return Response(
             {
@@ -143,3 +149,21 @@ class UserViewSet(ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        old_group = None
+        if (
+            instance.role == User.Role.STUDENT
+            and hasattr(instance, "student_profile")
+        ):
+            old_group = instance.student_profile.group
+
+        self.perform_destroy(instance)
+
+        if old_group and not old_group.students.exists():
+            old_group.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
