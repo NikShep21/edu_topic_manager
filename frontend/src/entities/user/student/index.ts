@@ -6,6 +6,8 @@ export type {
   OrderingStudentField,
 } from "./api/types";
 
+export { studentQueryKeys } from "./model/queryKeys";
+
 export { StudentTableRow } from "./ui/student-table-row/StudentTableRow";
 export { StudentRowActions } from "./ui/student-row-actions/StudentRowActions";
 export { StudentFormFields } from "./ui/student-form/StudentFormFields";

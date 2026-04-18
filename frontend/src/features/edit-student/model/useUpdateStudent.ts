@@ -1,4 +1,4 @@
-import { studentQueryKeys } from "@/entities/user/student/model/queryKeys";
+import { studentQueryKeys } from "@/entities/user/student";
 import type { UpdateStudentRequest } from "@/features/edit-student/api/types";
 import { updateStudent } from "@/features/edit-student/api/updateStudent";
 

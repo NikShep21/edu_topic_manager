@@ -1,4 +1,4 @@
-import { studentQueryKeys } from "@/entities/user/student/model/queryKeys";
+import { studentQueryKeys } from "@/entities/user/student";
 import { createStudent } from "@/features/button-create-student/api/createStudent";
 import type { createStudentRequest } from "@/features/button-create-student/api/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
