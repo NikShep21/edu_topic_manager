@@ -14,8 +14,21 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AcademicDegree',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, unique=True, verbose_name='ученая степень')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'name',
+                    models.CharField(
+                        max_length=100, unique=True, verbose_name='ученая степень'
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'Ученая степень',
@@ -26,8 +39,21 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AcademicTitle',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, unique=True, verbose_name='ученое звание')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'name',
+                    models.CharField(
+                        max_length=100, unique=True, verbose_name='ученое звание'
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'Ученое звание',
@@ -38,8 +64,21 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='JobTitle',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, unique=True, verbose_name='должность')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'name',
+                    models.CharField(
+                        max_length=100, unique=True, verbose_name='должность'
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'Должность',
@@ -50,16 +89,37 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='teacherprofile',
             name='academic_degree',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='teacher_profiles', to='users.academicdegree', verbose_name='Ученая степень'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='teacher_profiles',
+                to='users.academicdegree',
+                verbose_name='Ученая степень',
+            ),
         ),
         migrations.AlterField(
             model_name='teacherprofile',
             name='academic_title',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='teacher_profiles', to='users.academictitle', verbose_name='Ученое звание'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='teacher_profiles',
+                to='users.academictitle',
+                verbose_name='Ученое звание',
+            ),
         ),
         migrations.AlterField(
             model_name='teacherprofile',
             name='job_title',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='teacher_profiles', to='users.jobtitle', verbose_name='Должность'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='teacher_profiles',
+                to='users.jobtitle',
+                verbose_name='Должность',
+            ),
         ),
     ]

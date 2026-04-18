@@ -9,6 +9,7 @@ from .models import (
     StudentGroup,
 )
 
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ("id", "username", "role", "is_staff", "is_superuser")

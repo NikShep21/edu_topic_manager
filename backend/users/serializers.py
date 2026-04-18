@@ -439,7 +439,9 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         group_provided = validated_data.pop("_group_provided", False)
 
         academic_degree_name = validated_data.pop("_academic_degree_name", None)
-        academic_degree_provided = validated_data.pop("_academic_degree_provided", False)
+        academic_degree_provided = validated_data.pop(
+            "_academic_degree_provided", False
+        )
 
         academic_title_name = validated_data.pop("_academic_title_name", None)
         academic_title_provided = validated_data.pop("_academic_title_provided", False)

@@ -115,7 +115,7 @@ class StudentGroup(models.Model):
 
     def __str__(self):
         return self.name
-    
+
 
 class AcademicDegree(models.Model):
     name = models.CharField(
@@ -131,7 +131,7 @@ class AcademicDegree(models.Model):
 
     def __str__(self):
         return self.name
-    
+
 
 class AcademicTitle(models.Model):
     name = models.CharField(
@@ -147,7 +147,7 @@ class AcademicTitle(models.Model):
 
     def __str__(self):
         return self.name
-    
+
 
 class JobTitle(models.Model):
     name = models.CharField(

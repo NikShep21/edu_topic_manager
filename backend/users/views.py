@@ -170,9 +170,7 @@ class UserViewSet(ModelViewSet):
         academic_titles = AcademicTitle.objects.filter(
             teacher_profiles__isnull=False
         ).distinct()
-        job_titles = JobTitle.objects.filter(
-            teacher_profiles__isnull=False
-        ).distinct()
+        job_titles = JobTitle.objects.filter(teacher_profiles__isnull=False).distinct()
 
         return Response(
             {
