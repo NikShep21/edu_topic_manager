@@ -1,1 +1,1 @@
-export const EDIT_STUDENT = "/users/";
+export const EDIT_STUDENT = "/users";
