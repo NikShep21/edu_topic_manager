@@ -404,4 +404,3 @@ class TeacherListSerializer(serializers.ModelSerializer):
             "academic_title",
             "job_title",
         ]
-        

@@ -22,7 +22,7 @@ class LoginView(APIView):
             return Response(
                 {
                     "success": False,
-                    "message": "Invalid username or password",
+                    "message": "Неверные имя пользователя или пароль",
                     "errors": None,
                 },
                 status=status.HTTP_401_UNAUTHORIZED,
@@ -34,7 +34,7 @@ class LoginView(APIView):
         response = Response(
             {
                 "success": True,
-                "message": "Login successful",
+                "message": "Вход выполнен успешно",
                 "user": {
                     "id": user.id,
                     "username": user.username,
@@ -81,7 +81,7 @@ class RefreshView(APIView):
             return Response(
                 {
                     "success": False,
-                    "message": "No refresh token",
+                    "message": "Токен обновления отсутствует",
                     "errors": None,
                 },
                 status=status.HTTP_401_UNAUTHORIZED,
@@ -93,7 +93,7 @@ class RefreshView(APIView):
             return Response(
                 {
                     "success": False,
-                    "message": "Invalid refresh token",
+                    "message": "Недействительный токен обновления",
                     "errors": None,
                 },
                 status=status.HTTP_401_UNAUTHORIZED,
@@ -104,7 +104,7 @@ class RefreshView(APIView):
         response = Response(
             {
                 "success": True,
-                "message": "Token refreshed",
+                "message": "Токен успешно обновлён",
             }
         )
 
@@ -112,7 +112,7 @@ class RefreshView(APIView):
             key="access_token",
             value=str(access),
             httponly=True,
-            secure=True,  # поменять на тру при деплое
+            secure=True,  # поменять на true при деплое
             samesite="Lax",
             max_age=60 * 30,
         )
@@ -128,7 +128,7 @@ class LogoutView(APIView):
         response = Response(
             {
                 "success": True,
-                "message": "Logout successful",
+                "message": "Выход выполнен успешно",
             }
         )
 

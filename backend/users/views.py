@@ -154,10 +154,7 @@ class UserViewSet(ModelViewSet):
         instance = self.get_object()
 
         old_group = None
-        if (
-            instance.role == User.Role.STUDENT
-            and hasattr(instance, "student_profile")
-        ):
+        if instance.role == User.Role.STUDENT and hasattr(instance, "student_profile"):
             old_group = instance.student_profile.group
 
         self.perform_destroy(instance)
@@ -166,4 +163,3 @@ class UserViewSet(ModelViewSet):
             old_group.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
