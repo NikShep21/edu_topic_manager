@@ -1,0 +1,29 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 24px;
+
+  @media (max-width: $mobile) {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+.select {
+  height: 44px;
+  width: 100%;
+}

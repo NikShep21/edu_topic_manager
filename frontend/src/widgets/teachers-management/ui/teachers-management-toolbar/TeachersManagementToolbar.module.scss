@@ -1,0 +1,93 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+}
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.additFunctions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.filters {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  display: grid;
+  grid-template-columns: 300px 240px 240px;
+  gap: 12px;
+}
+
+.filters > * {
+  min-width: 0;
+}
+
+.upload {
+  flex: 0 0 auto;
+  align-self: flex-start;
+}
+
+.contentUpload {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon {
+  width: max-content;
+}
+
+@media (max-width: $desktop-sm) {
+  .filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: $laptop) {
+  .additFunctions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filters {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .upload {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: $mobile) {
+  .header {
+    padding: 16px;
+  }
+
+  .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .upload {
+    width: 100%;
+  }
+
+  .contentUpload {
+    justify-content: center;
+  }
+}

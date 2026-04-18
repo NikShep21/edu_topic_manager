@@ -6,6 +6,7 @@ export const nav: SidebarNavItem[] = [
   {
     name: "Темы",
     href: TEACHER_ROUTES.topics,
+    title: "Мои темы",
     icon: PiStudentFill,
   },
 ];

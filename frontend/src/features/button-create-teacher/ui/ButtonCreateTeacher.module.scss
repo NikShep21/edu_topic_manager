@@ -1,0 +1,9 @@
+.icon {
+  width: max-content;
+}
+
+.text {
+  @media (max-width: $laptop) {
+    display: none;
+  }
+}

@@ -1,0 +1,11 @@
+.modal {
+  overflow-y: auto;
+}
+
+.content {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+
+  flex-direction: column;
+}

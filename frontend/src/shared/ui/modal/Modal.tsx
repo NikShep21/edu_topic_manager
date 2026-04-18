@@ -68,7 +68,10 @@ export const Modal = ({
           </button>
         </section>
 
-        <section className={styles.modalBody}>{children}</section>
+        <section className={styles.modalBody}>
+          {children}
+          <div className={styles.br}></div>
+        </section>
 
         {footer ? <section className={styles.modalFooter}>{footer}</section> : null}
       </div>

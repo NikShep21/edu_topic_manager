@@ -11,12 +11,15 @@
 
 .modal {
   width: 100%;
-  max-width: 740px;
+  max-width: 540px;
   border: 1px solid var(--border-color);
   border-radius: 15px;
   background-color: var(--color-objects);
   box-shadow: 0 20px 60px rgb(0 0 0 / 12%);
   overflow: hidden;
+  max-height: calc(100dvh - 32px);
+
+  margin: auto;
 }
 
 .modalHeader {
@@ -71,12 +74,16 @@
 
 .modalBody {
   padding: 18px 26px;
+  overflow-y: auto;
   background-color: var(--color-objects);
 }
-
+.br {
+  width: 100%;
+  border-bottom: 1px solid var(--border-color);
+}
 .modalFooter {
-  padding: 18px 26px 26px;
-  border-top: 1px solid var(--border-color);
+  padding: 0px 26px 26px;
+
   background-color: var(--color-objects);
 }
 @media (max-width: $mobile) {

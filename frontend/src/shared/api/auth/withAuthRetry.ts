@@ -9,9 +9,11 @@ async function runRefreshOnce() {
       refreshPromise = null;
     });
   }
+
   return refreshPromise;
 }
-function isUnauthorizedError(error: unknown): error is ApiError {
+
+function isUnauthorizedError(error: unknown): error is ApiError<Record<string, unknown>> {
   return error instanceof ApiError && error.status === 401;
 }
 
@@ -23,6 +25,7 @@ export async function withAuthRetry<T>(request: () => Promise<T>): Promise<T> {
       throw error;
     }
   }
+
   await runRefreshOnce();
   return request();
 }

@@ -1,6 +1,6 @@
 import type { ApiError } from "@/shared/api";
 
-export const getErrorToastContent = (error: ApiError) => {
+export const getErrorToastContent = (error: ApiError<Record<string, unknown>>) => {
   if (error.status === 0) {
     return {
       title: "Ошибка сети",

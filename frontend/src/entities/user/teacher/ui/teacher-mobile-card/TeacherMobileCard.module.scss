@@ -1,0 +1,64 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  background: var(--background-secondary);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.fullName {
+  margin: 0;
+  min-width: 0;
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-color);
+  word-break: break-word;
+}
+
+.actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--search-input-bg);
+  min-width: 0;
+}
+
+.metaLabel {
+  font-size: 0.75rem;
+  line-height: 1.2;
+  color: var(--text-secondary);
+}
+
+.metaValue {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-color);
+  word-break: break-word;
+}
