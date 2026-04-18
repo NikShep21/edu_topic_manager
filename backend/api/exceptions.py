@@ -9,7 +9,7 @@ def custom_exception_handler(exc, context):
 
     data = {
         "success": False,
-        "message": "Request failed",
+        "message": "Запрос не выполнен",
         "errors": None,
     }
 
@@ -17,7 +17,7 @@ def custom_exception_handler(exc, context):
         if "detail" in response.data:
             data["message"] = response.data["detail"]
         else:
-            data["message"] = "Validation error"
+            data["message"] = "Ошибка валидации"
             data["errors"] = response.data
     else:
         data["message"] = response.data
