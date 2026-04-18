@@ -40,26 +40,31 @@
 }
 
 .triggerText {
-  display: inline-flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
   align-items: center;
   gap: 4px;
-  min-width: 0;
   overflow: hidden;
-  white-space: nowrap;
 }
 
 .prefix {
+  flex-shrink: 0;
   color: var(--text-color);
   font-size: 14px;
   font-weight: 500;
-  flex-shrink: 0;
 }
 
 .value {
-  color: var(--text-secondary);
-  font-size: 14px;
+  min-width: 0;
+  flex: 1 1 auto;
+  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: var(--text-secondary);
+  font-size: 14px;
 }
 
 .placeholder {
@@ -149,10 +154,11 @@
 
 .optionLabel {
   min-width: 0;
-  font-size: 14px;
+  flex: 1 1 auto;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 14px;
 }
 
 .optionIcon {

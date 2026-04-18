@@ -88,12 +88,13 @@ export const Select = ({
           disabled={disabled}
         >
           <span className={styles.triggerText}>
-            {label ? <span className={styles.prefix}> {label}: </span> : null}
+            {label ? <span className={styles.prefix}>{label}: </span> : null}
 
             <span
               className={clsx(styles.value, {
                 [styles.placeholder]: !selectedOption,
               })}
+              title={selectedOption?.label ?? placeholder}
             >
               {selectedOption?.label ?? placeholder}
             </span>
