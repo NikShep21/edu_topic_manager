@@ -1,6 +1,6 @@
 "use client";
 
-import type { TeacherData } from "@/entities/user/base/model/types";
+import type { TeacherData } from "@/entities/user";
 import type { SortDirection } from "@/shared/model/sort/types";
 import { Spinner } from "@/shared/ui/spinner";
 

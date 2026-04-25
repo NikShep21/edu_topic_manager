@@ -7,13 +7,13 @@ import { RxCross2 } from "react-icons/rx";
 import { PiStudentFill } from "react-icons/pi";
 import { CgProfile } from "react-icons/cg";
 import styles from "./Sidebar.module.scss";
+import type { UserData } from "@/entities/user";
+import { UserBadge } from "@/entities/user";
+import { useLogout } from "@/features/logout";
 import { NavLink } from "@/shared/ui/nav-link";
 import type { SidebarNavItem } from "../model/types";
-import { UserBadge } from "@/entities/user/current";
 
 import { Dropdown, DropdownMenu, DropdownMenuItem } from "@/shared/ui/dropdown";
-import { useLogout } from "@/features/logout";
-import type { UserData } from "@/entities/user";
 
 interface SidebarProps {
   nav: SidebarNavItem[];

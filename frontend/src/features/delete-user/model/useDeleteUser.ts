@@ -4,13 +4,13 @@ import { deleteUser } from "@/features/delete-user/api/deleteUser";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-type deleteStudentParams = {
+type DeleteUserParams = {
   id: number;
 };
 
-export const useDeleteStudent = () => {
+export const useDeleteUser = () => {
   const queryClient = useQueryClient();
-  return useMutation<null, Error, deleteStudentParams>({
+  return useMutation<null, Error, DeleteUserParams>({
     mutationFn: ({ id }) => deleteUser(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: studentQueryKeys.all });

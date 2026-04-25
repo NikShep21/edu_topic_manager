@@ -3,8 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { ApiError } from "@/shared/api";
 import { useLogoutMutation } from "@/features/logout/model/useLogoutMutation";
+import { ApiError } from "@/shared/api";
+import { ROUTES } from "@/shared/routes/routes";
 
 export const useLogout = () => {
   const router = useRouter();
@@ -20,7 +21,7 @@ export const useLogout = () => {
       }
     } finally {
       queryClient.clear();
-      router.push("/login");
+      router.push(ROUTES.login);
     }
   };
 

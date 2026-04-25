@@ -10,7 +10,7 @@ import { buildSelectOptions } from "@/shared/lib/select/buildSelectOptions";
 import { PaginationBar } from "@/shared/ui/pagination";
 
 import { useTeachersManagement } from "../../model/useTeachersManagement";
-import { TeachersManagementToolbar } from "../teachers-management-toolbar/TeachersManagenentToolbar";
+import { TeachersManagementToolbar } from "../teachers-management-toolbar/TeachersManagementToolbar";
 import { TeachersManagementContent } from "../teachers-management-content/TeachersManagementContent";
 
 import { useTeachersFilterQuery, useTeachersQuery } from "@/entities/user/teacher";
