@@ -3,7 +3,10 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { HiOutlineLockClosed } from "react-icons/hi2";
+
 import { Button } from "@/shared/ui/button";
+import { ROUTES } from "@/shared/routes/routes";
+
 import styles from "./page.module.scss";
 
 export default function ForbiddenPage() {
@@ -28,7 +31,7 @@ export default function ForbiddenPage() {
         </p>
 
         <div className={styles.actions}>
-          <Link href="/login" className={styles.linkButton}>
+          <Link href={ROUTES.login} className={styles.linkButton}>
             <Button type="button">Войти</Button>
           </Link>
 

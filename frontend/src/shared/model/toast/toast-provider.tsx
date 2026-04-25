@@ -1,9 +1,12 @@
 "use client";
+
 import { useCallback, useEffect, useMemo, useState } from "react";
+
 import { ToastContext } from "./toast-context";
-import type { ShowToastParams, ToastItem } from "./toast-types";
 import { subscribeToToasts } from "./toast-service";
-import { ToastContainer } from "@/shared/ui/toast/toast-container";
+import type { ShowToastParams, ToastItem } from "./toast-types";
+
+import { ToastContainer } from "@/shared/ui/toast";
 
 interface ToastProviderProps {
   children: React.ReactNode;

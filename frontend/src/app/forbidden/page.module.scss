@@ -2,9 +2,7 @@
   position: relative;
   min-height: 100vh;
   padding: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include centerFlex;
   background: var(--bg-color);
   overflow: hidden;
 }
@@ -52,9 +50,7 @@
   margin: 0 auto 20px;
   border-radius: 20px;
   background: var(--dropdown-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include centerFlex;
 }
 
 .icon {
@@ -112,21 +108,21 @@
   color: var(--text-color);
   border: 1px solid var(--border-color);
   box-shadow: none;
-}
 
-.secondaryButton:hover {
-  background: var(--dropdown-color);
-  box-shadow: none;
-}
+  &:hover {
+    background: var(--dropdown-color);
+    box-shadow: none;
+  }
 
-.secondaryButton:active {
-  transform: translateY(1px);
-  box-shadow: none;
-}
+  &:active {
+    transform: translateY(1px);
+    box-shadow: none;
+  }
 
-.secondaryButton:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--main-color) 30%, transparent);
-  outline-offset: 2px;
+  &:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--main-color) 30%, transparent);
+    outline-offset: 2px;
+  }
 }
 
 .note {

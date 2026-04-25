@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Sidebar } from "@/widgets/sidebar/ui/Sidebar";
 import { Header } from "@/widgets/header";
+import { Sidebar, type SidebarNavItem } from "@/widgets/sidebar";
 import styles from "./DashboardShell.module.scss";
-import type { SidebarNavItem } from "@/widgets/sidebar";
 import { useGetUser } from "@/entities/user/current";
 import { usePathname } from "next/navigation";
 

@@ -1,9 +1,10 @@
 "use client";
 
-import type { StudentData } from "@/entities/user/base/model/types";
+import type { StudentData } from "@/entities/user";
+import { DeleteUserModal } from "@/features/delete-user";
+import { EditStudentModal } from "@/features/edit-student";
 import type { SortDirection } from "@/shared/model/sort/types";
 import { Spinner } from "@/shared/ui/spinner";
-import { EditStudentModal } from "@/features/edit-student/ui/edit-student-modal/EditStudentModal";
 
 import type { StudentSortField } from "../../model/types";
 import { useStudentActions } from "../../model/useStudentActions";
@@ -11,7 +12,6 @@ import { StudentsDesktopTable } from "./students-desktop-table/StudentsDesktopTa
 import { StudentsMobileList } from "./students-mobile-list/StudentsMobileList";
 
 import styles from "./StudentsManagementContent.module.scss";
-import { DeleteUserModal } from "@/features/delete-user";
 
 interface StudentsManagementContentProps {
   students: StudentData[];

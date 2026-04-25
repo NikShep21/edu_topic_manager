@@ -12,7 +12,7 @@ import {
 
 import { FieldError } from "@/shared/ui/field-error";
 import { Input } from "@/shared/ui/input";
-import { Select } from "@/shared/ui/select";
+import { Select, type SelectOption } from "@/shared/ui/select";
 
 import styles from "./StudentFormFields.module.scss";
 
@@ -23,11 +23,6 @@ type StudentFormFieldsValues = {
   middle_name: string;
   course: number | undefined;
   group: string;
-};
-
-type SelectOption = {
-  value: string;
-  label: string;
 };
 
 interface StudentFormFieldsProps<T extends FieldValues & StudentFormFieldsValues> {
