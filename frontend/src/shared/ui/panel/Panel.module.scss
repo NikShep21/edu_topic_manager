@@ -1,0 +1,42 @@
+.panel {
+  width: 100%;
+  background-color: var(--color-objects);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+}
+
+.headerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  color: var(--text-color);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.rightSlot {
+  flex-shrink: 0;
+}
+
+.content {
+  padding: 24px;
+}
