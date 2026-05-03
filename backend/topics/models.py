@@ -25,6 +25,7 @@ class Topic(models.Model):
     type = models.CharField(
         max_length=20,
         choices=Type.choices,
+        default=Type.COURSEWORK,
         verbose_name=_("Тип темы")
     )
     status = models.CharField(
@@ -36,6 +37,8 @@ class Topic(models.Model):
     teacher = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
+        null=True,
+        blank=True,
         related_name="teacher_topics",
         verbose_name=_("Преподаватель")
     )
