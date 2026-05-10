@@ -90,10 +90,6 @@ class TopicStep(models.Model):
         max_length=255,
         verbose_name=_("Название этапа")
     )
-    description = models.TextField(
-        blank=True,
-        verbose_name=_("Описание этапа")
-    )
 
     class Meta:
         verbose_name = _("Этап темы")
