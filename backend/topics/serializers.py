@@ -44,9 +44,9 @@ class TopicSerializer(serializers.ModelSerializer):
         for step in steps_data:
             TopicStep.objects.create(topic=topic, **step)
         return topic
-    
+
     def update(self, instance, validated_data):
-        validated_data.pop("type", None)
+        validated_data.pop("type", None)  # type нельзя менять
         steps_data = validated_data.pop("steps", None)
 
         for attr, value in validated_data.items():
@@ -59,3 +59,4 @@ class TopicSerializer(serializers.ModelSerializer):
                 TopicStep.objects.create(topic=instance, **step)
 
         return instance
+    
