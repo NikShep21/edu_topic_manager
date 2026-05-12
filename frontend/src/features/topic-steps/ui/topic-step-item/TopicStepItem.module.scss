@@ -1,0 +1,101 @@
+.step {
+  display: grid;
+  grid-template-columns: 28px 32px minmax(0, 1fr) 32px;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px;
+
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+
+  background-color: var(--color-objects);
+
+  transition:
+    background-color 0.15s,
+    border-color 0.15s,
+    opacity 0.15s,
+    transform 0.15s;
+
+  &:hover {
+    border-color: var(--border-color-active);
+    background-color: var(--dropdown-color);
+  }
+}
+
+.dragging {
+  opacity: 0.55;
+  transform: scale(0.99);
+}
+
+.dragHandle {
+  @include centerFlex;
+
+  width: 28px;
+  height: 28px;
+  padding: 0;
+
+  border: none;
+  border-radius: 6px;
+
+  color: var(--text-secondary);
+  background-color: transparent;
+
+  cursor: grab;
+
+  &:hover {
+    color: var(--main-color);
+    background-color: var(--sidebar-link-hover-bg);
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.stepNumber {
+  @include centerFlex;
+
+  width: 28px;
+  height: 28px;
+
+  border-radius: 7px;
+
+  color: var(--main-color);
+  background-color: var(--sidebar-link-hover-bg);
+
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.stepTitle {
+  max-width: 100%;
+
+  color: var(--text-color);
+
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.removeButton {
+  color: var(--text-secondary);
+
+  &:hover {
+    color: #c94b4b;
+  }
+}
+
+@media (max-width: $mobile) {
+  .step {
+    grid-template-columns: 24px 28px minmax(0, 1fr) 28px;
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .dragHandle,
+  .stepNumber {
+    width: 24px;
+    height: 24px;
+  }
+}
