@@ -1,3 +1,3 @@
 export { Panel } from "./Panel";
-
-export { PanelHeader } from "./panel-header/PanelHeader";
+export { PanelHeader } from "./PanelHeader";
+export { PanelContent } from "./PanelContent";

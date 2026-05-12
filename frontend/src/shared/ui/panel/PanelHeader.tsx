@@ -1,18 +1,18 @@
 import type { ReactNode } from "react";
 
-import styles from "../styles/panel.module.scss";
+import styles from "./Panel.module.scss";
 
 type PanelHeaderProps = {
   title?: ReactNode;
   subtitle?: ReactNode;
-  rightSlot?: ReactNode;
+  actions?: ReactNode;
   className?: string;
 };
 
 export const PanelHeader = ({
   title,
   subtitle,
-  rightSlot,
+  actions,
   className,
 }: PanelHeaderProps) => {
   return (
@@ -22,7 +22,7 @@ export const PanelHeader = ({
         {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
       </div>
 
-      {rightSlot && <div className={styles.rightSlot}>{rightSlot}</div>}
+      {actions && <div className={styles.actions}>{actions}</div>}
     </div>
   );
 };

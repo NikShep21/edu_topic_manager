@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 
-import styles from "../styles/panel.module.scss";
+import styles from "./Panel.module.scss";
 
 type PanelProps = {
   children: ReactNode;
   className?: string;
 };
 
-export function Panel({ children, className }: PanelProps) {
+export const Panel = ({ children, className }: PanelProps) => {
   return <section className={`${styles.panel} ${className ?? ""}`}>{children}</section>;
-}
+};
