@@ -36,7 +36,7 @@ export class HttpClient {
     const url = this.buildUrl(path, query);
 
     let response: Response;
-
+    const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
     try {
       response = await fetch(url, {
         ...this.defaultOptions,
@@ -46,7 +46,7 @@ export class HttpClient {
           ...(this.defaultOptions.headers ?? {}),
           ...(headers ?? {}),
         },
-        body: body !== undefined ? JSON.stringify(body) : undefined,
+        body: isFormData ? body : body !== undefined ? JSON.stringify(body) : undefined,
       });
     } catch {
       throw new ApiError("Network error", 0, null);
