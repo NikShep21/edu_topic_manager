@@ -1,3 +1,5 @@
+"use client";
+
 import type React from "react";
 import clsx from "clsx";
 import { FieldError } from "@/shared/ui/field-error";
@@ -7,7 +9,6 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   startContent?: React.ReactNode;
   endContent?: React.ReactNode;
   error?: string;
-  isError?: boolean;
   className?: string;
   inputClassName?: string;
 }
@@ -16,11 +17,12 @@ export const Input = ({
   startContent,
   endContent,
   error,
-  isError = true,
   className,
   inputClassName,
   ...props
 }: InputProps) => {
+  const hasError = Boolean(error);
+
   return (
     <div className={clsx(styles.field, className)}>
       <div className={styles.inputContainer}>
@@ -49,7 +51,7 @@ export const Input = ({
         )}
       </div>
 
-      {isError ? <FieldError message={error} className={styles.error} /> : null}
+      {hasError && <FieldError message={error} className={styles.error} />}
     </div>
   );
 };
