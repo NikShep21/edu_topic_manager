@@ -45,7 +45,7 @@ export const Button = ({
 
       {isLoading ? (
         <span className={styles.spinnerWrapper} aria-hidden="true">
-          <Spinner size="md" className={styles.spinner} />
+          <Spinner size="md" color="secondary" className={styles.spinner} />
         </span>
       ) : null}
     </button>
