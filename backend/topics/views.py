@@ -76,8 +76,8 @@ class TopicViewSet(viewsets.ModelViewSet):
 
         return Topic.objects.none()
 
-    def perform_create(self, serializer):
-        serializer.save(teacher=self.request.user)
+    # def perform_create(self, serializer):
+    #     serializer.save(teacher=self.request.user)
 
     def get_permissions(self):
         if self.action in ["create", "update", "partial_update", "destroy"]:
