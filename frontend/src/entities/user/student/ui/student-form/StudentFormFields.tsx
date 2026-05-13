@@ -65,7 +65,9 @@ export const StudentFormFields = <T extends FieldValues & StudentFormFieldsValue
                   options={courseOptions}
                   placeholder="Выберите курс"
                 />
-                <FieldError message={fieldState.error?.message} />
+                {fieldState.error?.message && (
+                  <FieldError message={fieldState.error.message} />
+                )}
               </>
             )}
           />

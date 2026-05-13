@@ -34,7 +34,7 @@ export const TeacherFormFields = <T extends FieldValues & TeacherFormFieldsValue
   const { errors } = useFormState({ control });
 
   return (
-    <div className={styles.form}>
+    <>
       <div className={styles.field}>
         <label htmlFor="teacher-username" className={styles.label}>
           Логин
@@ -122,6 +122,6 @@ export const TeacherFormFields = <T extends FieldValues & TeacherFormFieldsValue
           {...register("job_title" as Path<T>)}
         />
       </div>
-    </div>
+    </>
   );
 };
