@@ -8,31 +8,24 @@ class Topic(models.Model):
         VKR = "vkr", _("ВКР")
         COURSEWORK = "coursework", _("Курсовая работа")
 
-
     class Status(models.TextChoices):
         AVAILABLE = "available", _("Доступна")
         PENDING_APPROVAL = "pending_approval", _("Ожидает подтверждения")
         ASSIGNED = "assigned", _("Назначена")
 
-    title = models.CharField(
-        max_length=255, 
-        verbose_name=_("Название")
-    )
-    description = models.TextField(
-        blank=True,
-        verbose_name=_("Описание")
-    )
+    title = models.CharField(max_length=255, verbose_name=_("Название"))
+    description = models.TextField(blank=True, verbose_name=_("Описание"))
     type = models.CharField(
         max_length=20,
         choices=Type.choices,
         default=Type.COURSEWORK,
-        verbose_name=_("Тип темы")
+        verbose_name=_("Тип темы"),
     )
     status = models.CharField(
         max_length=20,
         choices=Status.choices,
         default=Status.AVAILABLE,
-        verbose_name=_("Статус")
+        verbose_name=_("Статус"),
     )
     teacher = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -40,7 +33,7 @@ class Topic(models.Model):
         null=True,
         blank=True,
         related_name="teacher_topics",
-        verbose_name=_("Преподаватель")
+        verbose_name=_("Преподаватель"),
     )
     student = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -48,11 +41,10 @@ class Topic(models.Model):
         null=True,
         blank=True,
         related_name="student_topics",
-        verbose_name=_("Студент")
+        verbose_name=_("Студент"),
     )
     created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_("Дата создания")
+        auto_now_add=True, verbose_name=_("Дата создания")
     )
 
     class Meta:
@@ -62,34 +54,26 @@ class Topic(models.Model):
 
     def __str__(self):
         return self.title
-    
+
     @property
     def is_available(self):
         return self.status == self.Status.AVAILABLE
-    
+
     @property
     def is_pending_approval(self):
         return self.status == self.Status.PENDING_APPROVAL
-    
+
     @property
     def is_assigned(self):
         return self.status == self.Status.ASSIGNED
-    
+
 
 class TopicStep(models.Model):
     topic = models.ForeignKey(
-        Topic,
-        on_delete=models.CASCADE,
-        related_name="steps",
-        verbose_name=_("Тема")
+        Topic, on_delete=models.CASCADE, related_name="steps", verbose_name=_("Тема")
     )
-    order = models.PositiveIntegerField(
-        verbose_name=_("Порядок")
-    )
-    title = models.CharField(
-        max_length=255,
-        verbose_name=_("Название этапа")
-    )
+    order = models.PositiveIntegerField(verbose_name=_("Порядок"))
+    title = models.CharField(max_length=255, verbose_name=_("Название этапа"))
 
     class Meta:
         verbose_name = _("Этап темы")
@@ -97,15 +81,13 @@ class TopicStep(models.Model):
         ordering = ["order", "id"]
         constraints = [
             models.UniqueConstraint(
-                fields=["topic", "order"],
-                name="unique_topic_step_order"
+                fields=["topic", "order"], name="unique_topic_step_order"
             )
         ]
-    
 
     def __str__(self):
         return f"{self.order}. {self.title}"
-    
+
 
 class TopicFile(models.Model):
     topic = models.ForeignKey(
@@ -126,11 +108,11 @@ class TopicFile(models.Model):
 
     def __str__(self):
         return self.filename
-    
+
     @property
     def filename(self):
         return self.file.name.split("/")[-1] if self.file else ""
-    
+
 
 class TopicApplication(models.Model):
     class Status(models.TextChoices):
@@ -173,7 +155,7 @@ class TopicApplication(models.Model):
 
     def __str__(self):
         return f"{self.student} -> {self.topic} ({self.status})"
-    
+
     @property
     def is_pending(self):
         return self.status == self.Status.PENDING

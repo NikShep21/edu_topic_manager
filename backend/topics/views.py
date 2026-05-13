@@ -36,9 +36,13 @@ class TopicViewSet(viewsets.ModelViewSet):
             if type_param in [Topic.Type.COURSEWORK, Topic.Type.VKR]:
                 queryset = queryset.filter(type=type_param)
 
-            if status_param in [Topic.Status.AVAILABLE, Topic.Status.PENDING_APPROVAL, Topic.Status.ASSIGNED]:
+            if status_param in [
+                Topic.Status.AVAILABLE,
+                Topic.Status.PENDING_APPROVAL,
+                Topic.Status.ASSIGNED,
+            ]:
                 queryset = queryset.filter(status=status_param)
-                
+
             if search:
                 queryset = queryset.filter(title__icontains=search)
 
@@ -58,7 +62,11 @@ class TopicViewSet(viewsets.ModelViewSet):
             status_param = self.request.query_params.get("status")
             teacher_param = self.request.query_params.get("teacher")
             search = self.request.query_params.get("search")
-            if status_param in [Topic.Status.AVAILABLE, Topic.Status.PENDING_APPROVAL, Topic.Status.ASSIGNED]:
+            if status_param in [
+                Topic.Status.AVAILABLE,
+                Topic.Status.PENDING_APPROVAL,
+                Topic.Status.ASSIGNED,
+            ]:
                 queryset = queryset.filter(status=status_param)
             if teacher_param:
                 queryset = queryset.filter(teacher_id=teacher_param)
@@ -82,15 +90,15 @@ class TopicViewSet(viewsets.ModelViewSet):
         if topic.status != Topic.Status.AVAILABLE:
             return Response(
                 {"text": "Можно удалить только свободную тему"},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
-        
+
         if topic.applications.exists():
             return Response(
                 {"text": "Нельзя удалить тему, по которой уже были заявки"},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
-        
+
         self.perform_destroy(topic)
 
         return Response(
@@ -98,5 +106,5 @@ class TopicViewSet(viewsets.ModelViewSet):
                 "success": True,
                 "message": "Тема удалена",
             },
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
         )

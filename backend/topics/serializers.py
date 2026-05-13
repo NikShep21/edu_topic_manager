@@ -70,9 +70,7 @@ class TopicSerializer(serializers.ModelSerializer):
                 data["steps"] = json.loads(steps)
             except json.JSONDecodeError:
                 raise serializers.ValidationError(
-                    {
-                        "steps": "Неверный формат JSON для steps."
-                    }
+                    {"steps": "Неверный формат JSON для steps."}
                 )
 
         delete_files_ids = data.get("delete_files_ids")
@@ -170,4 +168,3 @@ class TopicSerializer(serializers.ModelSerializer):
             TopicFile.objects.create(topic=instance, file=uploaded_file)
 
         return instance
-    
