@@ -24,6 +24,11 @@
   height: 26px;
 }
 
+.spinner_lg {
+  width: 38px;
+  height: 38px;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

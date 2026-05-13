@@ -3,7 +3,7 @@ import styles from "./Spinner.module.scss";
 
 interface SpinnerProps {
   className?: string;
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "lg";
   color?: "primary" | "secondary";
 }
 
