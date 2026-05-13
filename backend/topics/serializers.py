@@ -64,6 +64,9 @@ class TopicSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
         data = data.copy()
 
+        if hasattr(data, "dict"):
+            data = data.dict()
+
         steps = data.get("steps")
         if isinstance(steps, str) and steps:
             try:
