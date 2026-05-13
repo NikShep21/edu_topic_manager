@@ -11,9 +11,10 @@ import { usePathname } from "next/navigation";
 interface DashboardShellProps {
   children: React.ReactNode;
   nav: SidebarNavItem[];
+  getTitle: (href?: string) => string;
 }
 
-export const DashboardShell = ({ children, nav }: DashboardShellProps) => {
+export const DashboardShell = ({ children, nav, getTitle }: DashboardShellProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const openSidebar = () => setIsSidebarOpen(true);
@@ -22,9 +23,11 @@ export const DashboardShell = ({ children, nav }: DashboardShellProps) => {
   const { data: userData } = useGetUser();
 
   const pathname = usePathname();
+  console.log("Current pathname:", pathname);
+  console.log("Navigation items:", nav);
 
-  const currentNavItem = nav.find((item) => item.href === pathname);
-  const title = currentNavItem?.title ?? currentNavItem?.name ?? "Админ-панель";
+  const title = getTitle(pathname);
+
   return (
     <div className={styles.layout}>
       <Sidebar

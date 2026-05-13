@@ -6,13 +6,11 @@ export const nav: SidebarNavItem[] = [
   {
     name: "Выбор Темы",
     href: STUDENT_ROUTES.topics,
-    title: "Выбор темы",
     icon: PiStudentFill,
   },
   {
     name: "Моя тема",
     href: STUDENT_ROUTES.myTopic,
-    title: "Моя тема",
     icon: PiStudentFill,
   },
 ];
