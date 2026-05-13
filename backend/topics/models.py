@@ -65,15 +65,15 @@ class Topic(models.Model):
     
     @property
     def is_available(self):
-        return self.status == self.status.AVAILABLE
+        return self.status == self.Status.AVAILABLE
     
     @property
     def is_pending_approval(self):
-        return self.status == self.status.PENDING_APPROVAL
+        return self.status == self.Status.PENDING_APPROVAL
     
     @property
     def is_assigned(self):
-        return self.status == self.status.ASSIGNED
+        return self.status == self.Status.ASSIGNED
     
 
 class TopicStep(models.Model):
@@ -133,7 +133,7 @@ class TopicFile(models.Model):
     
 
 class TopicApplication(models.Model):
-    class status(models.TextChoices):
+    class Status(models.TextChoices):
         PENDING = "pending", _("Ожидает решения")
         APPROVED = "approved", _("Одобрена")
         REJECTED = "rejected", _("Отклонена")
@@ -152,8 +152,8 @@ class TopicApplication(models.Model):
     )
     status = models.CharField(
         max_length=20,
-        choices=status.choices,
-        default=status.PENDING,
+        choices=Status.choices,
+        default=Status.PENDING,
         verbose_name=_("Статус заявки"),
     )
     created_at = models.DateTimeField(
