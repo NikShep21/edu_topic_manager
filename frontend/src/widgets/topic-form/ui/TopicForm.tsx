@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import { FiArrowLeft } from "react-icons/fi";
 import Link from "next/link";
@@ -7,11 +8,11 @@ import Link from "next/link";
 import { TopicFiles } from "@/features/topic-files";
 import { TopicSteps } from "@/features/topic-steps";
 import { Button } from "@/shared/ui/button";
-import { FieldError } from "@/shared/ui/field-error";
 import { Input } from "@/shared/ui/input";
 import { Panel, PanelContent, PanelHeader } from "@/shared/ui/panel";
 import { TextArea } from "@/shared/ui/textarea/Textarea";
 import { ToggleGroup } from "@/shared/ui/toggle-group";
+import { useToast } from "@/shared/model/toast/use-toast";
 
 import { useTopicForm } from "../model/useTopicForm";
 import type { TopicFormProps } from "../model/types";
@@ -26,6 +27,7 @@ const TOPIC_TYPE_OPTIONS = [
 export const TopicForm = (props: TopicFormProps) => {
   const { onCancel } = props;
 
+  const { showToast } = useToast();
   const { form, isEdit, isPending, handleSubmit, handleDelete } = useTopicForm(props);
 
   const {
@@ -34,18 +36,36 @@ export const TopicForm = (props: TopicFormProps) => {
     formState: { errors },
   } = form;
 
+  const rootErrorMessage = errors.root?.message;
+
+  useEffect(() => {
+    if (!rootErrorMessage) {
+      return;
+    }
+
+    showToast({
+      title: "Ошибка",
+      message: rootErrorMessage,
+      variant: "error",
+    });
+  }, [rootErrorMessage, showToast]);
+
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <div className={styles.topLink}>
-        <Link href="/teacher/topics" className={styles.topLinkAnchor}>
-          <FiArrowLeft size={18} />
-          <span>К моим темам</span>
-        </Link>
-      </div>
+      <div className={styles.headerForm}>
+        <div className={styles.topLink}>
+          <Link href="/teacher/topics" className={styles.topLinkAnchor}>
+            <FiArrowLeft size={18} />
+            <span>К моим темам</span>
+          </Link>
+        </div>
 
-      <p className={styles.subtitle}>
-        Заполните основную информацию, чтобы студенты могли выбрать тему
-      </p>
+        <p className={styles.subtitle}>
+          {isEdit
+            ? "Обновите основную информацию, чтобы студенты видели актуальные данные о теме"
+            : "Заполните основную информацию, чтобы студенты могли выбрать тему"}
+        </p>
+      </div>
 
       <Panel>
         <PanelHeader title="Основная информация" />
@@ -121,10 +141,6 @@ export const TopicForm = (props: TopicFormProps) => {
         </div>
       </div>
 
-      {errors.root?.message && (
-        <FieldError message={errors.root.message} className={styles.rootError} />
-      )}
-
       <div className={styles.footer}>
         {isEdit && (
           <Button
@@ -141,7 +157,13 @@ export const TopicForm = (props: TopicFormProps) => {
           Отмена
         </Button>
 
-        <Button className={styles.coreBtn} size="lg" type="submit" disabled={isPending}>
+        <Button
+          isLoading={isPending}
+          className={styles.coreBtn}
+          size="lg"
+          type="submit"
+          disabled={isPending}
+        >
           {isEdit ? "Сохранить изменения" : "Создать тему"}
         </Button>
       </div>
