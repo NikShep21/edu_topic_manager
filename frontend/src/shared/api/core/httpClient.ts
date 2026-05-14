@@ -35,17 +35,26 @@ export class HttpClient {
     const { query, body, headers, ...rest } = options;
     const url = this.buildUrl(path, query);
 
-    let response: Response;
     const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
+
+    const requestHeaders = new Headers({
+      ...(this.defaultOptions.headers ?? {}),
+      ...(headers ?? {}),
+    });
+
+    if (isFormData) {
+      requestHeaders.delete("Content-Type");
+    } else if (body !== undefined) {
+      requestHeaders.set("Content-Type", "application/json");
+    }
+
+    let response: Response;
+
     try {
       response = await fetch(url, {
         ...this.defaultOptions,
         ...rest,
-        headers: {
-          ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
-          ...(this.defaultOptions.headers ?? {}),
-          ...(headers ?? {}),
-        },
+        headers: requestHeaders,
         body: isFormData ? body : body !== undefined ? JSON.stringify(body) : undefined,
       });
     } catch {
