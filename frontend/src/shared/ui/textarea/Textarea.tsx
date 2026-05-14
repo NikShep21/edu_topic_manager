@@ -13,7 +13,7 @@ export interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextArea
   showCounter?: boolean;
 }
 
-export const TextArea = ({
+export const Textarea = ({
   error,
   isError = true,
   className,
