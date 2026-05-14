@@ -1,18 +1,18 @@
 "use client";
 
-import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import { FiArrowLeft } from "react-icons/fi";
 import Link from "next/link";
 
+import { DeleteTopicButton } from "@/features/delete-topic";
 import { TopicFiles } from "@/features/topic-files";
 import { TopicSteps } from "@/features/topic-steps";
 import { Button } from "@/shared/ui/button";
+import { FieldError } from "@/shared/ui/field-error";
 import { Input } from "@/shared/ui/input";
 import { Panel, PanelContent, PanelHeader } from "@/shared/ui/panel";
-import { TextArea } from "@/shared/ui/textarea/Textarea";
+import { Textarea } from "@/shared/ui/textarea";
 import { ToggleGroup } from "@/shared/ui/toggle-group";
-import { useToast } from "@/shared/model/toast/use-toast";
 
 import { useTopicForm } from "../model/useTopicForm";
 import type { TopicFormProps } from "../model/types";
@@ -27,28 +27,16 @@ const TOPIC_TYPE_OPTIONS = [
 export const TopicForm = (props: TopicFormProps) => {
   const { onCancel } = props;
 
-  const { showToast } = useToast();
-  const { form, isEdit, isPending, handleSubmit, handleDelete } = useTopicForm(props);
+  const { form, isEdit, isPending, handleSubmit } = useTopicForm(props);
+
+  const topicId = props.mode === "edit" ? props.initialData.id : null;
+  const onDeleteSuccess = props.mode === "edit" ? props.onDeleteSuccess : undefined;
 
   const {
     register,
     control,
     formState: { errors },
   } = form;
-
-  const rootErrorMessage = errors.root?.message;
-
-  useEffect(() => {
-    if (!rootErrorMessage) {
-      return;
-    }
-
-    showToast({
-      title: "Ошибка",
-      message: rootErrorMessage,
-      variant: "error",
-    });
-  }, [rootErrorMessage, showToast]);
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
@@ -101,7 +89,7 @@ export const TopicForm = (props: TopicFormProps) => {
 
           <div className={styles.field}>
             <label className={styles.label}>Описание темы</label>
-            <TextArea
+            <Textarea
               {...register("description")}
               placeholder="Введите описание работы"
               disabled={isPending}
@@ -141,31 +129,41 @@ export const TopicForm = (props: TopicFormProps) => {
         </div>
       </div>
 
+      {errors.root?.message && (
+        <FieldError message={errors.root.message} className={styles.rootError} />
+      )}
+
       <div className={styles.footer}>
-        {isEdit && (
+        <div className={styles.footerLeft}>
+          {topicId && (
+            <DeleteTopicButton
+              topicId={topicId}
+              disabled={isPending}
+              onSuccess={onDeleteSuccess}
+            />
+          )}
+        </div>
+
+        <div className={styles.footerRight}>
           <Button
             type="button"
             variant="secondary"
-            onClick={handleDelete}
+            onClick={onCancel}
             disabled={isPending}
           >
-            Удалить тему
+            Отмена
           </Button>
-        )}
 
-        <Button type="button" variant="secondary" onClick={onCancel} disabled={isPending}>
-          Отмена
-        </Button>
-
-        <Button
-          isLoading={isPending}
-          className={styles.coreBtn}
-          size="lg"
-          type="submit"
-          disabled={isPending}
-        >
-          {isEdit ? "Сохранить изменения" : "Создать тему"}
-        </Button>
+          <Button
+            isLoading={isPending}
+            className={styles.coreBtn}
+            size="lg"
+            type="submit"
+            disabled={isPending}
+          >
+            {isEdit ? "Сохранить изменения" : "Создать тему"}
+          </Button>
+        </div>
       </div>
     </form>
   );

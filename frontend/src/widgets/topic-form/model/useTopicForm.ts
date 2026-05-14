@@ -1,11 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import {
-  useCreateTopicMutation,
-  useDeleteTopicMutation,
-  useUpdateTopicMutation,
-} from "@/entities/topic";
+import { useCreateTopicMutation } from "@/features/create-topic";
+import { useUpdateTopicMutation } from "@/features/update-topic";
 
 import { buildCreateTopicPayload, buildUpdateTopicPayload } from "./buildTopicPayload";
 import { topicFormSchema, type TopicFormValues } from "./topicFormSchema";
@@ -20,7 +17,6 @@ export const useTopicForm = ({
 
   const createTopicMutation = useCreateTopicMutation();
   const updateTopicMutation = useUpdateTopicMutation();
-  const deleteTopicMutation = useDeleteTopicMutation();
 
   const form = useForm<TopicFormValues>({
     resolver: zodResolver(topicFormSchema),
@@ -46,13 +42,16 @@ export const useTopicForm = ({
           topicId: initialData.id,
           payload: buildUpdateTopicPayload(values),
         });
-        onSuccess?.(updatedTopic);
+
+        onSuccess?.(updatedTopic, "edit");
         return;
       }
+
       const createdTopic = await createTopicMutation.mutateAsync(
         buildCreateTopicPayload(values),
       );
-      onSuccess?.(createdTopic);
+
+      onSuccess?.(createdTopic, "create");
     } catch {
       form.setError("root", {
         message: isEdit ? "Не удалось сохранить изменения" : "Не удалось создать тему",
@@ -60,31 +59,12 @@ export const useTopicForm = ({
     }
   });
 
-  const handleDelete = async () => {
-    if (!initialData?.id) {
-      return;
-    }
-
-    try {
-      const deletedTopic = await deleteTopicMutation.mutateAsync(initialData.id);
-      onSuccess?.(deletedTopic);
-    } catch {
-      form.setError("root", {
-        message: "Не удалось удалить тему",
-      });
-    }
-  };
-
-  const isPending =
-    createTopicMutation.isPending ||
-    updateTopicMutation.isPending ||
-    deleteTopicMutation.isPending;
+  const isPending = createTopicMutation.isPending || updateTopicMutation.isPending;
 
   return {
     form,
     isEdit,
     isPending,
     handleSubmit,
-    handleDelete,
   };
 };
