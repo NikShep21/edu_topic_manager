@@ -4,6 +4,7 @@ from django.db import transaction
 from rest_framework import serializers
 
 from .models import Topic, TopicStep, TopicFile
+from users.serializers import StudentListSerializer, TeacherListSerializer
 
 
 class TopicStepSerializer(serializers.ModelSerializer):
@@ -22,21 +23,9 @@ class TopicFileSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "url", "size"]
 
 
-class TopicTeacherSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    fullname = serializers.CharField(source="get_full_name", read_only=True)
-
-
-class TopicStudentSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    fullname = serializers.CharField(source="get_full_name", read_only=True)
-    course = serializers.IntegerField(source="student_profile.course", read_only=True)
-    group = serializers.CharField(source="student_profile.group.name", read_only=True)
-
-
 class TopicSerializer(serializers.ModelSerializer):
-    teacher = TopicTeacherSerializer(read_only=True)
-    student = TopicStudentSerializer(read_only=True)
+    teacher = TeacherListSerializer(read_only=True)
+    student = StudentListSerializer(read_only=True)
     steps = TopicStepSerializer(many=True, required=False)
     files = TopicFileSerializer(many=True, read_only=True)
     delete_files_ids = serializers.ListField(
