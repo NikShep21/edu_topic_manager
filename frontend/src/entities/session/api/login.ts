@@ -1,8 +1,5 @@
-import { LOGIN_PATH } from "@/features/auth-by-credentials/api/constants";
-import type {
-  LoginResponse,
-  LoginRequest,
-} from "@/features/auth-by-credentials/api/types";
+import { LOGIN_PATH } from "@/entities/session/api/constants";
+import type { LoginResponse, LoginRequest } from "@/entities/session/api/types";
 import { fetchClient } from "@/shared/api";
 
 export const login = async (dataLogin: LoginRequest): Promise<LoginResponse> => {

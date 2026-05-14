@@ -1,4 +1,4 @@
-import { LOGOUT_PATH } from "@/features/logout/api/constants";
+import { LOGOUT_PATH } from "@/entities/session/api/constants";
 import { fetchClient } from "@/shared/api";
 
 export async function logout() {

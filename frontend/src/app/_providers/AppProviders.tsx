@@ -7,15 +7,18 @@ import { ThemeProvider } from "./ThemeProvider";
 import { queryClient } from "../../shared/api/react-query/queryClient";
 // import { MswProvider } from "@/app/_providers/MswProvider";
 import { ToastProvider } from "@/shared/model/toast/toast-provider";
+import { AuthRefreshProvider } from "@/app/_providers/AuthRefreshProvider";
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     // <MswProvider>
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="data-theme" defaultTheme="light" enableSystem={false}>
-        <ToastProvider>{children}</ToastProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </ThemeProvider>
+      <AuthRefreshProvider>
+        <ThemeProvider attribute="data-theme" defaultTheme="light" enableSystem={false}>
+          <ToastProvider>{children}</ToastProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </ThemeProvider>
+      </AuthRefreshProvider>
     </QueryClientProvider>
     // </MswProvider>
   );
