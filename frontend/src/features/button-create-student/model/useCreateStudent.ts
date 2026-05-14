@@ -1,6 +1,8 @@
-import { studentQueryKeys } from "@/entities/user/student";
-import { createStudent } from "@/features/button-create-student/api/createStudent";
-import type { createStudentRequest } from "@/features/button-create-student/api/types";
+import {
+  createStudent,
+  studentQueryKeys,
+  type createStudentRequest,
+} from "@/entities/user/student";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useCreateStudent = () => {

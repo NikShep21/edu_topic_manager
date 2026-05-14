@@ -1,9 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { teacherQueryKeys } from "@/entities/user/teacher";
-
-import type { UpdateTeacherRequest } from "../api/types";
-import { updateTeacher } from "../api/updateTeacher";
+import {
+  teacherQueryKeys,
+  updateTeacher,
+  type UpdateTeacherRequest,
+} from "@/entities/user/teacher";
 
 type UpdateTeacherMutationParams = {
   id: number;

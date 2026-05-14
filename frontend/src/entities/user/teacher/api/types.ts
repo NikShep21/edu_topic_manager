@@ -26,3 +26,25 @@ export interface TeachersFilterFields {
   academic_titles: FilterOption[];
   job_titles: FilterOption[];
 }
+
+export interface CreateTeacherRequest {
+  username: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+  middle_name: string;
+  academic_degree: string;
+  academic_title: string;
+  job_title: string;
+  role: "teacher";
+}
+
+export interface UpdateTeacherRequest {
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+  middle_name?: string;
+  academic_degree?: string;
+  academic_title?: string;
+  job_title?: string;
+}
