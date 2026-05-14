@@ -1,6 +1,5 @@
+import { deleteTopic, topicQueryKeys } from "@/entities/topic";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteTopic } from "../api/deleteTopic";
-import { topicQueryKeys } from "./queryKeys";
 
 export const useDeleteTopicMutation = () => {
   const queryClient = useQueryClient();

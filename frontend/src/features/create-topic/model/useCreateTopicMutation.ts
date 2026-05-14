@@ -1,6 +1,5 @@
+import { createTopic, topicQueryKeys } from "@/entities/topic";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createTopic } from "../api/createTopic";
-import { topicQueryKeys } from "./queryKeys";
 
 export const useCreateTopicMutation = () => {
   const queryClient = useQueryClient();

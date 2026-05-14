@@ -17,6 +17,8 @@ export type {
 
 export { topicQueryKeys } from "./model/queryKeys";
 
-export { useCreateTopicMutation } from "./model/useCreateTopicMutation";
-export { useUpdateTopicMutation } from "./model/useUpdateTopicMutation";
-export { useDeleteTopicMutation } from "./model/useDeleteTopicMutation";
+export { createTopic } from "./api/createTopic";
+export { deleteTopic } from "./api/deleteTopic";
+export { updateTopic } from "./api/updateTopic";
+
+export { getTopicErrorTitle } from "./lib/getTopicErrorTitle";
