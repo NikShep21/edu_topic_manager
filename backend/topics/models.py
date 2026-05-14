@@ -100,18 +100,30 @@ class TopicFile(models.Model):
         upload_to="topics/",
         verbose_name=_("Файл"),
     )
+    original_name = models.CharField(
+        max_length=255,
+        verbose_name=_("Оригинальное имя файла"),
+        editable=False,
+    )
 
     class Meta:
         verbose_name = _("Файл темы")
         verbose_name_plural = _("Файлы темы")
         ordering = ["id"]
 
+    def save(self, *args, **kwargs):
+        if self.file and not self.original_name:
+            self.original_name = self.file.name.split("/")[-1]
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return self.filename
+        return self.original_name
 
     @property
-    def filename(self):
-        return self.file.name.split("/")[-1] if self.file else ""
+    def size(self):
+        if self.file and hasattr(self.file, "size"):
+            return self.file.size
+        return 0
 
 
 class TopicApplication(models.Model):
