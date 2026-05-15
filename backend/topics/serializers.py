@@ -93,7 +93,7 @@ class TopicSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         if not request or not hasattr(request, "FILES"):
             return []
-    # фильтруем None на всякий случай
+        # фильтруем None на всякий случай
         return [f for f in request.FILES.getlist("files") if f]
 
     @transaction.atomic

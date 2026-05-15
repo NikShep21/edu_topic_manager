@@ -115,7 +115,9 @@ class TopicFile(models.Model):
     def save(self, *args, **kwargs):
         if self.file and not self.original_name:
             try:
-                self.original_name = getattr(self.file, "name", "unknown_file").split("/")[-1]
+                self.original_name = getattr(self.file, "name", "unknown_file").split(
+                    "/"
+                )[-1]
             except Exception:
                 self.original_name = "unknown_file"
         super().save(*args, **kwargs)
@@ -129,7 +131,7 @@ class TopicFile(models.Model):
             return self.file.size if self.file and hasattr(self.file, "size") else 0
         except Exception:
             return 0
-        
+
 
 class TopicApplication(models.Model):
     class Status(models.TextChoices):
