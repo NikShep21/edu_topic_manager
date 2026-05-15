@@ -104,6 +104,7 @@ class TopicFile(models.Model):
         max_length=255,
         verbose_name=_("Оригинальное имя файла"),
         editable=False,
+        default="",
     )
 
     class Meta:
@@ -113,18 +114,22 @@ class TopicFile(models.Model):
 
     def save(self, *args, **kwargs):
         if self.file and not self.original_name:
-            self.original_name = self.file.name.split("/")[-1]
+            try:
+                self.original_name = getattr(self.file, "name", "unknown_file").split("/")[-1]
+            except Exception:
+                self.original_name = "unknown_file"
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.original_name
+        return self.original_name or "unknown_file"
 
     @property
     def size(self):
-        if self.file and hasattr(self.file, "size"):
-            return self.file.size
-        return 0
-
+        try:
+            return self.file.size if self.file and hasattr(self.file, "size") else 0
+        except Exception:
+            return 0
+        
 
 class TopicApplication(models.Model):
     class Status(models.TextChoices):
