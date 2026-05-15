@@ -90,11 +90,10 @@ class TopicSerializer(serializers.ModelSerializer):
 
     def _get_uploaded_files(self):
         request = self.context.get("request")
-
         if not request or not hasattr(request, "FILES"):
             return []
-
-        return request.FILES.getlist("files")
+        # фильтруем None на всякий случай
+        return [f for f in request.FILES.getlist("files") if f]
 
     @transaction.atomic
     def create(self, validated_data):
