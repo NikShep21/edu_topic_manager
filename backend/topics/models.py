@@ -89,6 +89,10 @@ class TopicStep(models.Model):
         return f"{self.order}. {self.title}"
 
 
+def topic_file_path(instance, filename):
+    return f"uploads/topics/{instance.topic.id}/{filename}"
+
+
 class TopicFile(models.Model):
     topic = models.ForeignKey(
         Topic,
@@ -97,7 +101,7 @@ class TopicFile(models.Model):
         verbose_name=_("Тема"),
     )
     file = models.FileField(
-        upload_to="topics/",
+        upload_to=topic_file_path,
         verbose_name=_("Файл"),
     )
     original_name = models.CharField(

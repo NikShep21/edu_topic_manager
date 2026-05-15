@@ -2,9 +2,13 @@ from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.conf import settings
 
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+
+secure_flag = not settings.DEBUG  # True только в продакшене
+samesite_flag = "Lax" if settings.DEBUG else "None"
 
 
 class LoginView(APIView):
@@ -54,8 +58,8 @@ class LoginView(APIView):
             key="access_token",
             value=str(access),
             httponly=True,
-            samesite="None",
-            secure=True,
+            samesite=samesite_flag,
+            secure=secure_flag,
             max_age=access_age,
         )
 
@@ -63,8 +67,8 @@ class LoginView(APIView):
             key="refresh_token",
             value=str(refresh),
             httponly=True,
-            samesite="None",
-            secure=True,
+            samesite=samesite_flag,
+            secure=secure_flag,
             max_age=refresh_age,
         )
 
@@ -112,8 +116,8 @@ class RefreshView(APIView):
             key="access_token",
             value=str(access),
             httponly=True,
-            secure=True,  # поменять на true при деплое
-            samesite="Lax",
+            secure=secure_flag,
+            samesite=samesite_flag,
             max_age=60 * 30,
         )
 
