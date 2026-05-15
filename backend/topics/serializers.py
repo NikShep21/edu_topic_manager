@@ -16,7 +16,7 @@ class TopicStepSerializer(serializers.ModelSerializer):
 class TopicFileSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source="original_name", read_only=True)
     url = serializers.FileField(source="file", read_only=True)
-    size = serializers.IntegerField(source="size", read_only=True)
+    size = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = TopicFile
