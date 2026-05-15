@@ -92,6 +92,7 @@ class TopicStep(models.Model):
 def topic_file_path(instance, filename):
     return f"uploads/topics/{instance.topic.id}/{filename}"
 
+
 class TopicFile(models.Model):
     topic = models.ForeignKey(
         Topic,
