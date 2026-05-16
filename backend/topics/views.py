@@ -85,7 +85,7 @@ class TopicViewSet(viewsets.ModelViewSet):
     #     serializer.save(teacher=self.request.user)
 
     def get_permissions(self):
-        if self.action in ["apply"]:
+        if self.action in ["apply", "cancel"]:
             return [IsAuthenticated(), IsStudentRole()]
 
         if self.action in ["create", "update", "partial_update", "destroy"]:
@@ -116,7 +116,7 @@ class TopicViewSet(viewsets.ModelViewSet):
             },
             status=status.HTTP_200_OK,
         )
-    
+
     @action(detail=True, methods=["post"])
     @transaction.atomic
     def apply(self, request, pk=None):
@@ -130,7 +130,7 @@ class TopicViewSet(viewsets.ModelViewSet):
                 {"text": "Заявку можно подать только на свободную тему"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        
+
         student_profile = getattr(user, "student_profile", None)
         course = getattr(student_profile, "course", None)
 
@@ -146,17 +146,17 @@ class TopicViewSet(viewsets.ModelViewSet):
                     {"text": "Студенты 1–3 курса могут выбрать только курсовую работу"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-            
+
         elif course == 4:
             if topic.type != Topic.Type.VKR:
                 return Response(
                     {"text": "Студенты 4 курса могут выбрать только ВКР"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-            
+
         has_active_application = TopicApplication.objects.filter(
             student=user,
-            status__in = [
+            status__in=[
                 TopicApplication.Status.PENDING,
                 TopicApplication.Status.APPROVED,
             ],
@@ -167,7 +167,7 @@ class TopicViewSet(viewsets.ModelViewSet):
                 {"text": "У вас уже есть активная заявка или назначенная тема"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        
+
         TopicApplication.objects.create(
             topic=topic,
             student=user,
@@ -180,5 +180,48 @@ class TopicViewSet(viewsets.ModelViewSet):
 
         return Response(
             {"text": "Заявка отправлена"},
+            status=status.HTTP_200_OK,
+        )
+
+    @action(detail=True, methods=["post"])
+    @transaction.atomic
+    def cancel(self, request, pk=None):
+        topic = self.get_object()
+        user = request.user
+
+        topic = Topic.objects.select_for_update().get(pk=topic.pk)
+
+        if topic.status != Topic.Status.PENDING_APPROVAL:
+            return Response(
+                {"text": "Отменить можно только заявку, ожидающую подтверждения"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if topic.student_id != user.id:
+            return Response(
+                {"text": "Можно отменить только свою заявку"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        application = TopicApplication.objects.filter(
+            topic=topic,
+            student=user,
+            status=TopicApplication.Status.PENDING,
+        ).first()
+
+        if application is None:
+            return Response(
+                {"text": "Активная заявка не найдена"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        application.delete()
+
+        topic.status = Topic.Status.AVAILABLE
+        topic.student = None
+        topic.save(update_fields=["status", "student"])
+
+        return Response(
+            {"text": "Заявка отменена"},
             status=status.HTTP_200_OK,
         )
