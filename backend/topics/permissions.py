@@ -30,7 +30,7 @@ class IsStudentRole(BasePermission):
             and request.user.is_authenticated
             and request.user.role == "student"
         )
-    
+
 
 class IsTeacherRole(BasePermission):
     """

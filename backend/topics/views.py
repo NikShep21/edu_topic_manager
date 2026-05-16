@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import transaction
 
 from rest_framework import status, viewsets
@@ -7,8 +8,11 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
 from .models import Topic, TopicApplication
-from .permissions import IsTeacherOwner, IsStudentRole
+from .permissions import IsTeacherOwner, IsStudentRole, IsTeacherRole
 from .serializers import TopicSerializer
+
+
+User = get_user_model()
 
 
 class TopicViewSet(viewsets.ModelViewSet):
@@ -85,8 +89,16 @@ class TopicViewSet(viewsets.ModelViewSet):
     #     serializer.save(teacher=self.request.user)
 
     def get_permissions(self):
-        if self.action in ["apply", "cancel", "mytopic"]:
+        if self.action in [
+            "apply",
+            "cancel",
+            "mytopic",
+            "student_filter_options",
+        ]:
             return [IsAuthenticated(), IsStudentRole()]
+
+        if self.action in ["teacher_filter_options"]:
+            return [IsAuthenticated(), IsTeacherRole()]
 
         if self.action in [
             "create",
@@ -98,6 +110,22 @@ class TopicViewSet(viewsets.ModelViewSet):
         ]:
             return [IsAuthenticated(), IsTeacherOwner()]
         return [IsAuthenticated()]
+
+    def _get_status_options(self):
+        return [
+            {
+                "id": Topic.Status.AVAILABLE,
+                "name": Topic.Status.AVAILABLE.label,
+            },
+            {
+                "id": Topic.Status.PENDING_APPROVAL,
+                "name": Topic.Status.PENDING_APPROVAL.label,
+            },
+            {
+                "id": Topic.Status.ASSIGNED,
+                "name": Topic.Status.ASSIGNED.label,
+            },
+        ]
 
     def destroy(self, request, *args, **kwargs):
         topic = self.get_object()
@@ -317,7 +345,7 @@ class TopicViewSet(viewsets.ModelViewSet):
             {"text": "Заявка отклонена"},
             status=status.HTTP_200_OK,
         )
-    
+
     @action(detail=False, methods=["get"])
     def mytopic(self, request):
         application = (
@@ -343,9 +371,9 @@ class TopicViewSet(viewsets.ModelViewSet):
                     "applicationStatus": None,
                     "topic": None,
                 },
-                status=status.HTTP_200_OK
+                status=status.HTTP_200_OK,
             )
-        
+
         return Response(
             {
                 "applicationStatus": application.status,
@@ -354,5 +382,68 @@ class TopicViewSet(viewsets.ModelViewSet):
                     context={"request": request},
                 ).data,
             },
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
+        )
+
+    @action(detail=False, methods=["get"])
+    def teachers_filter_options(self, request):
+        return Response(
+            {
+                "types": [
+                    {
+                        "id": Topic.Type.VKR,
+                        "name": Topic.Type.VKR.label,
+                    },
+                    {
+                        "id": Topic.Type.COURSEWORK,
+                        "name": Topic.Type.COURSEWORK.label,
+                    },
+                ],
+                "statuses": self._get_status_options(),
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    @action(detail=False, methods=["get"])
+    def students_filter_options(self, request):
+        student_profile = getattr(request.user, "student_profile", None)
+        course = getattr(student_profile, "course", None)
+
+        if course in [1, 2, 3]:
+            topic_type = Topic.Type.COURSEWORK
+        elif course == 4:
+            topic_type = Topic.Type.VKR
+        else:
+            return Response(
+                {
+                    "statuses": self._get_status_options(),
+                    "teachers": [],
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        teacher_ids = (
+            Topic.objects.filter(type=topic_type)
+            .exclude(teacher__isnull=True)
+            .values_list("teacher_id", flat=True)
+            .distinct()
+        )
+
+        teachers = User.objects.filter(
+            id__in=teacher_ids,
+            role="teacher",
+        ).order_by("last_name", "first_name", "middle_name")
+
+        return Response(
+            {
+                "statuses": self._get_status_options(),
+                "teachers": [
+                    {
+                        "id": teacher.id,
+                        "name": teacher.get_full_name() or teacher.username,
+                    }
+                    for teacher in teachers
+                ],
+            },
+            status=status.HTTP_200_OK,
         )
