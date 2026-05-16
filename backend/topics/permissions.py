@@ -30,3 +30,16 @@ class IsStudentRole(BasePermission):
             and request.user.is_authenticated
             and request.user.role == "student"
         )
+    
+
+class IsTeacherRole(BasePermission):
+    """
+    Разрешает действие только преподавателю.
+    """
+
+    def has_permission(self, request, view):
+        return (
+            request.user
+            and request.user.is_authenticated
+            and request.user.role == "teacher"
+        )
