@@ -88,7 +88,14 @@ class TopicViewSet(viewsets.ModelViewSet):
         if self.action in ["apply", "cancel"]:
             return [IsAuthenticated(), IsStudentRole()]
 
-        if self.action in ["create", "update", "partial_update", "destroy"]:
+        if self.action in [
+            "create",
+            "update",
+            "partial_update",
+            "destroy",
+            "accept",
+            "reject",
+        ]:
             return [IsAuthenticated(), IsTeacherOwner()]
         return [IsAuthenticated()]
 
@@ -223,5 +230,90 @@ class TopicViewSet(viewsets.ModelViewSet):
 
         return Response(
             {"text": "Заявка отменена"},
+            status=status.HTTP_200_OK,
+        )
+
+    @action(detail=True, methods=["post"])
+    @transaction.atomic
+    def accept(self, request, pk=None):
+        topic = self.get_object()
+
+        topic = Topic.objects.select_for_update().get(pk=topic.pk)
+
+        if topic.status != Topic.Status.PENDING_APPROVAL:
+            return Response(
+                {"text": "Принять можно только заявку, ожидающую подтверждения"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if topic.student is None:
+            return Response(
+                {"text": "У темы нет заявителя"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        application = TopicApplication.objects.filter(
+            topic=topic,
+            student=topic.student,
+            status=TopicApplication.Status.PENDING,
+        ).first()
+
+        if application is None:
+            return Response(
+                {"text": "Активная заявка не найдена"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        application.status = TopicApplication.Status.APPROVED
+        application.save(update_fields=["status"])
+
+        topic.status = Topic.Status.ASSIGNED
+        topic.save(update_fields=["status"])
+
+        return Response(
+            {"text": "Заявка принята"},
+            status=status.HTTP_200_OK,
+        )
+
+    @action(detail=True, methods=["post"])
+    @transaction.atomic
+    def reject(self, request, pk=None):
+        topic = self.get_object()
+
+        topic = Topic.objects.select_for_update().get(pk=topic.pk)
+
+        if topic.status != Topic.Status.PENDING_APPROVAL:
+            return Response(
+                {"text": "Отклонить можно только заявку, ожидающую подтверждения"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if topic.student is None:
+            return Response(
+                {"text": "У темы нет заявителя"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        application = TopicApplication.objects.filter(
+            topic=topic,
+            student=topic.student,
+            status=TopicApplication.Status.PENDING,
+        ).first()
+
+        if application is None:
+            return Response(
+                {"text": "Активная заявка не найдена"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        application.status = TopicApplication.Status.REJECTED
+        application.save(update_fields=["status"])
+
+        topic.status = Topic.Status.AVAILABLE
+        topic.student = None
+        topic.save(update_fields=["status", "student"])
+
+        return Response(
+            {"text": "Заявка отклонена"},
             status=status.HTTP_200_OK,
         )
