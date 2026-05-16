@@ -85,7 +85,7 @@ class TopicViewSet(viewsets.ModelViewSet):
     #     serializer.save(teacher=self.request.user)
 
     def get_permissions(self):
-        if self.action in ["apply", "cancel"]:
+        if self.action in ["apply", "cancel", "mytopic"]:
             return [IsAuthenticated(), IsStudentRole()]
 
         if self.action in [
@@ -316,4 +316,43 @@ class TopicViewSet(viewsets.ModelViewSet):
         return Response(
             {"text": "Заявка отклонена"},
             status=status.HTTP_200_OK,
+        )
+    
+    @action(detail=False, methods=["get"])
+    def mytopic(self, request):
+        application = (
+            TopicApplication.objects.select_related(
+                "topic",
+                "topic__teacher",
+                "topic__student",
+                "topic__student__student_profile",
+                "topic__student__student_profile__group",
+            )
+            .prefetch_related(
+                "topic__steps",
+                "topic__files",
+            )
+            .filter(student=request.user)
+            .order_by("-created_at")
+            .first()
+        )
+
+        if application is None:
+            return Response(
+                {
+                    "applicationStatus": None,
+                    "topic": None,
+                },
+                status=status.HTTP_200_OK
+            )
+        
+        return Response(
+            {
+                "applicationStatus": application.status,
+                "topic": TopicSerializer(
+                    application.topic,
+                    context={"request": request},
+                ).data,
+            },
+            status=status.HTTP_200_OK
         )
