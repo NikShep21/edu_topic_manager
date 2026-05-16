@@ -1,10 +1,13 @@
+from django.db import transaction
+
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from .models import Topic
-from .permissions import IsTeacherOwner
+from .models import Topic, TopicApplication
+from .permissions import IsTeacherOwner, IsStudentRole
 from .serializers import TopicSerializer
 
 
@@ -82,6 +85,9 @@ class TopicViewSet(viewsets.ModelViewSet):
     #     serializer.save(teacher=self.request.user)
 
     def get_permissions(self):
+        if self.action in ["apply"]:
+            return [IsAuthenticated(), IsStudentRole()]
+
         if self.action in ["create", "update", "partial_update", "destroy"]:
             return [IsAuthenticated(), IsTeacherOwner()]
         return [IsAuthenticated()]
@@ -108,5 +114,71 @@ class TopicViewSet(viewsets.ModelViewSet):
                 "success": True,
                 "message": "Тема удалена",
             },
+            status=status.HTTP_200_OK,
+        )
+    
+    @action(detail=True, methods=["post"])
+    @transaction.atomic
+    def apply(self, request, pk=None):
+        topic = self.get_object()
+        user = request.user
+
+        topic = Topic.objects.select_for_update().get(pk=topic.pk)
+
+        if topic.status != Topic.Status.AVAILABLE:
+            return Response(
+                {"text": "Заявку можно подать только на свободную тему"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        student_profile = getattr(user, "student_profile", None)
+        course = getattr(student_profile, "course", None)
+
+        if course not in [1, 2, 3, 4]:
+            return Response(
+                {"text": "Некорректный курс студента"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        elif course in [1, 2, 3]:
+            if topic.type != Topic.Type.COURSEWORK:
+                return Response(
+                    {"text": "Студенты 1–3 курса могут выбрать только курсовую работу"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            
+        elif course == 4:
+            if topic.type != Topic.Type.VKR:
+                return Response(
+                    {"text": "Студенты 4 курса могут выбрать только ВКР"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            
+        has_active_application = TopicApplication.objects.filter(
+            student=user,
+            status__in = [
+                TopicApplication.Status.PENDING,
+                TopicApplication.Status.APPROVED,
+            ],
+        ).exists()
+
+        if has_active_application:
+            return Response(
+                {"text": "У вас уже есть активная заявка или назначенная тема"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        TopicApplication.objects.create(
+            topic=topic,
+            student=user,
+            status=TopicApplication.Status.PENDING,
+        )
+
+        topic.status = Topic.Status.PENDING_APPROVAL
+        topic.student = user
+        topic.save(update_fields=["status", "student"])
+
+        return Response(
+            {"text": "Заявка отправлена"},
             status=status.HTTP_200_OK,
         )
