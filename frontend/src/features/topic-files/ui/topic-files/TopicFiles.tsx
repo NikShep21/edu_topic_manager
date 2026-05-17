@@ -14,9 +14,10 @@ interface TopicFilesProps {
   value: TopicFilesValue;
   onChange: (value: TopicFilesValue) => void;
   error?: string;
+  className?: string;
 }
 
-export const TopicFiles = ({ value, onChange, error }: TopicFilesProps) => {
+export const TopicFiles = ({ value, onChange, error, className }: TopicFilesProps) => {
   const {
     inputRef,
     isDragActive,
@@ -29,7 +30,7 @@ export const TopicFiles = ({ value, onChange, error }: TopicFilesProps) => {
   } = useTopicFiles({ value, onChange });
 
   return (
-    <Panel>
+    <Panel className={className}>
       <PanelHeader
         title={
           <span className={styles.title}>
