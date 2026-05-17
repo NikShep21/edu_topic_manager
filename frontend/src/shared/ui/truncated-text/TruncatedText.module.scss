@@ -1,7 +1,14 @@
 .text {
-  display: inline-block;
-  max-width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.singleLine {
+  display: block;
   white-space: nowrap;
+}
+
+.multiLine {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
 }

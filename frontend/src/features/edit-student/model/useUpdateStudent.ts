@@ -1,6 +1,8 @@
-import { studentQueryKeys } from "@/entities/user/student";
-import type { UpdateStudentRequest } from "@/features/edit-student/api/types";
-import { updateStudent } from "@/features/edit-student/api/updateStudent";
+import {
+  studentQueryKeys,
+  updateStudent,
+  type UpdateStudentRequest,
+} from "@/entities/user/student";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 

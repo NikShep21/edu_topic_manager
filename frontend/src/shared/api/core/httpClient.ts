@@ -35,18 +35,27 @@ export class HttpClient {
     const { query, body, headers, ...rest } = options;
     const url = this.buildUrl(path, query);
 
+    const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
+
+    const requestHeaders = new Headers({
+      ...(this.defaultOptions.headers ?? {}),
+      ...(headers ?? {}),
+    });
+
+    if (isFormData) {
+      requestHeaders.delete("Content-Type");
+    } else if (body !== undefined) {
+      requestHeaders.set("Content-Type", "application/json");
+    }
+
     let response: Response;
 
     try {
       response = await fetch(url, {
         ...this.defaultOptions,
         ...rest,
-        headers: {
-          ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
-          ...(this.defaultOptions.headers ?? {}),
-          ...(headers ?? {}),
-        },
-        body: body !== undefined ? JSON.stringify(body) : undefined,
+        headers: requestHeaders,
+        body: isFormData ? body : body !== undefined ? JSON.stringify(body) : undefined,
       });
     } catch {
       throw new ApiError("Network error", 0, null);

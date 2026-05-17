@@ -1,1 +1,1 @@
-export { DashboardShell } from "./ui/DashboardShell";
+export { DashboardShell } from "./ui/DasboardShell";

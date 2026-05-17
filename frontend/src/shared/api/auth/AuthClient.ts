@@ -1,5 +1,5 @@
 import { withAuthRetry } from "@/shared/api/auth/withAuthRetry";
-import { fetchClient } from "@/shared/api/core/lib/createClient";
+import { fetchClient } from "@/shared/api/core/lib/createСlient";
 import type { RequestOptions } from "@/shared/api/core/types";
 
 export const authClient = {

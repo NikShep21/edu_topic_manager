@@ -1,24 +1,22 @@
 import { ADMIN_ROUTES } from "@/app/admin/_config/routes";
 import type { SidebarNavItem } from "@/widgets/sidebar";
-import { PiStudentFill } from "react-icons/pi";
+import { FaChalkboardTeacher, FaUserGraduate } from "react-icons/fa";
+import { MdWork } from "react-icons/md";
 
 export const nav: SidebarNavItem[] = [
   {
     name: "Преподаватели",
-    title: "Редактирование преподавателей",
     href: ADMIN_ROUTES.teachers,
-    icon: PiStudentFill,
+    icon: FaChalkboardTeacher,
   },
   {
     name: "Студенты",
-    title: "Редактирование студентов",
     href: ADMIN_ROUTES.students,
-    icon: PiStudentFill,
+    icon: FaUserGraduate,
   },
   {
     name: "Работы",
-    title: "Управление работами",
     href: ADMIN_ROUTES.works,
-    icon: PiStudentFill,
+    icon: MdWork,
   },
 ];

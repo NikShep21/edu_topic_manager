@@ -4,6 +4,8 @@ export type {
   StudentsQueryParams,
   OrderingStudentBaseField,
   OrderingStudentField,
+  UpdateStudentRequest,
+  createStudentRequest,
 } from "./api/types";
 
 export { studentQueryKeys } from "./model/queryKeys";
@@ -15,3 +17,6 @@ export { StudentMobileCard } from "./ui/student-mobile-card/StudentMobileCard";
 
 export { useStudentsQuery } from "./model/useStudentsQuery";
 export { useStudentsFilterQuery } from "./model/useStudentsFilterQuery";
+
+export { createStudent } from "./api/createStudent";
+export { updateStudent } from "./api/updateStudent";

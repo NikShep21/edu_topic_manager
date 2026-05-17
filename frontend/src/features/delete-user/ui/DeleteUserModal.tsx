@@ -1,13 +1,14 @@
 "use client";
 
-import type { UserData } from "@/entities/user";
-import { UserBadge } from "@/entities/user";
-import { useDeleteUser } from "@/features/delete-user/model/useDeleteUser";
-import { ApiError } from "@/shared/api";
 import { Modal, ModalDefaultActions } from "@/shared/ui/modal";
 import { FieldError } from "@/shared/ui/field-error";
 
+import type { UserData } from "@/entities/user/base/model/types";
+
 import styles from "./DeleteUserModal.module.scss";
+import { UserBadge } from "@/entities/user/current";
+import { useDeleteStudent } from "@/features/delete-user/model/useDeleteStudent";
+import { ApiError } from "@/shared/api";
 
 interface DeleteUserModalProps {
   isOpen: boolean;
@@ -17,7 +18,7 @@ interface DeleteUserModalProps {
 }
 
 export const DeleteUserModal = ({ isOpen, onClose, user }: DeleteUserModalProps) => {
-  const { mutate, isPending, error } = useDeleteUser();
+  const { mutate, isPending, error } = useDeleteStudent();
   const deleteError =
     error instanceof ApiError && (error.status === 400 || error.status === 401)
       ? error

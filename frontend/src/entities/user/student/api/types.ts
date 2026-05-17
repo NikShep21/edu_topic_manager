@@ -17,6 +17,24 @@ export interface StudentsQueryParams extends QueryParams {
 }
 
 export interface StudentsFilterFields {
-  groups: FilterOption[];
-  courses: FilterOption[];
+  groups: FilterOption<number>[];
+  courses: FilterOption<number>[];
+}
+
+export interface createStudentRequest {
+  username: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+  group: string;
+  course: number;
+  role: "student";
+}
+export interface UpdateStudentRequest {
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+  middle_name?: string;
+  group?: string;
+  course?: number;
 }

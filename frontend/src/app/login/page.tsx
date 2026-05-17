@@ -1,8 +1,6 @@
-import { LoginForm } from "@/features/auth-by-credentials";
-
 import styles from "./page.module.scss";
-
-const Page = () => {
+import { LoginForm } from "@/features/auth-by-credentials";
+const page = () => {
   return (
     <div className={styles.loginContainer}>
       <LoginForm />
@@ -10,4 +8,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default page;

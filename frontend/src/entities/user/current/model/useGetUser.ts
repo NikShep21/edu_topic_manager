@@ -1,10 +1,10 @@
 import { getUser } from "@/entities/user/current/api/getUser";
 import { userQueryKeys } from "@/entities/user/current/model/queryKeys";
-import type { CurrentUserData } from "@/entities/user";
+import type { UserData } from "@/entities/user/base/model/types";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetUser = () => {
-  return useQuery<CurrentUserData>({
+  return useQuery<UserData>({
     queryKey: [userQueryKeys.all],
     queryFn: getUser,
   });

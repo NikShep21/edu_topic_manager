@@ -1,9 +1,9 @@
-import { TEACHER_ROUTES } from "@/app/teacher/_config/routes";
+import { TEACHER_ROUTES } from "@/app/teacher/_config/routers";
 import { redirect } from "next/navigation";
 
-const Page = () => {
+const page = () => {
   redirect(TEACHER_ROUTES.default);
   return null;
 };
 
-export default Page;
+export default page;

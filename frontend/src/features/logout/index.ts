@@ -1,1 +1,1 @@
-export { useLogout } from "./model/useLogout";
+export { useLogout } from "@/features/logout/model/useLogout";

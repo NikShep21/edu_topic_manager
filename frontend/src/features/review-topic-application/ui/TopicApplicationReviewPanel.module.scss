@@ -1,0 +1,110 @@
+.panel {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  border: 1px solid color-mix(in srgb, var(--main-color) 32%, var(--border-color));
+  border-radius: 18px;
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--main-color) 7%, transparent),
+      transparent
+    ),
+    var(--color-objects);
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--accent-surface);
+  color: var(--accent-surface-text);
+}
+
+.title {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.userBadge {
+  max-width: 200px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.actionButton {
+  flex-shrink: 0;
+}
+
+@media (max-width: $laptop) {
+  .panel {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .actions {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: $tablet) {
+  .panel {
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: $mobile) {
+  .panel {
+    border-radius: 16px;
+  }
+
+  .content {
+    align-items: flex-start;
+  }
+
+  .icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .title {
+    font-size: 15px;
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .actionButton {
+    width: 100%;
+  }
+}

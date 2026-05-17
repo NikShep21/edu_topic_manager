@@ -18,7 +18,9 @@
   box-shadow: 0 20px 60px rgb(0 0 0 / 12%);
   overflow: hidden;
   max-height: calc(100dvh - 32px);
-
+  .br {
+    margin-top: 20px;
+  }
   margin: auto;
 }
 
@@ -73,7 +75,8 @@
 }
 
 .modalBody {
-  padding: 18px 26px;
+  padding: 0 26px;
+  margin-top: 18px;
   overflow-y: auto;
   background-color: var(--color-objects);
 }
@@ -82,7 +85,7 @@
   border-bottom: 1px solid var(--border-color);
 }
 .modalFooter {
-  padding: 0px 26px 26px;
+  padding: 18px 26px;
 
   background-color: var(--color-objects);
 }

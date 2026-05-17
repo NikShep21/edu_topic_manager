@@ -1,12 +1,11 @@
-import { TEACHER_ROUTES } from "@/app/teacher/_config/routes";
+import { TEACHER_ROUTES } from "@/app/teacher/_config/routers";
 import type { SidebarNavItem } from "@/widgets/sidebar";
-import { PiStudentFill } from "react-icons/pi";
+import { MdTopic } from "react-icons/md";
 
 export const nav: SidebarNavItem[] = [
   {
     name: "Темы",
     href: TEACHER_ROUTES.topics,
-    title: "Мои темы",
-    icon: PiStudentFill,
+    icon: MdTopic,
   },
 ];

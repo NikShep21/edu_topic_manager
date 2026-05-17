@@ -1,0 +1,47 @@
+.container {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: 20px;
+}
+
+.mainColumn,
+.sideColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.panel {
+  height: auto;
+}
+
+.panelTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--main-color);
+
+  span {
+    color: var(--text-color);
+  }
+}
+
+.description {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 15px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+@media (max-width: $desktop-sm) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}

@@ -124,7 +124,6 @@ export const Select = ({
                 placeholder={searchPlaceholder}
                 className={styles.searchField}
                 inputClassName={styles.searchInput}
-                isError={false}
               />
             </div>
           ) : null}

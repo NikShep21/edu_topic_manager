@@ -1,7 +1,7 @@
 .content {
   padding: 20px 30px;
   @media (max-width: $tablet) {
-    padding: 10px;
+    padding: $paddingMobile;
   }
 }
 .table {

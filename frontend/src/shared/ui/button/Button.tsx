@@ -12,11 +12,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   fullWidth?: boolean;
+  classNameContent?: string;
 }
 
 export const Button = ({
   children,
   className,
+  classNameContent,
   type = "button",
   isLoading = false,
   disabled,
@@ -41,11 +43,11 @@ export const Button = ({
       disabled={disabled || isLoading}
       {...props}
     >
-      <div className={styles.content}>{children}</div>
+      <div className={clsx(styles.content, classNameContent)}>{children}</div>
 
       {isLoading ? (
         <span className={styles.spinnerWrapper} aria-hidden="true">
-          <Spinner size="md" className={styles.spinner} />
+          <Spinner size="md" color="secondary" className={styles.spinner} />
         </span>
       ) : null}
     </button>

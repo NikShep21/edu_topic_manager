@@ -1,9 +1,15 @@
-import { refreshSession } from "@/features/refresh-session/api/refreshSession";
 import { ApiError } from "../core/apiError";
+import { getRefreshSessionHandler } from "./refreshSessionHandler";
 
 let refreshPromise: Promise<unknown> | null = null;
 
-async function runRefreshOnce() {
+const runRefreshOnce = async () => {
+  const refreshSession = getRefreshSessionHandler();
+
+  if (!refreshSession) {
+    throw new ApiError("Refresh session handler is not registered", 401, null);
+  }
+
   if (!refreshPromise) {
     refreshPromise = refreshSession().finally(() => {
       refreshPromise = null;
@@ -11,13 +17,15 @@ async function runRefreshOnce() {
   }
 
   return refreshPromise;
-}
+};
 
-function isUnauthorizedError(error: unknown): error is ApiError<Record<string, unknown>> {
+const isUnauthorizedError = (
+  error: unknown,
+): error is ApiError<Record<string, unknown>> => {
   return error instanceof ApiError && error.status === 401;
-}
+};
 
-export async function withAuthRetry<T>(request: () => Promise<T>): Promise<T> {
+export const withAuthRetry = async <T>(request: () => Promise<T>): Promise<T> => {
   try {
     return await request();
   } catch (error) {
@@ -27,5 +35,6 @@ export async function withAuthRetry<T>(request: () => Promise<T>): Promise<T> {
   }
 
   await runRefreshOnce();
+
   return request();
-}
+};

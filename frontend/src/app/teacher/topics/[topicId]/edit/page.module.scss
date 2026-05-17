@@ -1,0 +1,20 @@
+.content {
+  padding: 30px 50px;
+
+  @media (max-width: $desktop-sm) {
+    padding: 20px $paddingMobile;
+  }
+}
+
+.contentLoading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+}

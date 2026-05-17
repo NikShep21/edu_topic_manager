@@ -12,7 +12,6 @@ export const SearchInput = ({ className, ...props }: SearchInputProps) => {
       className={className}
       inputClassName={styles.searchInput}
       startContent={<IoIosSearch size={20} />}
-      isError={false}
     />
   );
 };

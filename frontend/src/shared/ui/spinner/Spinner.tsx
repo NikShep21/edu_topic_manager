@@ -3,13 +3,19 @@ import styles from "./Spinner.module.scss";
 
 interface SpinnerProps {
   className?: string;
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "lg";
+  color?: "primary" | "secondary";
 }
 
-export const Spinner = ({ className, size = "md" }: SpinnerProps) => {
+export const Spinner = ({ className, size = "md", color = "primary" }: SpinnerProps) => {
   return (
     <span
-      className={clsx(styles.spinner, styles[`spinner_${size}`], className)}
+      className={clsx(
+        styles.spinner,
+        styles[`spinner_${size}`],
+        styles[`spinner_color_${color}`],
+        className,
+      )}
       aria-hidden="true"
     />
   );

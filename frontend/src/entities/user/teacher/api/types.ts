@@ -22,7 +22,29 @@ export interface TeachersQueryParams extends QueryParams {
 }
 
 export interface TeachersFilterFields {
-  academic_degrees: FilterOption[];
-  academic_titles: FilterOption[];
-  job_titles: FilterOption[];
+  academic_degrees: FilterOption<number>[];
+  academic_titles: FilterOption<number>[];
+  job_titles: FilterOption<number>[];
+}
+
+export interface CreateTeacherRequest {
+  username: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+  middle_name: string;
+  academic_degree: string;
+  academic_title: string;
+  job_title: string;
+  role: "teacher";
+}
+
+export interface UpdateTeacherRequest {
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+  middle_name?: string;
+  academic_degree?: string;
+  academic_title?: string;
+  job_title?: string;
 }

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 
-import type { StudentData } from "@/entities/user";
+import type { StudentData } from "@/entities/user/base/model/types";
 
 type StudentActionState =
   | { type: "edit"; studentId: number }

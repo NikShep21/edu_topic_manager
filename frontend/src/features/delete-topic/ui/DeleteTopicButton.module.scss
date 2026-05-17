@@ -1,0 +1,11 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.text {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}

@@ -10,6 +10,12 @@ interface UserBadgeProps {
   size?: UserBadgeSize;
 }
 
+const MAP_ROLES = {
+  student: "Студент",
+  teacher: "Преподаватель",
+  admin: "Администратор",
+};
+
 export const UserBadge = ({ userData, className, size = "md" }: UserBadgeProps) => {
   if (!userData) {
     return null;
@@ -26,7 +32,7 @@ export const UserBadge = ({ userData, className, size = "md" }: UserBadgeProps) 
 
       <div className={styles.info}>
         <p className={styles.fullName}>{fullName}</p>
-        <span className={styles.role}>{userData.role}</span>
+        <span className={styles.role}>{MAP_ROLES[userData.role]}</span>
       </div>
     </div>
   );

@@ -1,0 +1,162 @@
+.card {
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  background-color: var(--color-objects);
+  cursor: pointer;
+  transition:
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    transform 0.16s ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--main-color) 55%, var(--border-color));
+    box-shadow: 0 14px 34px rgb(15 23 42 / 0.08);
+    transform: translateY(-2px);
+
+    .details {
+      color: var(--main-color);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--main-color) 45%, transparent);
+    outline-offset: 3px;
+  }
+}
+
+.header {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.badges {
+  display: flex;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.typeBadge,
+.statusBadge {
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.typeBadge {
+  background-color: var(--accent-surface);
+  color: var(--accent-surface-text);
+}
+
+.statusBadge {
+  background-color: var(--dropdown-color);
+  color: var(--text-secondary);
+}
+
+.status_available {
+  background-color: color-mix(in srgb, #35a66b 16%, var(--dropdown-color));
+  color: #2f8c5d;
+}
+
+.status_pending_approval {
+  background-color: color-mix(in srgb, #d99a2b 18%, var(--dropdown-color));
+  color: #b47716;
+}
+
+.status_assigned {
+  background-color: color-mix(in srgb, var(--main-color) 18%, var(--dropdown-color));
+  color: var(--accent-surface-text);
+}
+
+.details {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.16s ease;
+}
+
+.content {
+  height: 250px;
+}
+
+.title {
+  color: var(--text-color);
+  font-size: 18px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.description {
+  margin: 12px 0 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.footer {
+  height: 100%;
+  display: flex;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+}
+
+.userLabel {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.userBadge {
+  max-width: 100%;
+}
+.footerContent {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.emptyUser {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+@media (max-width: $mobile) {
+  .card {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .details {
+    display: none;
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .description {
+    margin-top: 10px;
+  }
+  .typeBadge,
+  .statusBadge {
+    font-size: 12px;
+  }
+}
