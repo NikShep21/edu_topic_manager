@@ -109,6 +109,7 @@ export const TopicForm = (props: TopicFormProps) => {
                 error={errors.steps?.message}
                 steps={field.value}
                 onChange={field.onChange}
+                className={styles.steps}
               />
             )}
           />
@@ -123,6 +124,7 @@ export const TopicForm = (props: TopicFormProps) => {
                 value={field.value}
                 onChange={field.onChange}
                 error={errors.filesState?.message}
+                className={styles.files}
               />
             )}
           />
