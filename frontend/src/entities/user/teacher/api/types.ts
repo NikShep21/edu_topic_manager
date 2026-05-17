@@ -22,9 +22,9 @@ export interface TeachersQueryParams extends QueryParams {
 }
 
 export interface TeachersFilterFields {
-  academic_degrees: FilterOption[];
-  academic_titles: FilterOption[];
-  job_titles: FilterOption[];
+  academic_degrees: FilterOption<number>[];
+  academic_titles: FilterOption<number>[];
+  job_titles: FilterOption<number>[];
 }
 
 export interface CreateTeacherRequest {
