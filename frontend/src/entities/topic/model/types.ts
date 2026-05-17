@@ -1,18 +1,10 @@
+import type { StudentData, TeacherData } from "@/entities/user";
+
 export type TopicType = "vkr" | "coursework";
 
 export type TopicStatus = "available" | "pending_approval" | "assigned";
 
 export type TopicApplicationStatus = "pending" | "approved" | "rejected";
-
-export interface TopicPerson {
-  id: number;
-  fullName: string;
-}
-
-export interface TopicStudent extends TopicPerson {
-  course?: number;
-  group?: string;
-}
 
 export interface TopicStep {
   order: number;
@@ -32,9 +24,9 @@ export interface Topic {
   description: string;
   type: TopicType;
   status: TopicStatus;
-  createdAt: string;
-  teacher: TopicPerson;
-  student: TopicStudent | null;
+  created_at: string;
+  teacher: TeacherData;
+  student: StudentData | null;
   steps?: TopicStep[];
   files?: TopicFile[];
 }
