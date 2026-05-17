@@ -1,0 +1,114 @@
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: var(--main-color);
+  }
+}
+
+.header {
+  padding: 26px;
+  margin-bottom: 20px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.title {
+  color: var(--text-color);
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.actionButtonContent {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 22px;
+  margin-top: 22px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.typeBadge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background-color: var(--accent-surface);
+  color: var(--accent-surface-text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.metaItem {
+  color: var(--text-secondary);
+}
+
+.status_available {
+  color: #2f8c5d;
+  font-weight: 600;
+}
+
+.status_pending_approval {
+  color: #b47716;
+  font-weight: 600;
+}
+
+.status_assigned {
+  color: var(--main-color);
+  font-weight: 600;
+}
+
+@media (max-width: $mobile) {
+  .header {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .titleRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  .actionButton {
+    width: 100%;
+  }
+
+  .meta {
+    gap: 10px;
+  }
+}
