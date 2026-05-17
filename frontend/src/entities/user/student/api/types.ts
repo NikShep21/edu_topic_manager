@@ -17,8 +17,8 @@ export interface StudentsQueryParams extends QueryParams {
 }
 
 export interface StudentsFilterFields {
-  groups: FilterOption[];
-  courses: FilterOption[];
+  groups: FilterOption<number>[];
+  courses: FilterOption<number>[];
 }
 
 export interface createStudentRequest {
