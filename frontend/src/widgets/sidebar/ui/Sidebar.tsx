@@ -46,7 +46,7 @@ export const Sidebar = ({ nav, isOpen, onClose, userData }: SidebarProps) => {
           <div className={styles.sidebarHeader}>
             <Link className={styles.logoLink} href="/">
               <PiStudentFill className={styles.logoIcon} />
-              <span className={styles.logoText}>MyApp</span>
+              <span className={styles.logoText}>TopicManager</span>
             </Link>
 
             <button
