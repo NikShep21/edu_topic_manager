@@ -1,1 +1,1 @@
-export const DELETE_USER = "/users/";
+export const deleteUserUrl = (userId: number) => `/users/${userId}/`;

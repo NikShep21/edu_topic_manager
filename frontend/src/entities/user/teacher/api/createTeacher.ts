@@ -1,8 +1,8 @@
 import { authClient } from "@/shared/api";
 
-import { TEACHER } from "./constants";
+import { USERS } from "./constants";
 import type { CreateTeacherRequest } from "./types";
 
 export const createTeacher = async (data: CreateTeacherRequest) => {
-  return authClient.post<null>(TEACHER, data);
+  return authClient.post<null>(USERS, data);
 };

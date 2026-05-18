@@ -20,6 +20,10 @@ export class HttpClient {
     const isAbsolute = /^https?:\/\//i.test(rawUrl);
     const url = isAbsolute ? new URL(rawUrl) : new URL(rawUrl, "http://localhost");
 
+    const normalizedPathname = url.pathname.replace(/\/{2,}/g, "/").replace(/\/+$/, "");
+
+    url.pathname = normalizedPathname ? `${normalizedPathname}/` : "/";
+
     if (query) {
       for (const [key, value] of Object.entries(query)) {
         if (value !== null && value !== undefined) {
@@ -30,7 +34,6 @@ export class HttpClient {
 
     return isAbsolute ? url.toString() : `${url.pathname}${url.search}`;
   }
-
   private async request<T>(path: string, options: RequestOptions = {}): Promise<T> {
     const { query, body, headers, ...rest } = options;
     const url = this.buildUrl(path, query);
