@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import type { TeacherData } from "@/entities/user/base/model/types";
 
 import { Modal, ModalDefaultActions } from "@/shared/ui/modal";
+import { Spinner } from "@/shared/ui/spinner";
 import { applyServerErrors } from "@/shared/lib/form/applyServerErrors";
 
 import { useUpdateTeacher } from "../../model/useUpdateTeacher";
@@ -73,7 +74,6 @@ export const EditTeacherModal = ({ isOpen, onClose, teacher }: EditTeacherModalP
   };
 
   const handleClose = () => {
-    reset();
     onClose();
   };
 
@@ -84,21 +84,30 @@ export const EditTeacherModal = ({ isOpen, onClose, teacher }: EditTeacherModalP
       title="Редактирование преподавателя"
       className={styles.modal}
       footer={
-        <ModalDefaultActions
-          formId="edit-teacher-form"
-          onClose={handleClose}
-          isLoading={isPending}
-          text="Сохранить"
-        />
+        teacher ? (
+          <ModalDefaultActions
+            formId="edit-teacher-form"
+            onClose={handleClose}
+            isLoading={isPending}
+            text="Сохранить"
+          />
+        ) : null
       }
     >
-      <form
-        id="edit-teacher-form"
-        onSubmit={handleSubmit(submit)}
-        className={styles.content}
-      >
-        <EditTeacherForm control={control} register={register} />
-      </form>
+      {!teacher ? (
+        <div className={styles.loading}>
+          <Spinner size="lg" />
+        </div>
+      ) : (
+        <form
+          key={teacher.id}
+          id="edit-teacher-form"
+          onSubmit={handleSubmit(submit)}
+          className={styles.content}
+        >
+          <EditTeacherForm control={control} register={register} />
+        </form>
+      )}
     </Modal>
   );
 };

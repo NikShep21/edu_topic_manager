@@ -6,19 +6,21 @@ import { useForm } from "react-hook-form";
 
 import type { StudentData } from "@/entities/user/base/model/types";
 
+import { useStudentsFilterQuery } from "@/entities/user/student";
+
 import { Modal, ModalDefaultActions } from "@/shared/ui/modal";
+import { Spinner } from "@/shared/ui/spinner";
+import { buildSelectOptions } from "@/shared/lib/select/buildSelectOptions";
+import { applyServerErrors } from "@/shared/lib/form/applyServerErrors";
 
 import { useUpdateStudent } from "../../model/useUpdateStudent";
 import { EditStudentForm } from "../edit-student-form/EditStudentForm";
-
-import styles from "./EditStudentModal.module.scss";
 import {
   editStudentSchema,
   type EditStudentValues,
 } from "@/features/edit-student/model/schema";
-import { useStudentsFilterQuery } from "@/entities/user/student";
-import { buildSelectOptions } from "@/shared/lib/select/buildSelectOptions";
-import { applyServerErrors } from "@/shared/lib/form/applyServerErrors";
+
+import styles from "./EditStudentModal.module.scss";
 
 interface EditStudentModalProps {
   isOpen: boolean;
@@ -50,7 +52,7 @@ export const EditStudentModal = ({ isOpen, onClose, student }: EditStudentModalP
       last_name: student.last_name,
       middle_name: student.middle_name,
       course: student.course,
-      group: student.group.name,
+      group: student.group?.name ?? "",
     });
   }, [student, isOpen, reset]);
 
@@ -76,7 +78,6 @@ export const EditStudentModal = ({ isOpen, onClose, student }: EditStudentModalP
   };
 
   const handleClose = () => {
-    reset();
     onClose();
   };
 
@@ -91,25 +92,34 @@ export const EditStudentModal = ({ isOpen, onClose, student }: EditStudentModalP
       title="Редактирование студента"
       className={styles.modal}
       footer={
-        <ModalDefaultActions
-          formId="edit-student-form"
-          onClose={handleClose}
-          isLoading={isPending}
-          text="Сохранить"
-        />
+        student ? (
+          <ModalDefaultActions
+            formId="edit-student-form"
+            onClose={handleClose}
+            isLoading={isPending}
+            text="Сохранить"
+          />
+        ) : null
       }
     >
-      <form
-        id="edit-student-form"
-        onSubmit={handleSubmit(submit)}
-        className={styles.content}
-      >
-        <EditStudentForm
-          courseOptions={courseOptions}
-          control={control}
-          register={register}
-        />
-      </form>
+      {!student ? (
+        <div className={styles.loading}>
+          <Spinner size="lg" />
+        </div>
+      ) : (
+        <form
+          key={student.id}
+          id="edit-student-form"
+          onSubmit={handleSubmit(submit)}
+          className={styles.content}
+        >
+          <EditStudentForm
+            courseOptions={courseOptions}
+            control={control}
+            register={register}
+          />
+        </form>
+      )}
     </Modal>
   );
 };
