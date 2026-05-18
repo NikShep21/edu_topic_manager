@@ -23,8 +23,6 @@ export const DashboardShell = ({ children, nav, getTitle }: DashboardShellProps)
   const { data: userData } = useGetUser();
 
   const pathname = usePathname();
-  console.log("Current pathname:", pathname);
-  console.log("Navigation items:", nav);
 
   const title = getTitle(pathname);
 
