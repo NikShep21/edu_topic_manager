@@ -130,17 +130,17 @@ class TopicViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         topic = self.get_object()
 
-        if topic.status != Topic.Status.AVAILABLE:
-            return Response(
-                {"text": "Можно удалить только свободную тему"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        # if topic.status != Topic.Status.AVAILABLE:
+        #     return Response(
+        #         {"text": "Можно удалить только свободную тему"},
+        #         status=status.HTTP_400_BAD_REQUEST,
+        #     )
 
-        if topic.applications.exists():
-            return Response(
-                {"text": "Нельзя удалить тему, по которой уже были заявки"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        # if topic.applications.exists():
+        #     return Response(
+        #         {"text": "Нельзя удалить тему, по которой уже были заявки"},
+        #         status=status.HTTP_400_BAD_REQUEST,
+        #     )
 
         self.perform_destroy(topic)
 
