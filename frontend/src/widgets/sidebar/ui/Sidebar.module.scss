@@ -85,18 +85,10 @@
   min-height: 0;
 }
 
-.nav {
-  min-height: 0;
-}
-
 .navList {
   display: flex;
   flex-direction: column;
   gap: 12px;
-}
-
-.navItem {
-  list-style: none;
 }
 
 .navLinkInner {
@@ -115,7 +107,6 @@
   position: fixed;
   inset: 0;
   border: none;
-  padding: 0;
   background: rgba(0, 0, 0, 0.2);
   opacity: 0;
   visibility: hidden;
@@ -135,11 +126,14 @@
   visibility: visible;
   pointer-events: auto;
 }
+
 .sidebarFooter {
   height: 100px;
   display: flex;
-  @include sidePadding(15px);
   flex-direction: column;
   justify-content: center;
+  overflow: hidden;
   border-top: 1px solid rgba(184, 184, 184, 0.25);
+
+  @include sidePadding(15px);
 }

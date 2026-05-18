@@ -21,6 +21,8 @@
   display: flex;
   align-items: center;
   gap: 14px;
+  flex-shrink: 0;
+  min-width: 0;
 }
 
 .icon {
@@ -44,13 +46,18 @@
 }
 
 .userBadge {
-  max-width: 200px;
+  flex: 0 1 280px;
+  width: auto;
+  min-width: 0;
+  max-width: 280px;
+  overflow: hidden;
 }
 
 .actions {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .actionButton {
@@ -61,6 +68,17 @@
   .panel {
     align-items: flex-start;
     flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .content {
+    flex-shrink: 1;
+  }
+
+  .userBadge {
+    flex: 0 1 auto;
+    width: 100%;
+    max-width: 320px;
   }
 
   .actions {
@@ -72,6 +90,10 @@
   .panel {
     gap: 14px;
     padding: 16px;
+  }
+
+  .userBadge {
+    max-width: 100%;
   }
 
   .actions {

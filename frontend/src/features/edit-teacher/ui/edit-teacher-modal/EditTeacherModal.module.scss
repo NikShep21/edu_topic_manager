@@ -9,6 +9,14 @@
   flex-direction: column;
 }
 
+.loading {
+  width: 100%;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .actions {
   width: 100%;
   padding-top: 15px;
