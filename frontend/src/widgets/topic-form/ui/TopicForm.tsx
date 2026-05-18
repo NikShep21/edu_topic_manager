@@ -42,7 +42,8 @@ export const TopicForm = (props: TopicFormProps) => {
     <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.headerForm}>
         <div className={styles.topLink}>
-          <Link href="/teacher/topics" className={styles.topLinkAnchor}>
+          {/*вынести href отсюда */}
+          <Link href="/teacher/topics/" className={styles.topLinkAnchor}>
             <FiArrowLeft size={18} />
             <span>К моим темам</span>
           </Link>

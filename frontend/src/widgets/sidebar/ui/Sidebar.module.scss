@@ -54,6 +54,9 @@
 .logoText {
   font-size: 1.3rem;
   font-weight: 600;
+  @media (max-width: $tablet) {
+    font-size: 1.1rem;
+  }
 }
 
 .closeButton {
