@@ -1,6 +1,7 @@
 COMPOSE = docker compose
+FRONTEND = npm --prefix frontend run
 
-.PHONY: help up down restart build logs ps test lint format check clean backend frontend
+.PHONY: help up down restart build logs ps test lint format check clean
 
 help:
 	@echo "Available commands:"
@@ -36,20 +37,20 @@ ps:
 	$(COMPOSE) ps
 
 test:
-	$(MAKE) -C backend test
-	$(MAKE) -C frontend test
+	"$(MAKE)" -C backend test
+	$(FRONTEND) test
 
 lint:
-	$(MAKE) -C backend lint
-# 	$(MAKE) -C frontend lint
+	"$(MAKE)" -C backend lint
+	$(FRONTEND) lint
 
 format:
-	$(MAKE) -C backend format
-	$(MAKE) -C frontend format
+	"$(MAKE)" -C backend format
+	$(FRONTEND) format
 
 check:
-	$(MAKE) -C backend check
-	$(MAKE) -C frontend check
+	"$(MAKE)" -C backend check
+	$(FRONTEND) check
 
 clean:
 	$(COMPOSE) down --remove-orphans
