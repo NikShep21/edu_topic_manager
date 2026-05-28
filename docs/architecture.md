@@ -18,7 +18,7 @@ The application is accessed through Nginx. Nginx routes frontend requests to the
 
 Diagram source:
 
-```txt
+```text
 docs/assets/diagrams/sources/global-architecture.mmd
 ```
 
@@ -33,13 +33,13 @@ The common request flow contains two main parts:
 
 Diagram source:
 
-```txt
+```text
 docs/assets/diagrams/sources/request-flow.mmd
 ```
 
 ## Monorepo Structure
 
-```txt
+```text
 edu_topic_manager/
 ├── backend/
 ├── frontend/
@@ -85,6 +85,7 @@ PostgreSQL stores application data:
 - topics;
 - topic files;
 - topic steps;
+- topic applications;
 - reference data.
 
 ## Nginx Responsibility
@@ -93,7 +94,7 @@ Nginx is used as a reverse proxy.
 
 It routes requests to the correct service:
 
-```txt
+```text
 /api/      → backend
 /static/   → backend static files
 /media/    → backend media files
@@ -108,7 +109,7 @@ If the backend returns `401 Unauthorized`, the frontend tries to refresh the ses
 
 General flow:
 
-```txt
+```text
 Protected request
   ↓
 authClient
@@ -128,25 +129,47 @@ Project diagrams are stored both as editable Mermaid sources and exported PNG im
 
 Mermaid sources are stored in:
 
-```txt
+```text
 docs/assets/diagrams/sources/
 ```
 
 Exported PNG images are stored in:
 
-```txt
+```text
 docs/assets/diagrams/png/
 ```
+
+### Use Case Diagram
+
+![Use case diagram](assets/diagrams/png/use-case.png)
+
+Diagram source: `docs/assets/diagrams/sources/use-case.mmd`
+
+This diagram shows the main user roles and their key actions in the system: students work with topics and applications, teachers manage topics and application decisions, and administrators manage users and reference data.
+
+### Topic Application Flow
+
+![Topic application flow](assets/diagrams/png/topic-application-flow.png)
+
+Diagram source: `docs/assets/diagrams/sources/topic-application-flow.mmd`
+
+This sequence diagram shows the main backend scenario for applying to a topic. It includes the frontend request, nginx routing, backend validation, database checks, topic application creation, and error branches.
+
+### Database Schema
+
+![Database schema](assets/diagrams/png/database-schema.png)
+
+Diagram source: `docs/assets/diagrams/sources/database-schema.mmd`
+
+This diagram shows the main backend database entities and relations: users, student and teacher profiles, reference tables, topics, topic steps, topic files, and topic applications.
+
+Built-in Django tables such as groups, permissions, sessions, and migrations are not shown to keep the diagram focused on project domain data.
 
 ### Frontend API Flow
 
 ![Frontend API flow](assets/diagrams/png/frontend-api-flow.png)
 
-Diagram source:
-
-```txt
-docs/assets/diagrams/sources/frontend-api-flow.mmd
-```
+Diagram source: `docs/assets/diagrams/sources/frontend-api-flow.mmd`
 
 This diagram describes how the frontend sends API requests, receives backend responses, and updates the user interface.
 
@@ -154,11 +177,7 @@ This diagram describes how the frontend sends API requests, receives backend res
 
 ![Frontend auth retry flow](assets/diagrams/png/frontend-auth-retry-flow.png)
 
-Diagram source:
-
-```txt
-docs/assets/diagrams/sources/frontend-auth-retry-flow.mmd
-```
+Diagram source: `docs/assets/diagrams/sources/frontend-auth-retry-flow.mmd`
 
 This diagram shows how the frontend handles an expired access token, refreshes it, and retries the original request once.
 
@@ -166,11 +185,7 @@ This diagram shows how the frontend handles an expired access token, refreshes i
 
 ![Frontend FSD layers](assets/diagrams/png/frontend-fsd-layers.png)
 
-Diagram source:
-
-```txt
-docs/assets/diagrams/sources/frontend-fsd-layers.mmd
-```
+Diagram source: `docs/assets/diagrams/sources/frontend-fsd-layers.mmd`
 
 This diagram shows the frontend code organization based on Feature-Sliced Design layers.
 

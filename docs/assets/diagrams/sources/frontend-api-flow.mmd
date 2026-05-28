@@ -1,18 +1,99 @@
-sequenceDiagram
-    participant Component as UI Component / Feature
-    participant Hook as React Query Hook
-    participant ApiMethod as Entity API Method
-    participant AuthClient as authClient
-    participant HttpClient as HttpClient
-    participant Backend as Backend API
+erDiagram
+    USER {
+        bigint id
+        string username
+        string email
+        string first_name
+        string last_name
+        string middle_name
+        string role
+        boolean is_staff
+        boolean is_superuser
+        boolean is_active
+        datetime date_joined
+    }
 
-    Component->>Hook: Calls query or mutation
-    Hook->>ApiMethod: Executes API method
-    ApiMethod->>AuthClient: Sends protected request
-    AuthClient->>HttpClient: Performs HTTP request
-    HttpClient->>Backend: fetch(...)
-    Backend-->>HttpClient: JSON response
-    HttpClient-->>AuthClient: Parsed response
-    AuthClient-->>ApiMethod: Result
-    ApiMethod-->>Hook: Data
-    Hook-->>Component: Loading / error / data state
+    STUDENT_GROUP {
+        bigint id
+        string name
+    }
+
+    STUDENT_PROFILE {
+        bigint id
+        bigint user_id
+        smallint course
+        bigint group_id
+    }
+
+    ACADEMIC_DEGREE {
+        bigint id
+        string name
+    }
+
+    ACADEMIC_TITLE {
+        bigint id
+        string name
+    }
+
+    JOB_TITLE {
+        bigint id
+        string name
+    }
+
+    TEACHER_PROFILE {
+        bigint id
+        bigint user_id
+        bigint academic_degree_id
+        bigint academic_title_id
+        bigint job_title_id
+    }
+
+    TOPIC {
+        bigint id
+        string title
+        string description
+        string type
+        string status
+        bigint teacher_id
+        bigint student_id
+        datetime created_at
+    }
+
+    TOPIC_STEP {
+        bigint id
+        bigint topic_id
+        int order
+        string title
+    }
+
+    TOPIC_FILE {
+        bigint id
+        bigint topic_id
+        string file
+        string original_name
+    }
+
+    TOPIC_APPLICATION {
+        bigint id
+        bigint topic_id
+        bigint student_id
+        string status
+        datetime created_at
+    }
+
+    USER ||--o| STUDENT_PROFILE : has
+    STUDENT_GROUP ||--o{ STUDENT_PROFILE : contains
+
+    USER ||--o| TEACHER_PROFILE : has
+    ACADEMIC_DEGREE ||--o{ TEACHER_PROFILE : has
+    ACADEMIC_TITLE ||--o{ TEACHER_PROFILE : has
+    JOB_TITLE ||--o{ TEACHER_PROFILE : has
+
+    USER ||--o{ TOPIC : teaches
+    USER ||--o{ TOPIC : assigned_to
+
+    TOPIC ||--o{ TOPIC_STEP : contains
+    TOPIC ||--o{ TOPIC_FILE : has
+    TOPIC ||--o{ TOPIC_APPLICATION : receives
+
+    USER ||--o{ TOPIC_APPLICATION : submits

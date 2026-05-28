@@ -1,0 +1,99 @@
+erDiagram
+    User {
+        bigint id PK
+        string username
+        string email
+        string first_name
+        string last_name
+        string middle_name
+        string role
+        boolean is_staff
+        boolean is_superuser
+        boolean is_active
+        datetime date_joined
+    }
+
+    StudentGroup {
+        bigint id PK
+        string name UK
+    }
+
+    StudentProfile {
+        bigint id PK
+        bigint user_id FK_UK
+        smallint course
+        bigint group_id FK
+    }
+
+    AcademicDegree {
+        bigint id PK
+        string name UK
+    }
+
+    AcademicTitle {
+        bigint id PK
+        string name UK
+    }
+
+    JobTitle {
+        bigint id PK
+        string name UK
+    }
+
+    TeacherProfile {
+        bigint id PK
+        bigint user_id FK_UK
+        bigint academic_degree_id FK
+        bigint academic_title_id FK
+        bigint job_title_id FK
+    }
+
+    Topic {
+        bigint id PK
+        string title
+        text description
+        string type
+        string status
+        bigint teacher_id FK
+        bigint student_id FK
+        datetime created_at
+    }
+
+    TopicStep {
+        bigint id PK
+        bigint topic_id FK
+        int order
+        string title
+    }
+
+    TopicFile {
+        bigint id PK
+        bigint topic_id FK
+        file file
+        string original_name
+    }
+
+    TopicApplication {
+        bigint id PK
+        bigint topic_id FK
+        bigint student_id FK
+        string status
+        datetime created_at
+    }
+
+    User ||--o| StudentProfile : has
+    StudentGroup ||--o{ StudentProfile : contains
+
+    User ||--o| TeacherProfile : has
+    AcademicDegree ||--o{ TeacherProfile : used_by
+    AcademicTitle ||--o{ TeacherProfile : used_by
+    JobTitle ||--o{ TeacherProfile : used_by
+
+    User ||--o{ Topic : teaches
+    User ||--o{ Topic : assigned_to
+
+    Topic ||--o{ TopicStep : contains
+    Topic ||--o{ TopicFile : has
+    Topic ||--o{ TopicApplication : receives
+
+    User ||--o{ TopicApplication : submits

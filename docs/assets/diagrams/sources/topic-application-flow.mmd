@@ -1,0 +1,42 @@
+sequenceDiagram
+    actor Student
+    participant Browser
+    participant Nginx
+    participant Backend as Django REST API
+    participant TopicViewSet
+    participant DB as PostgreSQL
+
+    Student->>Browser: Clicks "Apply for topic"
+    Browser->>Nginx: POST /api/topics/{id}/apply/
+    Nginx->>Backend: Proxy API request
+    Backend->>TopicViewSet: apply(request, pk)
+
+    TopicViewSet->>DB: Load topic with select_for_update
+    DB-->>TopicViewSet: Topic
+
+    TopicViewSet->>DB: Load student profile
+    DB-->>TopicViewSet: StudentProfile
+
+    TopicViewSet->>DB: Check active applications
+    DB-->>TopicViewSet: Application count
+
+    alt Topic is unavailable
+        TopicViewSet-->>Backend: 400 Bad Request
+        Backend-->>Nginx: Error response
+        Nginx-->>Browser: Error response
+    else Course does not match topic type
+        TopicViewSet-->>Backend: 400 Bad Request or 404 Not Found
+        Backend-->>Nginx: Error response
+        Nginx-->>Browser: Error response
+    else Student already has active application
+        TopicViewSet-->>Backend: 400 Bad Request
+        Backend-->>Nginx: Error response
+        Nginx-->>Browser: Error response
+    else Application is valid
+        TopicViewSet->>DB: Create TopicApplication with pending status
+        TopicViewSet->>DB: Update Topic status to pending_approval
+        DB-->>TopicViewSet: Saved
+        TopicViewSet-->>Backend: 200 OK
+        Backend-->>Nginx: JSON response
+        Nginx-->>Browser: JSON response
+    end

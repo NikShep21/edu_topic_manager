@@ -1,0 +1,38 @@
+flowchart TB
+    Student["Student"]
+    Teacher["Teacher"]
+    Admin["Admin"]
+
+    subgraph StudentUseCases["Student use cases"]
+        ViewTopics(("View available topics"))
+        ApplyTopic(("Apply for a topic"))
+        CancelApplication(("Cancel application"))
+        ViewMyTopic(("View assigned topic"))
+    end
+
+    subgraph TeacherUseCases["Teacher use cases"]
+        CreateTopic(("Create topic"))
+        EditTopic(("Edit topic"))
+        AcceptApplication(("Accept application"))
+        RejectApplication(("Reject application"))
+    end
+
+    subgraph AdminUseCases["Admin use cases"]
+        ManageUsers(("Manage users"))
+        ManageRoles(("Manage roles"))
+        ManageReferenceData(("Manage reference data"))
+    end
+
+    Student --> ViewTopics
+    Student --> ApplyTopic
+    Student --> CancelApplication
+    Student --> ViewMyTopic
+
+    Teacher --> CreateTopic
+    Teacher --> EditTopic
+    Teacher --> AcceptApplication
+    Teacher --> RejectApplication
+
+    Admin --> ManageUsers
+    Admin --> ManageRoles
+    Admin --> ManageReferenceData
