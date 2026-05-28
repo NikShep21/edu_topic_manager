@@ -108,6 +108,16 @@ Backend tests should cover:
 - API endpoints;
 - business rules.
 
+## Coverage
+
+Backend test coverage is measured with `coverage.py`.
+
+Current backend coverage:
+
+```text
+TOTAL: 64%
+```
+
 ## Code Quality Checks
 
 ### Frontend
