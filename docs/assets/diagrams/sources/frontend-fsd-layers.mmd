@@ -1,0 +1,11 @@
+flowchart TB
+    App["app"]
+    Widgets["widgets"]
+    Features["features"]
+    Entities["entities"]
+    Shared["shared"]
+
+    App --> Widgets
+    Widgets --> Features
+    Features --> Entities
+    Entities --> Shared

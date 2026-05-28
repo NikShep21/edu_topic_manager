@@ -1,0 +1,20 @@
+sequenceDiagram
+    participant User
+    participant Browser
+    participant Nginx
+    participant Frontend as Next.js Frontend
+    participant Backend as Django REST API
+    participant DB as PostgreSQL
+
+    User->>Browser: Opens application
+    Browser->>Nginx: GET /
+    Nginx->>Frontend: Proxy frontend request
+    Frontend-->>Nginx: HTML / JS response
+    Nginx-->>Browser: Application page
+
+    Browser->>Nginx: API request /api/...
+    Nginx->>Backend: Proxy API request
+    Backend->>DB: Read or write data
+    DB-->>Backend: Query result
+    Backend-->>Nginx: JSON response
+    Nginx-->>Browser: JSON response

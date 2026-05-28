@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant Component as UI Component / Feature
+    participant Hook as React Query Hook
+    participant ApiMethod as Entity API Method
+    participant AuthClient as authClient
+    participant HttpClient as HttpClient
+    participant Backend as Backend API
+
+    Component->>Hook: Calls query or mutation
+    Hook->>ApiMethod: Executes API method
+    ApiMethod->>AuthClient: Sends protected request
+    AuthClient->>HttpClient: Performs HTTP request
+    HttpClient->>Backend: fetch(...)
+    Backend-->>HttpClient: JSON response
+    HttpClient-->>AuthClient: Parsed response
+    AuthClient-->>ApiMethod: Result
+    ApiMethod-->>Hook: Data
+    Hook-->>Component: Loading / error / data state
