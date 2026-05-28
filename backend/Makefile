@@ -1,4 +1,4 @@
-COMPOSE = docker compose -f ../docker-compose.yml
+COMPOSE = docker-compose -f ../docker-compose.yml
 SERVICE = backend
 
 .PHONY: help up install migrate makemigrations superuser shell test lint format check collectstatic
