@@ -122,6 +122,58 @@ refresh session
 retry original request
 ```
 
+## Additional Architecture Diagrams
+
+Project diagrams are stored both as editable Mermaid sources and exported PNG images.
+
+Mermaid sources are stored in:
+
+```txt
+docs/assets/diagrams/sources/
+```
+
+Exported PNG images are stored in:
+
+```txt
+docs/assets/diagrams/png/
+```
+
+### Frontend API Flow
+
+![Frontend API flow](assets/diagrams/png/frontend-api-flow.png)
+
+Diagram source:
+
+```txt
+docs/assets/diagrams/sources/frontend-api-flow.mmd
+```
+
+This diagram describes how the frontend sends API requests, receives backend responses, and updates the user interface.
+
+### Authentication Retry Flow
+
+![Frontend auth retry flow](assets/diagrams/png/frontend-auth-retry-flow.png)
+
+Diagram source:
+
+```txt
+docs/assets/diagrams/sources/frontend-auth-retry-flow.mmd
+```
+
+This diagram shows how the frontend handles an expired access token, refreshes it, and retries the original request once.
+
+### Frontend FSD Layers
+
+![Frontend FSD layers](assets/diagrams/png/frontend-fsd-layers.png)
+
+Diagram source:
+
+```txt
+docs/assets/diagrams/sources/frontend-fsd-layers.mmd
+```
+
+This diagram shows the frontend code organization based on Feature-Sliced Design layers.
+
 ## Development Principles
 
 - Keep frontend and backend responsibilities separated.

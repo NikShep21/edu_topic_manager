@@ -69,4 +69,6 @@ dist/
 .DS_Store
 Thumbs.db
 
+docs/_build/
+
 backend/uploads/
