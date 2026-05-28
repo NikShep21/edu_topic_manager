@@ -1,0 +1,31 @@
+flowchart TD
+    Start["Protected API request"]
+    Send["Send request with authClient"]
+    Status{"Response status"}
+
+    Success["Return response"]
+    Unauthorized["401 Unauthorized"]
+    OtherError["Throw ApiError"]
+
+    Refresh["Refresh session"]
+    RefreshResult{"Refresh successful?"}
+
+    Retry["Retry original request once"]
+    RetryStatus{"Retry response status"}
+
+    Start --> Send
+    Send --> Status
+
+    Status -->|"2xx"| Success
+    Status -->|"401"| Unauthorized
+    Status -->|"Other error"| OtherError
+
+    Unauthorized --> Refresh
+    Refresh --> RefreshResult
+
+    RefreshResult -->|"Yes"| Retry
+    RefreshResult -->|"No"| OtherError
+
+    Retry --> RetryStatus
+    RetryStatus -->|"2xx"| Success
+    RetryStatus -->|"Error"| OtherError

@@ -1,0 +1,20 @@
+flowchart TD
+    User["User / Browser"]
+
+    subgraph Infrastructure["Infrastructure"]
+        Nginx["Nginx Reverse Proxy"]
+        Frontend["Next.js Frontend"]
+        Backend["Django REST API"]
+        DB[("PostgreSQL Database")]
+        Media["Media Files"]
+        Static["Static Files"]
+    end
+
+    User --> Nginx
+
+    Nginx -->|"/"| Frontend
+    Nginx -->|"/api/"| Backend
+    Nginx -->|"/media/"| Media
+    Nginx -->|"/static/"| Static
+
+    Backend --> DB
