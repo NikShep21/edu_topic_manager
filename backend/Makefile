@@ -38,11 +38,11 @@ shell: up
 test: up
 	$(COMPOSE) exec $(SERVICE) python manage.py test
 
-lint: up
-	$(COMPOSE) exec $(SERVICE) flake8
+lint:
+	flake8
 
-format: up
-	$(COMPOSE) exec $(SERVICE) black .
+format:
+	black .
 
 check: up
 	$(COMPOSE) exec $(SERVICE) python manage.py check
